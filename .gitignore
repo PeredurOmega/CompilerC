@@ -2,3 +2,4 @@
 cmake-build-debug/
 dist/
 build/
+tests/ifcc-test-output/
