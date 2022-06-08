@@ -22,9 +22,17 @@ antlrcpp::Any CodeGenVisitor::visitStatement(ifccParser::StatementContext *ctx){
 }
 
 antlrcpp::Any CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *ctx) {
-    string type = ctx->TYPE();
+    string type = ctx->TYPE()->getText();
 }
 
 antlrcpp::Any CodeGenVisitor::visitAffectation(ifccParser::AffectationContext *ctx) {
+
+}
+
+antlrcpp::Any CodeGenVisitor::visitInit(ifccParser::InitContext *ctx) {
+
+}
+
+antlrcpp::Any CodeGenVisitor::visitExpression(ifccParser::ExpressionContext *ctx) {
 
 }
