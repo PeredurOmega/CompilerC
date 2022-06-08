@@ -35,3 +35,8 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: python3 ifcc-test.py testfiles/
       
+    - name: Tests Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ifcc-test-output
+        path: ifcc-test-output/*
