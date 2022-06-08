@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -32,8 +32,14 @@ public:
   virtual void enterAffectation(ifccParser::AffectationContext *ctx) = 0;
   virtual void exitAffectation(ifccParser::AffectationContext *ctx) = 0;
 
-  virtual void enterExpression(ifccParser::ExpressionContext *ctx) = 0;
-  virtual void exitExpression(ifccParser::ExpressionContext *ctx) = 0;
+  virtual void enterVariable(ifccParser::VariableContext *ctx) = 0;
+  virtual void exitVariable(ifccParser::VariableContext *ctx) = 0;
+
+  virtual void enterConstant(ifccParser::ConstantContext *ctx) = 0;
+  virtual void exitConstant(ifccParser::ConstantContext *ctx) = 0;
+
+  virtual void enterVarexpr(ifccParser::VarexprContext *ctx) = 0;
+  virtual void exitVarexpr(ifccParser::VarexprContext *ctx) = 0;
 
 
 };
