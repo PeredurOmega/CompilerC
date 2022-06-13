@@ -2,9 +2,11 @@ grammar ifcc;
 
 axiom : prog ;
 
-prog : 'int' 'main' '(' ')' '{' statement* RETURN CONST ';' '}' ;
+prog : 'int' 'main' '(' ')' '{' statement* '}' ;
 statement : declaration
-          | affectation ;
+          | affectation
+          | ret;
+ret : RETURN expression ';';
 declaration : TYPE (init| VAR) (',' (init| VAR))*';';
 init : VAR '=' expression ;
 affectation : VAR '=' expression ';';

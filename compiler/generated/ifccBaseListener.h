@@ -1,5 +1,5 @@
 
-// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -24,6 +24,9 @@ public:
 
   virtual void enterStatement(ifccParser::StatementContext * /*ctx*/) override { }
   virtual void exitStatement(ifccParser::StatementContext * /*ctx*/) override { }
+
+  virtual void enterRet(ifccParser::RetContext * /*ctx*/) override { }
+  virtual void exitRet(ifccParser::RetContext * /*ctx*/) override { }
 
   virtual void enterDeclaration(ifccParser::DeclarationContext * /*ctx*/) override { }
   virtual void exitDeclaration(ifccParser::DeclarationContext * /*ctx*/) override { }

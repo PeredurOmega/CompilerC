@@ -1,5 +1,5 @@
 
-// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -18,8 +18,8 @@ public:
   };
 
   enum {
-    RuleAxiom = 0, RuleProg = 1, RuleStatement = 2, RuleDeclaration = 3, 
-    RuleInit = 4, RuleAffectation = 5, RuleExpression = 6
+    RuleAxiom = 0, RuleProg = 1, RuleStatement = 2, RuleRet = 3, RuleDeclaration = 4, 
+    RuleInit = 5, RuleAffectation = 6, RuleExpression = 7
   };
 
   explicit ifccParser(antlr4::TokenStream *input);
@@ -42,6 +42,7 @@ public:
   class AxiomContext;
   class ProgContext;
   class StatementContext;
+  class RetContext;
   class DeclarationContext;
   class InitContext;
   class AffectationContext;
@@ -67,8 +68,6 @@ public:
     ProgContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *TYPE();
-    antlr4::tree::TerminalNode *RETURN();
-    antlr4::tree::TerminalNode *CONST();
     std::vector<StatementContext *> statement();
     StatementContext* statement(size_t i);
 
@@ -87,6 +86,7 @@ public:
     virtual size_t getRuleIndex() const override;
     DeclarationContext *declaration();
     AffectationContext *affectation();
+    RetContext *ret();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -96,6 +96,22 @@ public:
   };
 
   StatementContext* statement();
+
+  class  RetContext : public antlr4::ParserRuleContext {
+  public:
+    RetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *RETURN();
+    ExpressionContext *expression();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  RetContext* ret();
 
   class  DeclarationContext : public antlr4::ParserRuleContext {
   public:
