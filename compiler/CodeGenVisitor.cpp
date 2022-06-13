@@ -56,15 +56,17 @@ CodeGenVisitor::visitAffectation(ifccParser::AffectationContext *ctx) {
 antlrcpp::Any CodeGenVisitor::visitConstant(ifccParser::ConstantContext *ctx) {
     int offset = symbolTable[currentVariable];
     cout << "    movl    $" << ctx->CONST()->getText() << ", " << offset
-         << "(%rbp)" << endl;
+         << "(%rbp) #" << currentVariable << endl;
     return offset;
 }
 
 antlrcpp::Any CodeGenVisitor::visitVariable(ifccParser::VariableContext *ctx) {
     int loffset = symbolTable[currentVariable];
     int roffset = symbolTable[ctx->VAR()->getText()];
-    cout << "    movl    " << roffset << "(%rbp), %eax" << endl;
-    cout << "    movl    %eax, " << loffset << "(%rbp)" << endl;
+    cout << "    movl    " << roffset << "(%rbp), %eax #"
+         << ctx->VAR()->getText() << endl;
+    cout << "    movl    %eax, " << loffset << "(%rbp) #" << currentVariable
+         << endl;
     return loffset;
 }
 
@@ -77,8 +79,9 @@ antlrcpp::Any CodeGenVisitor::visitVarexpr(ifccParser::VarexprContext *ctx) {
         // Case when we recursively assign variables
         loffset = symbolTable[temp];
         int roffset = symbolTable[ctx->VAR()->getText()];
-        cout << "    movl    " << roffset << "(%rbp), %eax" << endl;
-        cout << "    movl    %eax, " << loffset << "(%rbp)" << endl;
+        cout << "    movl    " << roffset << "(%rbp), %eax #"
+             << ctx->VAR()->getText() << endl;
+        cout << "    movl    %eax, " << loffset << "(%rbp) #" << temp << endl;
     }
 
     return loffset;

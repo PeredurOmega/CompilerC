@@ -22,7 +22,7 @@ jobs:
     - name: Build
       run: cmake --build build --target compiler
 
-    - name: Tests
+    - name: Test
       run: |
         chmod +x tests/ifcc-wrapper.sh
         python3 tests/ifcc-test.py tests/testfiles/
