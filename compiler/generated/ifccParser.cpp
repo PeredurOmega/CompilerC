@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 
 #include "ifccListener.h"
@@ -646,43 +646,94 @@ ifccParser::ExpressionContext::ExpressionContext(ParserRuleContext *parent, size
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* ifccParser::ExpressionContext::VAR() {
-  return getToken(ifccParser::VAR, 0);
-}
-
-tree::TerminalNode* ifccParser::ExpressionContext::CONST() {
-  return getToken(ifccParser::CONST, 0);
-}
-
-ifccParser::ExpressionContext* ifccParser::ExpressionContext::expression() {
-  return getRuleContext<ifccParser::ExpressionContext>(0);
-}
-
 
 size_t ifccParser::ExpressionContext::getRuleIndex() const {
   return ifccParser::RuleExpression;
 }
 
-void ifccParser::ExpressionContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<ifccListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterExpression(this);
+void ifccParser::ExpressionContext::copyFrom(ExpressionContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
 }
 
-void ifccParser::ExpressionContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<ifccListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitExpression(this);
+//----------------- ConstantContext ------------------------------------------------------------------
+
+tree::TerminalNode* ifccParser::ConstantContext::CONST() {
+  return getToken(ifccParser::CONST, 0);
 }
 
+ifccParser::ConstantContext::ConstantContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-std::any ifccParser::ExpressionContext::accept(tree::ParseTreeVisitor *visitor) {
+void ifccParser::ConstantContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterConstant(this);
+}
+void ifccParser::ConstantContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitConstant(this);
+}
+
+std::any ifccParser::ConstantContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitExpression(this);
+    return parserVisitor->visitConstant(this);
   else
     return visitor->visitChildren(this);
 }
+//----------------- VarexprContext ------------------------------------------------------------------
 
+tree::TerminalNode* ifccParser::VarexprContext::VAR() {
+  return getToken(ifccParser::VAR, 0);
+}
+
+ifccParser::ExpressionContext* ifccParser::VarexprContext::expression() {
+  return getRuleContext<ifccParser::ExpressionContext>(0);
+}
+
+ifccParser::VarexprContext::VarexprContext(ExpressionContext *ctx) { copyFrom(ctx); }
+
+void ifccParser::VarexprContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterVarexpr(this);
+}
+void ifccParser::VarexprContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitVarexpr(this);
+}
+
+std::any ifccParser::VarexprContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
+    return parserVisitor->visitVarexpr(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- VariableContext ------------------------------------------------------------------
+
+tree::TerminalNode* ifccParser::VariableContext::VAR() {
+  return getToken(ifccParser::VAR, 0);
+}
+
+ifccParser::VariableContext::VariableContext(ExpressionContext *ctx) { copyFrom(ctx); }
+
+void ifccParser::VariableContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterVariable(this);
+}
+void ifccParser::VariableContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitVariable(this);
+}
+
+std::any ifccParser::VariableContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
+    return parserVisitor->visitVariable(this);
+  else
+    return visitor->visitChildren(this);
+}
 ifccParser::ExpressionContext* ifccParser::expression() {
   ExpressionContext *_localctx = _tracker.createInstance<ExpressionContext>(_ctx, getState());
   enterRule(_localctx, 12, ifccParser::RuleExpression);
@@ -695,23 +746,28 @@ ifccParser::ExpressionContext* ifccParser::expression() {
     exitRule();
   });
   try {
-    enterOuterAlt(_localctx, 1);
     setState(67);
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 5, _ctx)) {
     case 1: {
+      _localctx = _tracker.createInstance<ifccParser::VariableContext>(_localctx);
+      enterOuterAlt(_localctx, 1);
       setState(62);
       match(ifccParser::VAR);
       break;
     }
 
     case 2: {
+      _localctx = _tracker.createInstance<ifccParser::ConstantContext>(_localctx);
+      enterOuterAlt(_localctx, 2);
       setState(63);
       match(ifccParser::CONST);
       break;
     }
 
     case 3: {
+      _localctx = _tracker.createInstance<ifccParser::VarexprContext>(_localctx);
+      enterOuterAlt(_localctx, 3);
       setState(64);
       match(ifccParser::VAR);
       setState(65);

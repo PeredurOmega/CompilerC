@@ -8,7 +8,10 @@ statement : declaration
 declaration : TYPE (init| VAR) (',' (init| VAR))*';';
 init : VAR '=' expression ;
 affectation : VAR '=' expression ';';
-expression : (VAR|CONST|VAR'='expression) ;
+expression : VAR #variable
+            |CONST #constant
+            |VAR'='expression #varexpr
+            ;
 
 RETURN : 'return' ;
 TYPE : 'int';
