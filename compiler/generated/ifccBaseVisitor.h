@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -43,7 +43,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitVariable(ifccParser::VariableContext *ctx) override {
+  virtual std::any visitTimesdiv(ifccParser::TimesdivContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitPlusminus(ifccParser::PlusminusContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -52,6 +56,14 @@ public:
   }
 
   virtual std::any visitVarexpr(ifccParser::VarexprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitVariable(ifccParser::VariableContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitParenthesis(ifccParser::ParenthesisContext *ctx) override {
     return visitChildren(ctx);
   }
 

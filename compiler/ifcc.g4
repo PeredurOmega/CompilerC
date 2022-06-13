@@ -13,6 +13,9 @@ affectation : VAR '=' expression ';';
 expression : VAR #variable
             |CONST #constant
             |VAR'='expression #varexpr
+            |'(' expression ')' #parenthesis
+            |expression ('+' | '-') expression #plusminus
+            |expression ('*' | '/') expression #timesdiv
             ;
 
 RETURN : 'return' ;

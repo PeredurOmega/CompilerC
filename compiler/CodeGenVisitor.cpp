@@ -93,3 +93,15 @@ antlrcpp::Any CodeGenVisitor::visitRet(ifccParser::RetContext *ctx) {
     cout << "    movl    " << offset << "(%rbp), %eax" << endl;
     return offset;
 }
+
+antlrcpp::Any CodeGenVisitor::visitPlusminus(ifccParser::PlusminusContext *ctx) {
+
+}
+
+antlrcpp::Any CodeGenVisitor::visitTimesdiv(ifccParser::TimesdivContext *ctx) {
+
+}
+
+antlrcpp::Any CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
+    visit(ctx->expression());
+}

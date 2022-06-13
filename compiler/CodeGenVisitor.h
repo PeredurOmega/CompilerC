@@ -28,6 +28,12 @@ public:
 
     antlrcpp::Any visitRet(ifccParser::RetContext *ctx) override;
 
+    antlrcpp::Any visitPlusminus(ifccParser::PlusminusContext *ctx) override;
+
+    antlrcpp::Any visitTimesdiv(ifccParser::TimesdivContext *ctx) override;
+
+    antlrcpp::Any visitParenthesis(ifccParser::ParenthesisContext *ctx) override;
+
 private:
     unordered_map<string, int> symbolTable;
     int currentOffset = 0;
