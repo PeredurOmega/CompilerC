@@ -26,8 +26,14 @@ jobs:
       run: |
         chmod +x tests/ifcc-wrapper.sh
         python3 tests/ifcc-test.py tests/testfiles/
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: "ifcc-test-output/test_report.xml"
       
-    - name: Tests Artifacts
+    - name: Publish Tests Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: ifcc-test-output
