@@ -54,13 +54,22 @@ CodeGenVisitor::visitAffectation(ifccParser::AffectationContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitConstant(ifccParser::ConstantContext *ctx) {
-    int offset = symbolTable[currentVariable];
+    int offset;
+    if(currentVariable.empty()){
+        currentOffset+=4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
     cout << "    movl    $" << ctx->CONST()->getText() << ", " << offset
-         << "(%rbp) #" << currentVariable << endl;
+         << "(%rbp) #v" << currentVariable << endl;
     return offset;
 }
 
 antlrcpp::Any CodeGenVisitor::visitVariable(ifccParser::VariableContext *ctx) {
+    if(currentVariable.empty()){
+        return symbolTable[ctx->VAR()->getText()];
+    }
     int loffset = symbolTable[currentVariable];
     int roffset = symbolTable[ctx->VAR()->getText()];
     cout << "    movl    " << roffset << "(%rbp), %eax #"
@@ -94,14 +103,40 @@ antlrcpp::Any CodeGenVisitor::visitRet(ifccParser::RetContext *ctx) {
     return offset;
 }
 
-antlrcpp::Any CodeGenVisitor::visitPlusminus(ifccParser::PlusminusContext *ctx) {
-
+antlrcpp::Any CodeGenVisitor::visitAddsub(ifccParser::AddsubContext *ctx) {
+    string temp = currentVariable;
+    vector<ifccParser::ExpressionContext*> expr = ctx->expression();
+    ifccParser::ExpressionContext* lexpr = expr[0];
+    ifccParser::ExpressionContext* rexpr = expr[1];
+    currentVariable = "";
+    int loffset = any_cast<int>(visit(lexpr));
+    int roffset = any_cast<int>(visit(rexpr));
+    string op = ctx->op->getText();
+    if(op == "+"){
+        cout << "    movl    " << loffset << "(%rbp), %edx" << endl;
+        cout << "    movl    " << roffset << "(%rbp), %eax" << endl;
+        cout << "    addl    %edx, %eax" << endl;
+    } else {
+        cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
+        cout << "    subl    "<< roffset <<"(%rbp), %eax" << endl;
+    }
+    currentVariable = temp;
+    int offset;
+    if(currentVariable.empty()){
+        currentOffset+=4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
+    cout << "    movl    %eax, " << offset
+         << "(%rbp) #v" << currentVariable << endl;
+    return offset;
 }
 
-antlrcpp::Any CodeGenVisitor::visitTimesdiv(ifccParser::TimesdivContext *ctx) {
+antlrcpp::Any CodeGenVisitor::visitTimes(ifccParser::TimesContext *ctx) {
 
 }
 
 antlrcpp::Any CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
-    visit(ctx->expression());
+    return visit(ctx->expression());
 }

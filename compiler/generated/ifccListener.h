@@ -35,11 +35,8 @@ public:
   virtual void enterAffectation(ifccParser::AffectationContext *ctx) = 0;
   virtual void exitAffectation(ifccParser::AffectationContext *ctx) = 0;
 
-  virtual void enterTimesdiv(ifccParser::TimesdivContext *ctx) = 0;
-  virtual void exitTimesdiv(ifccParser::TimesdivContext *ctx) = 0;
-
-  virtual void enterPlusminus(ifccParser::PlusminusContext *ctx) = 0;
-  virtual void exitPlusminus(ifccParser::PlusminusContext *ctx) = 0;
+  virtual void enterTimes(ifccParser::TimesContext *ctx) = 0;
+  virtual void exitTimes(ifccParser::TimesContext *ctx) = 0;
 
   virtual void enterConstant(ifccParser::ConstantContext *ctx) = 0;
   virtual void exitConstant(ifccParser::ConstantContext *ctx) = 0;
@@ -49,6 +46,9 @@ public:
 
   virtual void enterVariable(ifccParser::VariableContext *ctx) = 0;
   virtual void exitVariable(ifccParser::VariableContext *ctx) = 0;
+
+  virtual void enterAddsub(ifccParser::AddsubContext *ctx) = 0;
+  virtual void exitAddsub(ifccParser::AddsubContext *ctx) = 0;
 
   virtual void enterParenthesis(ifccParser::ParenthesisContext *ctx) = 0;
   virtual void exitParenthesis(ifccParser::ParenthesisContext *ctx) = 0;

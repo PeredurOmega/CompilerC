@@ -13,8 +13,8 @@ class  ifccParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, RETURN = 13, 
-    TYPE = 14, CONST = 15, VAR = 16, COMMENT = 17, DIRECTIVE = 18, WS = 19
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, RETURN = 12, TYPE = 13, CONST = 14, 
+    VAR = 15, COMMENT = 16, DIRECTIVE = 17, WS = 18
   };
 
   enum {
@@ -177,22 +177,11 @@ public:
    
   };
 
-  class  TimesdivContext : public ExpressionContext {
+  class  TimesContext : public ExpressionContext {
   public:
-    TimesdivContext(ExpressionContext *ctx);
+    TimesContext(ExpressionContext *ctx);
 
-    std::vector<ExpressionContext *> expression();
-    ExpressionContext* expression(size_t i);
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-
-    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-  };
-
-  class  PlusminusContext : public ExpressionContext {
-  public:
-    PlusminusContext(ExpressionContext *ctx);
-
+    antlr4::Token *op = nullptr;
     std::vector<ExpressionContext *> expression();
     ExpressionContext* expression(size_t i);
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -229,6 +218,19 @@ public:
     VariableContext(ExpressionContext *ctx);
 
     antlr4::tree::TerminalNode *VAR();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  AddsubContext : public ExpressionContext {
+  public:
+    AddsubContext(ExpressionContext *ctx);
+
+    antlr4::Token *op = nullptr;
+    std::vector<ExpressionContext *> expression();
+    ExpressionContext* expression(size_t i);
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
 

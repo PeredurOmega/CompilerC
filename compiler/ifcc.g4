@@ -14,8 +14,8 @@ expression : VAR #variable
             |CONST #constant
             |VAR'='expression #varexpr
             |'(' expression ')' #parenthesis
-            |expression ('+' | '-') expression #plusminus
-            |expression ('*' | '/') expression #timesdiv
+            |expression op=('+' | '-') expression #addsub
+            |expression op='*' expression #times
             ;
 
 RETURN : 'return' ;

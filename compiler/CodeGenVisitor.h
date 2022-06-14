@@ -28,9 +28,9 @@ public:
 
     antlrcpp::Any visitRet(ifccParser::RetContext *ctx) override;
 
-    antlrcpp::Any visitPlusminus(ifccParser::PlusminusContext *ctx) override;
+    antlrcpp::Any visitAddsub(ifccParser::AddsubContext *ctx) override;
 
-    antlrcpp::Any visitTimesdiv(ifccParser::TimesdivContext *ctx) override;
+    antlrcpp::Any visitTimes(ifccParser::TimesContext *ctx) override;
 
     antlrcpp::Any visitParenthesis(ifccParser::ParenthesisContext *ctx) override;
 

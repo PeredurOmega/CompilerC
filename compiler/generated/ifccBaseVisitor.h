@@ -43,11 +43,7 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitTimesdiv(ifccParser::TimesdivContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitPlusminus(ifccParser::PlusminusContext *ctx) override {
+  virtual std::any visitTimes(ifccParser::TimesContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -60,6 +56,10 @@ public:
   }
 
   virtual std::any visitVariable(ifccParser::VariableContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitAddsub(ifccParser::AddsubContext *ctx) override {
     return visitChildren(ctx);
   }
 
