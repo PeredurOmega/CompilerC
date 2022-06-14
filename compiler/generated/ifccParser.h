@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -13,8 +13,8 @@ class  ifccParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, RETURN = 9, TYPE = 10, CONST = 11, VAR = 12, COMMENT = 13, 
-    DIRECTIVE = 14, WS = 15
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, RETURN = 13, 
+    TYPE = 14, CONST = 15, VAR = 16, COMMENT = 17, DIRECTIVE = 18, WS = 19
   };
 
   enum {
@@ -177,6 +177,30 @@ public:
    
   };
 
+  class  TimesdivContext : public ExpressionContext {
+  public:
+    TimesdivContext(ExpressionContext *ctx);
+
+    std::vector<ExpressionContext *> expression();
+    ExpressionContext* expression(size_t i);
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  PlusminusContext : public ExpressionContext {
+  public:
+    PlusminusContext(ExpressionContext *ctx);
+
+    std::vector<ExpressionContext *> expression();
+    ExpressionContext* expression(size_t i);
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
   class  ConstantContext : public ExpressionContext {
   public:
     ConstantContext(ExpressionContext *ctx);
@@ -211,8 +235,23 @@ public:
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
-  ExpressionContext* expression();
+  class  ParenthesisContext : public ExpressionContext {
+  public:
+    ParenthesisContext(ExpressionContext *ctx);
 
+    ExpressionContext *expression();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  ExpressionContext* expression();
+  ExpressionContext* expression(int precedence);
+
+  bool sempred(antlr4::RuleContext *_localctx, size_t ruleIndex, size_t predicateIndex) override;
+
+  bool expressionSempred(ExpressionContext *_localctx, size_t predicateIndex);
 
   // By default the static state used to implement the parser is lazily initialized during the first
   // call to the constructor. You can call this function if you wish to initialize the static state

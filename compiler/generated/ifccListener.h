@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -35,14 +35,23 @@ public:
   virtual void enterAffectation(ifccParser::AffectationContext *ctx) = 0;
   virtual void exitAffectation(ifccParser::AffectationContext *ctx) = 0;
 
-  virtual void enterVariable(ifccParser::VariableContext *ctx) = 0;
-  virtual void exitVariable(ifccParser::VariableContext *ctx) = 0;
+  virtual void enterTimesdiv(ifccParser::TimesdivContext *ctx) = 0;
+  virtual void exitTimesdiv(ifccParser::TimesdivContext *ctx) = 0;
+
+  virtual void enterPlusminus(ifccParser::PlusminusContext *ctx) = 0;
+  virtual void exitPlusminus(ifccParser::PlusminusContext *ctx) = 0;
 
   virtual void enterConstant(ifccParser::ConstantContext *ctx) = 0;
   virtual void exitConstant(ifccParser::ConstantContext *ctx) = 0;
 
   virtual void enterVarexpr(ifccParser::VarexprContext *ctx) = 0;
   virtual void exitVarexpr(ifccParser::VarexprContext *ctx) = 0;
+
+  virtual void enterVariable(ifccParser::VariableContext *ctx) = 0;
+  virtual void exitVariable(ifccParser::VariableContext *ctx) = 0;
+
+  virtual void enterParenthesis(ifccParser::ParenthesisContext *ctx) = 0;
+  virtual void exitParenthesis(ifccParser::ParenthesisContext *ctx) = 0;
 
 
 };

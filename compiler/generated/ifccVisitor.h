@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -33,11 +33,17 @@ public:
 
     virtual std::any visitAffectation(ifccParser::AffectationContext *context) = 0;
 
-    virtual std::any visitVariable(ifccParser::VariableContext *context) = 0;
+    virtual std::any visitTimesdiv(ifccParser::TimesdivContext *context) = 0;
+
+    virtual std::any visitPlusminus(ifccParser::PlusminusContext *context) = 0;
 
     virtual std::any visitConstant(ifccParser::ConstantContext *context) = 0;
 
     virtual std::any visitVarexpr(ifccParser::VarexprContext *context) = 0;
+
+    virtual std::any visitVariable(ifccParser::VariableContext *context) = 0;
+
+    virtual std::any visitParenthesis(ifccParser::ParenthesisContext *context) = 0;
 
 
 };
