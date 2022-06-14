@@ -50,6 +50,9 @@ public:
   virtual void enterAddsub(ifccParser::AddsubContext *ctx) = 0;
   virtual void exitAddsub(ifccParser::AddsubContext *ctx) = 0;
 
+  virtual void enterUnary(ifccParser::UnaryContext *ctx) = 0;
+  virtual void exitUnary(ifccParser::UnaryContext *ctx) = 0;
+
   virtual void enterParenthesis(ifccParser::ParenthesisContext *ctx) = 0;
   virtual void exitParenthesis(ifccParser::ParenthesisContext *ctx) = 0;
 

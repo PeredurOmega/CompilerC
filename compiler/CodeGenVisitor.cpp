@@ -116,7 +116,7 @@ antlrcpp::Any CodeGenVisitor::visitAddsub(ifccParser::AddsubContext *ctx) {
         cout << "    movl    " << loffset << "(%rbp), %edx" << endl;
         cout << "    movl    " << roffset << "(%rbp), %eax" << endl;
         cout << "    addl    %edx, %eax" << endl;
-    } else {
+    } else if (op == "-") {
         cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
         cout << "    subl    "<< roffset <<"(%rbp), %eax" << endl;
     }
@@ -134,9 +134,44 @@ antlrcpp::Any CodeGenVisitor::visitAddsub(ifccParser::AddsubContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitTimes(ifccParser::TimesContext *ctx) {
-
+    string temp = currentVariable;
+    vector<ifccParser::ExpressionContext*> expr = ctx->expression();
+    ifccParser::ExpressionContext* lexpr = expr[0];
+    ifccParser::ExpressionContext* rexpr = expr[1];
+    currentVariable = "";
+    int loffset = any_cast<int>(visit(lexpr));
+    int roffset = any_cast<int>(visit(rexpr));
+    string op = ctx->op->getText();
+    if(op == "*"){
+        cout << "    movl    " << loffset << "(%rbp), %edx" << endl;
+        cout << "    movl    " << roffset << "(%rbp), %eax" << endl;
+        cout << "    imull    %edx, %eax" << endl;
+    } else if ( op == "/"){
+        cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
+        cout << "    cltd" << endl;
+        cout << "    idivl    "<< roffset << "(%rbp)" << endl;
+    }
+    currentVariable = temp;
+    int offset;
+    if(currentVariable.empty()){
+        currentOffset+=4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
+    cout << "    movl    %eax, " << offset
+         << "(%rbp) #v" << currentVariable << endl;
+    return offset;
 }
 
 antlrcpp::Any CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
     return visit(ctx->expression());
+}
+
+antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
+    int offset = any_cast<int>(visit(ctx->expression()));
+    if (ctx->op->getText() == "-"){
+        cout << "    negl    " << offset << "(%rbp)" << endl;
+    }
+    return offset;
 }

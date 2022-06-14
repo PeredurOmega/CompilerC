@@ -43,6 +43,8 @@ public:
 
     virtual std::any visitAddsub(ifccParser::AddsubContext *context) = 0;
 
+    virtual std::any visitUnary(ifccParser::UnaryContext *context) = 0;
+
     virtual std::any visitParenthesis(ifccParser::ParenthesisContext *context) = 0;
 
 

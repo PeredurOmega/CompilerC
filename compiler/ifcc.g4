@@ -14,8 +14,10 @@ expression : VAR #variable
             |CONST #constant
             |VAR'='expression #varexpr
             |'(' expression ')' #parenthesis
+            |expression op=('*' | '/') expression #times
             |expression op=('+' | '-') expression #addsub
-            |expression op='*' expression #times
+            |op='-' expression #unary
+            |expression op=('<' | '<=' | '==' | '!=' | '>=' | '>') expression #compare
             ;
 
 RETURN : 'return' ;

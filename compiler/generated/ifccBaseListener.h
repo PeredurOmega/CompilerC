@@ -52,6 +52,9 @@ public:
   virtual void enterAddsub(ifccParser::AddsubContext * /*ctx*/) override { }
   virtual void exitAddsub(ifccParser::AddsubContext * /*ctx*/) override { }
 
+  virtual void enterUnary(ifccParser::UnaryContext * /*ctx*/) override { }
+  virtual void exitUnary(ifccParser::UnaryContext * /*ctx*/) override { }
+
   virtual void enterParenthesis(ifccParser::ParenthesisContext * /*ctx*/) override { }
   virtual void exitParenthesis(ifccParser::ParenthesisContext * /*ctx*/) override { }
 

@@ -34,6 +34,8 @@ public:
 
     antlrcpp::Any visitParenthesis(ifccParser::ParenthesisContext *ctx) override;
 
+    antlrcpp::Any visitUnary(ifccParser::UnaryContext *ctx) override;
+
 private:
     unordered_map<string, int> symbolTable;
     int currentOffset = 0;

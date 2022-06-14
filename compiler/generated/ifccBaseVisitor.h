@@ -63,6 +63,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitUnary(ifccParser::UnaryContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitParenthesis(ifccParser::ParenthesisContext *ctx) override {
     return visitChildren(ctx);
   }
