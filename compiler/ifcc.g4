@@ -3,7 +3,11 @@ grammar ifcc;
 axiom : prog EOF;
 
 prog : function*;
-function: (TYPE|'void') VAR '(' ')' block;
+function: (TYPE|'void') VAR '(' parameters? ')' block;
+
+parameters : parameter (',' parameter)* ;
+parameter : TYPE VAR ;
+
 block : '{' statement* '}';
 statement : ';'
           | declaration
