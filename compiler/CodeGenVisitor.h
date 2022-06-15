@@ -68,6 +68,4 @@ private:
     int finalJump = 0;
     string currentVariable;
     bool hasReturn = false;
-    int jumpOffset = 1;
-
 };
