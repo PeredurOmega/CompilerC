@@ -28,3 +28,8 @@ Prefer use WSL Ubuntu and run the two commands given above.
 To run the test framework, you have to :
 * `cd tests`
 * `python3 ifcc-test.py .`
+
+## About grammar generation
+
+* `cd compiler`
+* `java -cp ../antlr-4.9.2-complete.jar org.antlr.v4.Tool -lib ./ -visitor -listener -Dlanguage=Cpp -o ./generated ./ifcc.g4`
