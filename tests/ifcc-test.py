@@ -177,10 +177,11 @@ directory_size = 0
 for jobname in jobs:
     os.chdir(orig_cwd)
 
-    if currentDir != jobname.split('/')[1].split('-')[1]:
-        currentDir = jobname.split('/')[1].split('-')[1]
-        print(jobname)
-        print(currentDir)
+    test_name = jobname.split('/')[1]
+    test_name = test_name.replace('tests-', '')
+
+    if currentDir != test_name.split('-')[1]:
+        currentDir = test_name.split('-')[1]
         list_files = os.listdir("testfiles/" + currentDir)
         directory_cpt = 0
         directory_size = len(list_files)
@@ -188,8 +189,8 @@ for jobname in jobs:
         print("TEST-SUITE: " + currentDir)
     directory_cpt += 1
 
-    xml_result += tab + tab + "<testcase classname=\"" + currentDir + "\" name=\"" + jobname.split('/')[1].split('-')[2] + "\""
-    print(tab + 'TEST-CASE: ' + currentDir + "/" + jobname.split('/')[1].split('-')[2])
+    xml_result += tab + tab + "<testcase classname=\"" + currentDir + "\" name=\"" + test_name.split('-')[2] + "\""
+    print(tab + 'TEST-CASE: ' + currentDir + "/" + test_name.split('-')[2])
     os.chdir(jobname)
 
     ## Reference compiler = GCC
