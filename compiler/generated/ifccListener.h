@@ -1,5 +1,5 @@
 
-// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -61,6 +61,12 @@ public:
 
   virtual void enterParenthesis(ifccParser::ParenthesisContext *ctx) = 0;
   virtual void exitParenthesis(ifccParser::ParenthesisContext *ctx) = 0;
+
+  virtual void enterIfBlock(ifccParser::IfBlockContext *ctx) = 0;
+  virtual void exitIfBlock(ifccParser::IfBlockContext *ctx) = 0;
+
+  virtual void enterElseBlock(ifccParser::ElseBlockContext *ctx) = 0;
+  virtual void exitElseBlock(ifccParser::ElseBlockContext *ctx) = 0;
 
 
 };

@@ -1,5 +1,5 @@
 
-// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -50,6 +50,10 @@ public:
     virtual std::any visitUnary(ifccParser::UnaryContext *context) = 0;
 
     virtual std::any visitParenthesis(ifccParser::ParenthesisContext *context) = 0;
+
+    virtual std::any visitIfBlock(ifccParser::IfBlockContext *context) = 0;
+
+    virtual std::any visitElseBlock(ifccParser::ElseBlockContext *context) = 0;
 
 
 };

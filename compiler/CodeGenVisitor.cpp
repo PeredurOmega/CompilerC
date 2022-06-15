@@ -8,32 +8,42 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
             "    pushq   %rbp\n"
             "    movq    %rsp, %rbp\n";
     visit(ctx->block());
-    if (!hasReturn){
+    if (!hasReturn) {
         cout << "    movl    $0, %eax" << endl;
     }
     cout << "    popq %rbp\n"
             "    ret\n";
 
     return 0;
-
 }
 
+/**
+ *
+ * @param ctx
+ * @return Whether or not the block "stop" the function via a return.
+ */
 antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
     for (auto statement: ctx->statement()) {
         bool stop = any_cast<bool>(visitStatement(statement));
-        if (stop) break;
+        if (stop) return true;
     }
-    return 0;
+    return false;
 }
 
+/**
+ *
+ * @param ctx
+ * @return Whether or not the statement "stop" the function via a return.
+ */
 antlrcpp::Any
 CodeGenVisitor::visitStatement(ifccParser::StatementContext *ctx) {
-    visitChildren(ctx);
-    if (ctx->ret() != nullptr) {
+    antlrcpp::Any result = visitChildren(ctx);
+    if (ctx->block() != nullptr) {
+        return any_cast<bool>(result);
+    } else if (ctx->ret() != nullptr) {
         hasReturn = true;
-        return true ;
-    }
-    else {
+        return true;
+    } else {
         return false;
     }
 }
@@ -204,17 +214,17 @@ antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
     cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
     cout << "    cmpl    " << roffset << "(%rbp), %eax" << endl;
     string instruction;
-    if(op == "=="){
+    if (op == "==") {
         instruction = "sete";
-    } else if(op == "!=") {
+    } else if (op == "!=") {
         instruction = "setne";
-    } else if(op == "<") {
+    } else if (op == "<") {
         instruction = "setl";
-    } else if(op == "<=") {
+    } else if (op == "<=") {
         instruction = "setle";
-    } else if(op == ">=") {
+    } else if (op == ">=") {
         instruction = "setge";
-    } else if(op == ">") {
+    } else if (op == ">") {
         instruction = "setg";
     }
     cout << "    " << instruction << " %al" << endl;
