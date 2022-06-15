@@ -14,6 +14,10 @@ public:
 
     antlrcpp::Any visitBlock(ifccParser::BlockContext *ctx) override;
 
+    antlrcpp::Any visitIfBlock(ifccParser::IfBlockContext *ctx) override;
+
+    antlrcpp::Any visitElseBlock(ifccParser::ElseBlockContext *ctx) override;
+
     antlrcpp::Any visitStatement(ifccParser::StatementContext *ctx) override;
 
     antlrcpp::Any
@@ -36,7 +40,8 @@ public:
 
     antlrcpp::Any visitTimes(ifccParser::TimesContext *ctx) override;
 
-    antlrcpp::Any visitParenthesis(ifccParser::ParenthesisContext *ctx) override;
+    antlrcpp::Any
+    visitParenthesis(ifccParser::ParenthesisContext *ctx) override;
 
     antlrcpp::Any visitUnary(ifccParser::UnaryContext *ctx) override;
 
@@ -45,6 +50,8 @@ public:
 private:
     unordered_map<string, int> symbolTable;
     int currentOffset = 0;
+    int jumpOffset = 0;
+    int finalJump = 0;
     string currentVariable;
     bool hasReturn = false;
 

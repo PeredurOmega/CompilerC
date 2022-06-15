@@ -42,6 +42,43 @@ antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
     return false;
 }
 
+antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
+    jumpOffset++;
+    bool finish = finalJump == 0;
+    if (finish) {
+        finalJump = jumpOffset;
+        jumpOffset++;
+    }
+    int offset = any_cast<int>(visit(ctx->expression()));
+    cout << "    cmpl    $0, " << offset << "(%rbp)" << endl;
+    cout << "    je      .L" << jumpOffset << endl;
+
+    bool stop = false;
+    if (ctx->statement() != nullptr) {
+        stop = any_cast<bool>(visitStatement(ctx->statement()));
+    } else if (ctx->block() != nullptr) {
+        stop = any_cast<bool>(visitBlock(ctx->block()));
+    }
+
+    if (ctx->elseBlock() != nullptr) {
+        cout << "    jmp      .L" << finalJump << endl;
+        stop = stop && any_cast<bool>(visitElseBlock(ctx->elseBlock()));
+    }
+
+    if (finish) {
+        cout << ".L" << finalJump << ":" << endl;
+        finalJump = 0;
+    }
+    return stop;
+}
+
+antlrcpp::Any
+CodeGenVisitor::visitElseBlock(ifccParser::ElseBlockContext *ctx) {
+    jumpOffset++;
+    cout << ".L" << jumpOffset << ":" << endl;
+    return visitChildren(ctx);
+}
+
 /**
  *
  * @param ctx
