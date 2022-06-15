@@ -33,8 +33,8 @@ ELSE: 'else';
 
 RETURN : 'return' ;
 TYPE : 'int';
+COMMENT : (('/*' .*? '*/') | ('//' .*? ('\n' | '\r\n'))) -> skip ;
 CONST : [0-9]+ ;
 VAR : [a-zA-Z_][a-zA-Z_$0-9]*;
-COMMENT : '/*' .*? '*/' -> skip ;
 DIRECTIVE : '#' .*? '\n' -> skip ;
 WS    : [ \t\r\n] -> channel(HIDDEN);
