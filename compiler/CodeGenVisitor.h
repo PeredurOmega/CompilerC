@@ -36,9 +36,12 @@ public:
 
     antlrcpp::Any visitUnary(ifccParser::UnaryContext *ctx) override;
 
+    antlrcpp::Any visitCompare(ifccParser::CompareContext *ctx) override;
+
 private:
     unordered_map<string, int> symbolTable;
     int currentOffset = 0;
     string currentVariable;
+    bool hasReturn = false;
 
 };

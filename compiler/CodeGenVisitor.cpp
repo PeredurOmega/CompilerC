@@ -11,7 +11,9 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
         bool stop = any_cast<bool>(visitStatement(statement));
         if (stop) break;
     }
-
+    if (!hasReturn){
+        cout << "    movl    $0, %eax" << endl;
+    }
     cout << "    popq %rbp\n"
             "    ret\n";
 
@@ -22,8 +24,13 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
 antlrcpp::Any
 CodeGenVisitor::visitStatement(ifccParser::StatementContext *ctx) {
     visitChildren(ctx);
-    if (ctx->ret() != nullptr) return true;
-    else return false;
+    if (ctx->ret() != nullptr) {
+        hasReturn = true;
+        return true ;
+    }
+    else {
+        return false;
+    }
 }
 
 antlrcpp::Any
@@ -178,4 +185,8 @@ antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
         cout << "    negl    " << offset << "(%rbp)" << endl;
     }
     return offset;
+}
+
+antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
+    return ifccBaseVisitor::visitCompare(ctx);
 }

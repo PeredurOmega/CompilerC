@@ -2,14 +2,14 @@ grammar ifcc;
 
 axiom : prog ;
 
-prog : 'int' 'main' '(' ')' '{' statement* '}' ;
+prog : 'int' 'main' '(' ')' '{' ';'* statement* ';'* '}' ;
 statement : declaration
           | affectation
           | ret;
-ret : RETURN expression ';';
-declaration : TYPE (init| VAR) (',' (init| VAR))*';';
+ret : RETURN expression ';'+;
+declaration : TYPE (init| VAR) (',' (init| VAR))* ';'+;
 init : VAR '=' expression ;
-affectation : VAR '=' expression ';';
+affectation : VAR '=' expression ';'+;
 expression : VAR #variable
             |CONST #constant
             |VAR'='expression #varexpr
