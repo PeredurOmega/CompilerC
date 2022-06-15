@@ -1,32 +1,43 @@
 #include "CodeGenVisitor.h"
+#include "ir/Prog.h"
 
 using namespace std;
 
-antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
-    cout << ".globl	main" << endl;
+antlrcpp::Any CodeGenVisitor::visitAxiom(ifccParser::AxiomContext *ctx) {
+    return visitProg(ctx->prog());
+}
 
-    for (auto function: ctx->function()) {
-        visitFunction(function);
+antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
+    Prog *prog = new Prog("main");
+
+    for (auto f: ctx->function()) {
+        prog->addFunction(any_cast<Function *>(visit(f)));
     }
-    return 0;
+
+    return prog;
 }
 
 antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
-    cout << " " << ctx->VAR()->getText() << ":" << endl
-         << "    pushq   %rbp" << endl
-         << "    movq    %rsp, %rbp" << endl;
-    visitBlock(ctx->block());
-    if (!hasReturn) {
-        if (ctx->VAR()->getText() == "main" &&
-            ctx->TYPE()->getText() == "int") {
-            cout << "    movl    $0, %eax" << endl;
+
+    //TODO HANDLE INVALID FUN TYPE
+    IrType *returnType;
+    string rawReturnType = ctx->TYPE()->getText();
+    try {
+        returnType = (IrType *) PrimaryType::parse(rawReturnType);
+    } catch (const InvalidType &e) {
+        if (rawReturnType == "void") {
+            returnType = (IrType *) new Void();
         } else {
-            cout << "    nop" << endl;
+            //TODO REPLACE BY COMPILATION EXCEPTION
+            cerr << e.what() << " at line " << ctx->start->getLine() << endl;
         }
     }
-    cout << "    popq %rbp" << endl
-         << "    ret" << endl;
-    return 0;
+
+    //TODO ADD BLOCKS
+    visitBlock(ctx->block());
+
+    Function *fun = new Function(ctx->VAR()->getText(), returnType);
+    return fun;
 }
 
 /**

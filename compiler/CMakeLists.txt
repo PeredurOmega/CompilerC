@@ -12,6 +12,10 @@ set(compiler-GENERATED_SRC
         ${PROJECT_SOURCE_DIR}/compiler/generated/ifccVisitor.cpp
         )
 
+set(compiler-IR_SRC
+        ${PROJECT_SOURCE_DIR}/compiler/ir/Prog.cpp
+        ir/IrElement.cpp ir/IrElement.h ir/Function.cpp ir/Function.h ir/IrScope.cpp ir/IrScope.h ir/Block.cpp ir/Block.h ir/TypeSymbol.cpp ir/TypeSymbol.h)
+
 foreach(src_file ${compiler-GENERATED_SRC})
     set_source_files_properties(
             ${src_file}
@@ -41,7 +45,7 @@ include_directories(
 )
 
 #file(GLOB compiler_SRC "${PROJECT_SOURCE_DIR}/compiler/generated/*")
-set(compiler_SRC ${PROJECT_SOURCE_DIR}/compiler/main.cpp ${PROJECT_SOURCE_DIR}/compiler/CodeGenVisitor.cpp ${compiler-GENERATED_SRC})
+set(compiler_SRC ${PROJECT_SOURCE_DIR}/compiler/main.cpp ${PROJECT_SOURCE_DIR}/compiler/CodeGenVisitor.cpp ${compiler-GENERATED_SRC} ${compiler-IR_SRC})
 
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set (flags_1 "-Wno-overloaded-virtual")

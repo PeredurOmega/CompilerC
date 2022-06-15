@@ -8,6 +8,8 @@ using namespace std;
 
 class CodeGenVisitor : public ifccBaseVisitor {
 public:
+    antlrcpp::Any visitAxiom(ifccParser::AxiomContext *ctx) override;
+
     antlrcpp::Any visitProg(ifccParser::ProgContext *ctx) override;
 
     antlrcpp::Any visitFunction(ifccParser::FunctionContext *ctx) override;
