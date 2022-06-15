@@ -1,5 +1,5 @@
 
-// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -182,7 +182,6 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *IF();
     ExpressionContext *expression();
-    BlockContext *block();
     StatementContext *statement();
     ElseBlockContext *elseBlock();
 
@@ -200,8 +199,6 @@ public:
     ElseBlockContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *ELSE();
-    IfBlockContext *ifBlock();
-    BlockContext *block();
     StatementContext *statement();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;

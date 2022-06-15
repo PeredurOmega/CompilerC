@@ -16,8 +16,8 @@ statement : ';'
           | ifBlock
           | block;
 
-ifBlock: IF '(' expression ')' (block | statement) elseBlock?;
-elseBlock: ELSE (ifBlock|block|statement);
+ifBlock: IF '(' expression ')' statement elseBlock?;
+elseBlock: ELSE statement;
 
 ret : RETURN expression ';'+;
 declaration : TYPE (init| VAR) (',' (init| VAR))* ';'+;

@@ -56,14 +56,9 @@ antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
     else jOffset = finalJump;
     cout << "    je      .L" << jOffset << endl;
 
-    bool stop = false;
     int temp = finalJump;
     finalJump = 0;
-    if (ctx->statement() != nullptr) {
-        stop = any_cast<bool>(visitStatement(ctx->statement()));
-    } else if (ctx->block() != nullptr) {
-        stop = any_cast<bool>(visitBlock(ctx->block()));
-    }
+    bool stop = any_cast<bool>(visitStatement(ctx->statement()));
 
     finalJump = temp;
 
@@ -83,7 +78,7 @@ antlrcpp::Any
 CodeGenVisitor::visitElseBlock(ifccParser::ElseBlockContext *ctx) {
     jumpOffset++;
     cout << ".L" << jumpOffset << ":" << endl;
-    return visitChildren(ctx);
+    return visitStatement(ctx->statement());
 }
 
 /**
