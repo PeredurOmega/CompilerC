@@ -65,11 +65,12 @@ antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
         stop = any_cast<bool>(visitBlock(ctx->block()));
     }
 
+    finalJump = temp;
+
     if (ctx->elseBlock() != nullptr) {
         cout << "    jmp      .L" << finalJump << endl;
         stop = any_cast<bool>(visitElseBlock(ctx->elseBlock())) && stop;
     }
-    finalJump = temp;
 
     if (finish) {
         cout << ".L" << finalJump << ":" << endl;
