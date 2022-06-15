@@ -185,11 +185,29 @@ CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
-    int offset = any_cast<int>(visit(ctx->expression()));
     if (ctx->op->getText() == "-") {
+        int offset = any_cast<int>(visit(ctx->expression()));
         cout << "    negl    " << offset << "(%rbp)" << endl;
+        return offset;
+    } else if (ctx->op->getText() == "!") {
+        string temp = currentVariable;
+        currentVariable = "";
+        int roffset = any_cast<int>(visit(ctx->expression()));
+        cout << "    cmpl    $0, " << roffset << "(%rbp)" << endl;
+        cout << "    sete    %al" << endl;
+        cout << "    movzbl  %al, %eax" << endl;
+        currentVariable = temp;
+        int offset;
+        if (currentVariable.empty()) {
+            currentOffset += 4;
+            offset = -currentOffset;
+        } else {
+            offset = symbolTable[currentVariable];
+        }
+        cout << "    movl    %eax, " << offset
+             << "(%rbp) #v" << currentVariable << endl;
+        return offset;
     }
-    return offset;
 }
 
 antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {

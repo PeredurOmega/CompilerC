@@ -64,6 +64,12 @@ public:
   virtual void enterParenthesis(ifccParser::ParenthesisContext * /*ctx*/) override { }
   virtual void exitParenthesis(ifccParser::ParenthesisContext * /*ctx*/) override { }
 
+  virtual void enterIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }
+  virtual void exitIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }
+
+  virtual void enterElseBlock(ifccParser::ElseBlockContext * /*ctx*/) override { }
+  virtual void exitElseBlock(ifccParser::ElseBlockContext * /*ctx*/) override { }
+
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }
   virtual void exitEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

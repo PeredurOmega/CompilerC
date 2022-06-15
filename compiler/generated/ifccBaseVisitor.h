@@ -79,6 +79,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitIfBlock(ifccParser::IfBlockContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitElseBlock(ifccParser::ElseBlockContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
 
 };
 

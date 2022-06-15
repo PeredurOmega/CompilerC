@@ -51,6 +51,10 @@ public:
 
     virtual std::any visitParenthesis(ifccParser::ParenthesisContext *context) = 0;
 
+    virtual std::any visitIfBlock(ifccParser::IfBlockContext *context) = 0;
+
+    virtual std::any visitElseBlock(ifccParser::ElseBlockContext *context) = 0;
+
 
 };
 

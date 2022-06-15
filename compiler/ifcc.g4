@@ -2,7 +2,7 @@ grammar ifcc;
 
 axiom : prog ;
 
-prog : 'int' 'main' '(' ')' block;
+prog : TYPE 'main' '(' ')' block;
 block : '{' statement* '}';
 statement : ';'
           | declaration
@@ -19,7 +19,7 @@ expression : VAR #variable
             |'(' expression ')' #parenthesis
             |expression op=('*' | '/' | '%') expression #times
             |expression op=('+' | '-') expression #addsub
-            |op='-' expression #unary
+            |op=('-'|'!') expression #unary
             |expression op=('<' | '<=' | '==' | '!=' | '>=' | '>') expression #compare
             ;
 
