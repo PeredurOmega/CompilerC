@@ -8,7 +8,8 @@ statement : ';'
           | declaration
           | affectation
           | ret
-          | ifBlock;
+          | ifBlock
+          | block;
 ret : RETURN expression ';'+;
 declaration : TYPE (init| VAR) (',' (init| VAR))* ';'+;
 init : VAR '=' expression ;
