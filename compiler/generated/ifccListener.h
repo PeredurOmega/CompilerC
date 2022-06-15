@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -47,20 +47,23 @@ public:
   virtual void enterAffectation(ifccParser::AffectationContext *ctx) = 0;
   virtual void exitAffectation(ifccParser::AffectationContext *ctx) = 0;
 
-  virtual void enterTimes(ifccParser::TimesContext *ctx) = 0;
-  virtual void exitTimes(ifccParser::TimesContext *ctx) = 0;
-
   virtual void enterCompare(ifccParser::CompareContext *ctx) = 0;
   virtual void exitCompare(ifccParser::CompareContext *ctx) = 0;
 
   virtual void enterConstant(ifccParser::ConstantContext *ctx) = 0;
   virtual void exitConstant(ifccParser::ConstantContext *ctx) = 0;
 
+  virtual void enterLogicaland(ifccParser::LogicalandContext *ctx) = 0;
+  virtual void exitLogicaland(ifccParser::LogicalandContext *ctx) = 0;
+
   virtual void enterVarexpr(ifccParser::VarexprContext *ctx) = 0;
   virtual void exitVarexpr(ifccParser::VarexprContext *ctx) = 0;
 
-  virtual void enterVariable(ifccParser::VariableContext *ctx) = 0;
-  virtual void exitVariable(ifccParser::VariableContext *ctx) = 0;
+  virtual void enterShift(ifccParser::ShiftContext *ctx) = 0;
+  virtual void exitShift(ifccParser::ShiftContext *ctx) = 0;
+
+  virtual void enterBitwisexor(ifccParser::BitwisexorContext *ctx) = 0;
+  virtual void exitBitwisexor(ifccParser::BitwisexorContext *ctx) = 0;
 
   virtual void enterAddsub(ifccParser::AddsubContext *ctx) = 0;
   virtual void exitAddsub(ifccParser::AddsubContext *ctx) = 0;
@@ -68,8 +71,26 @@ public:
   virtual void enterUnary(ifccParser::UnaryContext *ctx) = 0;
   virtual void exitUnary(ifccParser::UnaryContext *ctx) = 0;
 
+  virtual void enterBitwiseand(ifccParser::BitwiseandContext *ctx) = 0;
+  virtual void exitBitwiseand(ifccParser::BitwiseandContext *ctx) = 0;
+
   virtual void enterParenthesis(ifccParser::ParenthesisContext *ctx) = 0;
   virtual void exitParenthesis(ifccParser::ParenthesisContext *ctx) = 0;
+
+  virtual void enterEqual(ifccParser::EqualContext *ctx) = 0;
+  virtual void exitEqual(ifccParser::EqualContext *ctx) = 0;
+
+  virtual void enterTimes(ifccParser::TimesContext *ctx) = 0;
+  virtual void exitTimes(ifccParser::TimesContext *ctx) = 0;
+
+  virtual void enterVariable(ifccParser::VariableContext *ctx) = 0;
+  virtual void exitVariable(ifccParser::VariableContext *ctx) = 0;
+
+  virtual void enterBitwiseor(ifccParser::BitwiseorContext *ctx) = 0;
+  virtual void exitBitwiseor(ifccParser::BitwiseorContext *ctx) = 0;
+
+  virtual void enterLogicalor(ifccParser::LogicalorContext *ctx) = 0;
+  virtual void exitLogicalor(ifccParser::LogicalorContext *ctx) = 0;
 
   virtual void enterIfBlock(ifccParser::IfBlockContext *ctx) = 0;
   virtual void exitIfBlock(ifccParser::IfBlockContext *ctx) = 0;

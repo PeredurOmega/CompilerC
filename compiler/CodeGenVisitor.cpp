@@ -244,28 +244,37 @@ CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
-    if (ctx->op->getText() == "-") {
+    if (ctx->op->getText() == "+"){
         int offset = any_cast<int>(visit(ctx->expression()));
-        cout << "    negl    " << offset << "(%rbp)" << endl;
         return offset;
-    } else if (ctx->op->getText() == "!") {
-        string temp = currentVariable;
-        currentVariable = "";
-        int roffset = any_cast<int>(visit(ctx->expression()));
-        cout << "    cmpl    $0, " << roffset << "(%rbp)" << endl;
-        cout << "    sete    %al" << endl;
-        cout << "    movzbl  %al, %eax" << endl;
-        currentVariable = temp;
-        int offset;
-        if (currentVariable.empty()) {
-            currentOffset += 4;
-            offset = -currentOffset;
-        } else {
-            offset = symbolTable[currentVariable];
+    } else {
+        if (ctx->op->getText() == "-") {
+            int offset = any_cast<int>(visit(ctx->expression()));
+            cout << "    negl    " << offset << "(%rbp)" << endl;
+            return offset;
+        } else if (ctx->op->getText() == "~") {
+            int offset = any_cast<int>(visit(ctx->expression()));
+            cout << "    notl    " << offset << "(%rbp)" << endl;
+            return offset;
+        } else if (ctx->op->getText() == "!") {
+            string temp = currentVariable;
+            currentVariable = "";
+            int roffset = any_cast<int>(visit(ctx->expression()));
+            cout << "    cmpl    $0, " << roffset << "(%rbp)" << endl;
+            cout << "    sete    %al" << endl;
+            cout << "    movzbl  %al, %eax" << endl;
+            currentVariable = temp;
+            int offset;
+            if (currentVariable.empty()) {
+                currentOffset += 4;
+                offset = -currentOffset;
+            } else {
+                offset = symbolTable[currentVariable];
+            }
+            cout << "    movl    %eax, " << offset
+                 << "(%rbp) #v" << currentVariable << endl;
+            return offset;
         }
-        cout << "    movl    %eax, " << offset
-             << "(%rbp) #v" << currentVariable << endl;
-        return offset;
     }
 }
 
@@ -281,11 +290,7 @@ antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
     cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
     cout << "    cmpl    " << roffset << "(%rbp), %eax" << endl;
     string instruction;
-    if (op == "==") {
-        instruction = "sete";
-    } else if (op == "!=") {
-        instruction = "setne";
-    } else if (op == "<") {
+    if (op == "<") {
         instruction = "setl";
     } else if (op == "<=") {
         instruction = "setle";
@@ -311,3 +316,224 @@ antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
          << "(%rbp) #v" << currentVariable << endl;
     return offset;
 }
+
+antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
+    string temp = currentVariable;
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    ifccParser::ExpressionContext *lexpr = expr[0];
+    ifccParser::ExpressionContext *rexpr = expr[1];
+    currentVariable = "";
+    int loffset = any_cast<int>(visit(lexpr));
+    int roffset = any_cast<int>(visit(rexpr));
+    string op = ctx->op->getText();
+    cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
+    cout << "    cmpl    " << roffset << "(%rbp), %eax" << endl;
+    string instruction;
+    if (op == "==") {
+        instruction = "sete";
+    } else if (op == "!=") {
+        instruction = "setne";
+    }
+    cout << "    " << instruction << " %al" << endl;
+    cout << "    movzbl  %al, %eax" << endl;
+    string res;
+    if (op == "%") res = "edx";
+    else res = "eax";
+    currentVariable = temp;
+    int offset;
+    if (currentVariable.empty()) {
+        currentOffset += 4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
+    cout << "    movl    %" << res << ", " << offset
+         << "(%rbp) #v" << currentVariable << endl;
+    return offset;
+}
+
+antlrcpp::Any CodeGenVisitor::visitBitwiseand(ifccParser::BitwiseandContext *ctx) {
+    string temp = currentVariable;
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    ifccParser::ExpressionContext *lexpr = expr[0];
+    ifccParser::ExpressionContext *rexpr = expr[1];
+    currentVariable = "";
+    int loffset = any_cast<int>(visit(lexpr));
+    int roffset = any_cast<int>(visit(rexpr));
+    cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
+    string op = ctx->op->getText();
+    string instruction;
+    if(op == "&"){
+        instruction = "andl";
+    }
+    cout << "    " << instruction << "    " << roffset << "(%rbp), %eax" << endl;
+    currentVariable = temp;
+    int offset;
+    if (currentVariable.empty()) {
+        currentOffset += 4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
+    cout << "    movl    %eax, " << offset
+         << "(%rbp) #v" << currentVariable << endl;
+    return offset;
+}
+
+antlrcpp::Any CodeGenVisitor::visitBitwisexor(ifccParser::BitwisexorContext *ctx) {
+    string temp = currentVariable;
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    ifccParser::ExpressionContext *lexpr = expr[0];
+    ifccParser::ExpressionContext *rexpr = expr[1];
+    currentVariable = "";
+    int loffset = any_cast<int>(visit(lexpr));
+    int roffset = any_cast<int>(visit(rexpr));
+    cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
+    string op = ctx->op->getText();
+    string instruction;
+    if(op == "^"){
+        instruction = "xorl";
+    }
+    cout << "    " << instruction << "    " << roffset << "(%rbp), %eax" << endl;
+    currentVariable = temp;
+    int offset;
+    if (currentVariable.empty()) {
+        currentOffset += 4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
+    cout << "    movl    %eax, " << offset
+         << "(%rbp) #v" << currentVariable << endl;
+    return offset;
+}
+
+antlrcpp::Any CodeGenVisitor::visitBitwiseor(ifccParser::BitwiseorContext *ctx) {
+    string temp = currentVariable;
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    ifccParser::ExpressionContext *lexpr = expr[0];
+    ifccParser::ExpressionContext *rexpr = expr[1];
+    currentVariable = "";
+    int loffset = any_cast<int>(visit(lexpr));
+    int roffset = any_cast<int>(visit(rexpr));
+    cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
+    string op = ctx->op->getText();
+    string instruction;
+    if(op == "|"){
+        instruction = "orl";
+    }
+    cout << "    " << instruction << "    " << roffset << "(%rbp), %eax" << endl;
+    currentVariable = temp;
+    int offset;
+    if (currentVariable.empty()) {
+        currentOffset += 4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
+    cout << "    movl    %eax, " << offset
+         << "(%rbp) #v" << currentVariable << endl;
+    return offset;
+}
+
+antlrcpp::Any CodeGenVisitor::visitShift(ifccParser::ShiftContext *ctx) {
+    string temp = currentVariable;
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    ifccParser::ExpressionContext *lexpr = expr[0];
+    ifccParser::ExpressionContext *rexpr = expr[1];
+    currentVariable = "";
+    int loffset = any_cast<int>(visit(lexpr));
+    int roffset = any_cast<int>(visit(rexpr));
+    cout << "    movl    " << roffset << "(%rbp), %eax" << endl;
+    cout << "    movl    " << loffset << "(%rbp), %edx" << endl;
+    cout << "    movl    %eax, %ecx" << endl;
+    string op = ctx->op->getText();
+    string instruction;
+    if(op == "<<"){
+        instruction = "sall";
+    } else if(op == ">>"){
+        instruction = "sarl";
+    }
+    cout << "    " << instruction << "    %cl, %edx" << endl;
+    cout << "    movl    %edx, %eax" << endl;
+    currentVariable = temp;
+    int offset;
+    if (currentVariable.empty()) {
+        currentOffset += 4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
+    cout << "    movl    %eax, " << offset
+         << "(%rbp) #v" << currentVariable << endl;
+    return offset;
+}
+
+antlrcpp::Any CodeGenVisitor::visitLogicaland(ifccParser::LogicalandContext *ctx) {
+    string temp = currentVariable;
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    ifccParser::ExpressionContext *lexpr = expr[0];
+    ifccParser::ExpressionContext *rexpr = expr[1];
+    currentVariable = "";
+    int loffset = any_cast<int>(visit(lexpr));
+    int roffset = any_cast<int>(visit(rexpr));
+    cout << "    cmpl    $0, " << loffset << "(%rbp)" << endl;
+    jumpOffset++;
+    cout << "    jne      .L" << jumpOffset << endl;
+    cout << "    cmpl    $0, " << roffset << "(%rbp)" << endl;
+    cout << "    je      .L" << jumpOffset << endl;
+    cout << "    movl    $1, %eax" << endl;
+    jumpOffset++;
+    cout << "    jmp     .L" << jumpOffset << endl;
+    cout << " .L" << jumpOffset-1 << ":" << endl;
+    cout << "    movl    $0, %eax" << endl;
+    cout << " .L" << jumpOffset << ":" << endl;
+    cout << "    movzbl  %al, %eax" << endl;
+    currentVariable = temp;
+    int offset;
+    if (currentVariable.empty()) {
+        currentOffset += 4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
+    cout << "    movl    %eax, " << offset
+         << "(%rbp) #v" << currentVariable << endl;
+    return offset;
+}
+
+antlrcpp::Any CodeGenVisitor::visitLogicalor(ifccParser::LogicalorContext *ctx) {
+    string temp = currentVariable;
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    ifccParser::ExpressionContext *lexpr = expr[0];
+    ifccParser::ExpressionContext *rexpr = expr[1];
+    currentVariable = "";
+    int loffset = any_cast<int>(visit(lexpr));
+    int roffset = any_cast<int>(visit(rexpr));
+    cout << "    cmpl    $0, " << loffset << "(%rbp)" << endl;
+    jumpOffset++;
+    cout << "    jne     .L" << jumpOffset << endl;
+    cout << "    cmpl    $0, " << roffset << "(%rbp)" << endl;
+    jumpOffset++;
+    cout << "    je      .L" << jumpOffset << endl;
+    cout << " .L" << jumpOffset-1 << ":" << endl;
+    cout << "    movl    $1, %eax" << endl;
+    jumpOffset++;
+    cout << "    jmp     .L" << jumpOffset << endl;
+    cout << " .L" << jumpOffset-1 << ":" << endl;
+    cout << "    movl    $0, %eax" << endl;
+    cout << " .L" << jumpOffset << ":" << endl;
+    cout << "    movzbl  %al, %eax" << endl;
+    currentVariable = temp;
+    int offset;
+    if (currentVariable.empty()) {
+        currentOffset += 4;
+        offset = -currentOffset;
+    } else {
+        offset = symbolTable[currentVariable];
+    }
+    cout << "    movl    %eax, " << offset
+         << "(%rbp) #v" << currentVariable << endl;
+    return offset;
+}
+

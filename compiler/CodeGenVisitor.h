@@ -47,6 +47,20 @@ public:
 
     antlrcpp::Any visitCompare(ifccParser::CompareContext *ctx) override;
 
+    antlrcpp::Any visitEqual(ifccParser::EqualContext *ctx) override;
+
+    antlrcpp::Any visitBitwiseand(ifccParser::BitwiseandContext *ctx) override;
+
+    antlrcpp::Any visitBitwisexor(ifccParser::BitwisexorContext *ctx) override;
+
+    antlrcpp::Any visitBitwiseor(ifccParser::BitwiseorContext *ctx) override;
+
+    antlrcpp::Any visitShift(ifccParser::ShiftContext *ctx) override;
+
+    antlrcpp::Any visitLogicaland(ifccParser::LogicalandContext *ctx) override;
+
+    antlrcpp::Any visitLogicalor(ifccParser::LogicalorContext *ctx) override;
+
 private:
     unordered_map<string, int> symbolTable;
     int currentOffset = 0;
@@ -54,5 +68,6 @@ private:
     int finalJump = 0;
     string currentVariable;
     bool hasReturn = false;
+    int jumpOffset = 1;
 
 };
