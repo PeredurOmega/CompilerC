@@ -1,5 +1,5 @@
 
-// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -34,6 +34,8 @@ public:
     virtual std::any visitAffectation(ifccParser::AffectationContext *context) = 0;
 
     virtual std::any visitTimes(ifccParser::TimesContext *context) = 0;
+
+    virtual std::any visitCompare(ifccParser::CompareContext *context) = 0;
 
     virtual std::any visitConstant(ifccParser::ConstantContext *context) = 0;
 

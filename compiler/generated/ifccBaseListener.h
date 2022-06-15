@@ -1,5 +1,5 @@
 
-// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -39,6 +39,9 @@ public:
 
   virtual void enterTimes(ifccParser::TimesContext * /*ctx*/) override { }
   virtual void exitTimes(ifccParser::TimesContext * /*ctx*/) override { }
+
+  virtual void enterCompare(ifccParser::CompareContext * /*ctx*/) override { }
+  virtual void exitCompare(ifccParser::CompareContext * /*ctx*/) override { }
 
   virtual void enterConstant(ifccParser::ConstantContext * /*ctx*/) override { }
   virtual void exitConstant(ifccParser::ConstantContext * /*ctx*/) override { }

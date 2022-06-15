@@ -1,5 +1,5 @@
 
-// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -44,6 +44,10 @@ public:
   }
 
   virtual std::any visitTimes(ifccParser::TimesContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitCompare(ifccParser::CompareContext *ctx) override {
     return visitChildren(ctx);
   }
 

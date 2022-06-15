@@ -14,7 +14,7 @@ expression : VAR #variable
             |CONST #constant
             |VAR'='expression #varexpr
             |'(' expression ')' #parenthesis
-            |expression op=('*' | '/') expression #times
+            |expression op=('*' | '/' | '%') expression #times
             |expression op=('+' | '-') expression #addsub
             |op='-' expression #unary
             |expression op=('<' | '<=' | '==' | '!=' | '>=' | '>') expression #compare
