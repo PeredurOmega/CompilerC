@@ -180,17 +180,17 @@ for jobname in jobs:
     test_name = jobname.split('/')[1]
     test_name = test_name.replace('tests-', '')
 
-    if currentDir != test_name.split('-')[1]:
-        currentDir = test_name.split('-')[1]
-        list_files = os.listdir("testfiles/" + currentDir)
+    if currentDir != test_name.split('-')[0]:
+        currentDir = test_name.split('-')[0]
+        list_files = os.listdir(currentDir)
         directory_cpt = 0
         directory_size = len(list_files)
         xml_result += tab + "<testsuite tests=\"" + str(directory_size) + "\">" + endl
         print("TEST-SUITE: " + currentDir)
     directory_cpt += 1
 
-    xml_result += tab + tab + "<testcase classname=\"" + currentDir + "\" name=\"" + test_name.split('-')[2] + "\""
-    print(tab + 'TEST-CASE: ' + currentDir + "/" + test_name.split('-')[2])
+    xml_result += tab + tab + "<testcase classname=\"" + currentDir + "\" name=\"" + test_name.split('-')[1] + "\""
+    print(tab + 'TEST-CASE: ' + currentDir + "/" + test_name.split('-')[1])
     os.chdir(jobname)
 
     ## Reference compiler = GCC
