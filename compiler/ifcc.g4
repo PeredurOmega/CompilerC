@@ -2,7 +2,8 @@ grammar ifcc;
 
 axiom : prog ;
 
-prog : TYPE 'main' '(' ')' block;
+prog : function*;
+function: (TYPE|'void') VAR '(' ')' block;
 block : '{' statement* '}';
 statement : ';'
           | declaration

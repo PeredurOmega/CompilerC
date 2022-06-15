@@ -3,17 +3,24 @@
 using namespace std;
 
 antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
-    cout << ".globl	main\n"
-            " main: \n"
-            "    pushq   %rbp\n"
-            "    movq    %rsp, %rbp\n";
-    visit(ctx->block());
-    if (!hasReturn) {
-        cout << "    movl    $0, %eax" << endl;
-    }
-    cout << "    popq %rbp\n"
-            "    ret\n";
+    cout << ".globl	main" << endl;
 
+    for (auto function: ctx->function()) {
+        visitFunction(function);
+    }
+    return 0;
+}
+
+antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
+    cout << " " << ctx->VAR()->getText() << ":" << endl
+         << "    pushq   %rbp" << endl
+         << "    movq    %rsp, %rbp" << endl;
+    visitBlock(ctx->block());
+    if (!hasReturn) {
+        cout << "    nop" << endl;
+    }
+    cout << "    popq %rbp" << endl
+         << "    ret" << endl;
     return 0;
 }
 

@@ -23,6 +23,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitFunction(ifccParser::FunctionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitBlock(ifccParser::BlockContext *ctx) override {
     return visitChildren(ctx);
   }

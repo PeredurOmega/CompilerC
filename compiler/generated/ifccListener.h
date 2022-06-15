@@ -20,6 +20,9 @@ public:
   virtual void enterProg(ifccParser::ProgContext *ctx) = 0;
   virtual void exitProg(ifccParser::ProgContext *ctx) = 0;
 
+  virtual void enterFunction(ifccParser::FunctionContext *ctx) = 0;
+  virtual void exitFunction(ifccParser::FunctionContext *ctx) = 0;
+
   virtual void enterBlock(ifccParser::BlockContext *ctx) = 0;
   virtual void exitBlock(ifccParser::BlockContext *ctx) = 0;
 
