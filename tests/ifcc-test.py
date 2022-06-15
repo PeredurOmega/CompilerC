@@ -177,12 +177,13 @@ directory_size = 0
 for jobname in jobs:
     os.chdir(orig_cwd)
 
-    file_name = jobname.split('/')[1]
-    test_name = file_name.replace('tests-', '')
+    file_path = jobname.split('/')[1]
+    test_name = file_path.replace('tests-', '')
+    file_name = test_name.split('-')[2]
 
     if currentDir != test_name.split('-')[1]:
         currentDir = test_name.split('-')[1]
-        if "tests" in file_name:
+        if "tests" in file_path:
             list_files = os.listdir("tests/testfiles/" + currentDir)
         else:
             list_files = os.listdir("testfiles/" + currentDir)
@@ -192,8 +193,8 @@ for jobname in jobs:
         print("TEST-SUITE: " + currentDir)
     directory_cpt += 1
 
-    xml_result += tab + tab + "<testcase classname=\"" + currentDir + "\" name=\"" + test_name.split('-')[2] + "\""
-    print(tab + 'TEST-CASE: ' + currentDir + "/" + test_name.split('-')[2])
+    xml_result += tab + tab + "<testcase classname=\"" + currentDir + "\" name=\"" + file_name + "\""
+    print(tab + 'TEST-CASE: ' + currentDir + "/" + file_name)
     os.chdir(jobname)
 
     ## Reference compiler = GCC
@@ -219,7 +220,7 @@ for jobname in jobs:
     elif gccstatus != 0 and ifccstatus == 0:
         ## ifcc wrongly accepts invalid program -> error
         xml_result += ">" + endl
-        xml_result += tab + tab + tab + "<failure type=\"AcceptInvalidProgram\">Your compiler accepts an invalid program</failure>" + endl
+        xml_result += tab + tab + tab + "<failure type=\"AcceptInvalidProgram\">" + currentDir + " - " + file_name + " - Your compiler accepts an invalid program</failure>" + endl
         xml_result += tab + tab + "</testcase>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
@@ -228,7 +229,7 @@ for jobname in jobs:
     elif gccstatus == 0 and ifccstatus != 0:
         ## ifcc wrongly rejects valid program -> error
         xml_result += ">" + endl
-        xml_result += tab + tab + tab + "<failure type=\"RejectsValidProgram\">Your compiler rejects a valid program</failure>" + endl
+        xml_result += tab + tab + tab + "<failure type=\"RejectsValidProgram\">" + currentDir + " - " + file_name + " - Your compiler rejects a valid program</failure>" + endl
         xml_result += tab + tab + "</testcase>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
@@ -241,7 +242,7 @@ for jobname in jobs:
         ldstatus = command("gcc -o exe-ifcc asm-ifcc.s", "ifcc-link.txt")
         if ldstatus:
             xml_result += ">" + endl
-            xml_result += tab + tab + tab + "<failure type=\"IncorrectAssembly\">Your compiler produces incorrect assembly</failure>" + endl
+            xml_result += tab + tab + tab + "<failure type=\"IncorrectAssembly\">" + currentDir + " - " + file_name + " - Your compiler produces incorrect assembly</failure>" + endl
             xml_result += tab + tab + "</testcase>" + endl
             if directory_cpt == directory_size:
                 xml_result += tab + "</testsuite>" + endl
@@ -256,7 +257,7 @@ for jobname in jobs:
     command("./exe-ifcc", "ifcc-execute.txt")
     if open("gcc-execute.txt").read() != open("ifcc-execute.txt").read():
         xml_result += ">" + endl
-        xml_result += tab + tab + tab + "<failure type=\"WrongResult\">Different results at execution</failure>" + endl
+        xml_result += tab + tab + tab + "<failure type=\"WrongResult\">" + currentDir + " - " + file_name + " - Different results at execution</failure>" + endl
         xml_result += tab + tab + "</testcase>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
