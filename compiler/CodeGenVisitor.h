@@ -10,6 +10,8 @@ class CodeGenVisitor : public ifccBaseVisitor {
 public:
     antlrcpp::Any visitProg(ifccParser::ProgContext *ctx) override;
 
+    antlrcpp::Any visitFunction(ifccParser::FunctionContext *ctx) override;
+
     antlrcpp::Any visitBlock(ifccParser::BlockContext *ctx) override;
 
     antlrcpp::Any visitStatement(ifccParser::StatementContext *ctx) override;

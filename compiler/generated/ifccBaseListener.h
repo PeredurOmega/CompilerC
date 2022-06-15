@@ -22,6 +22,9 @@ public:
   virtual void enterProg(ifccParser::ProgContext * /*ctx*/) override { }
   virtual void exitProg(ifccParser::ProgContext * /*ctx*/) override { }
 
+  virtual void enterFunction(ifccParser::FunctionContext * /*ctx*/) override { }
+  virtual void exitFunction(ifccParser::FunctionContext * /*ctx*/) override { }
+
   virtual void enterBlock(ifccParser::BlockContext * /*ctx*/) override { }
   virtual void exitBlock(ifccParser::BlockContext * /*ctx*/) override { }
 

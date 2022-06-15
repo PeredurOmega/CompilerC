@@ -23,6 +23,8 @@ public:
 
     virtual std::any visitProg(ifccParser::ProgContext *context) = 0;
 
+    virtual std::any visitFunction(ifccParser::FunctionContext *context) = 0;
+
     virtual std::any visitBlock(ifccParser::BlockContext *context) = 0;
 
     virtual std::any visitStatement(ifccParser::StatementContext *context) = 0;
