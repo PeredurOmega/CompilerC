@@ -23,6 +23,7 @@ antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
         bool stop = any_cast<bool>(visitStatement(statement));
         if (stop) break;
     }
+    return 0;
 }
 
 antlrcpp::Any
