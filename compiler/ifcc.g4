@@ -15,10 +15,15 @@ statement : ';'
           | ret
           | ifBlock
           | block;
+
+ifBlock: IF '(' expression ')' statement elseBlock?;
+elseBlock: ELSE statement;
+
 ret : RETURN expression ';'+;
 declaration : TYPE (init| VAR) (',' (init| VAR))* ';'+;
 init : VAR '=' expression ;
 affectation : VAR '=' expression ';'+;
+
 expression : VAR #variable
             |CONST #constant
             |VAR'='expression #varexpr
@@ -36,8 +41,6 @@ expression : VAR #variable
             |expression op='||' expression #logicalor
             ;
 
-ifBlock: IF '(' expression ')' (block | statement) elseBlock?;
-elseBlock: ELSE (ifBlock|block|statement);
 
 IF : 'if';
 ELSE: 'else';

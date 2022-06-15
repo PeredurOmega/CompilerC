@@ -43,6 +43,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitIfBlock(ifccParser::IfBlockContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitElseBlock(ifccParser::ElseBlockContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitRet(ifccParser::RetContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -116,14 +124,6 @@ public:
   }
 
   virtual std::any visitLogicalor(ifccParser::LogicalorContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitIfBlock(ifccParser::IfBlockContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitElseBlock(ifccParser::ElseBlockContext *ctx) override {
     return visitChildren(ctx);
   }
 

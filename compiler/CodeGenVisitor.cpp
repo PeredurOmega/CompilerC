@@ -43,26 +43,28 @@ antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
+    currentVariable = "";
     jumpOffset++;
     bool finish = finalJump == 0;
     if (finish) {
         finalJump = jumpOffset;
-        jumpOffset++;
     }
     int offset = any_cast<int>(visit(ctx->expression()));
     cout << "    cmpl    $0, " << offset << "(%rbp)" << endl;
-    cout << "    je      .L" << jumpOffset << endl;
+    int jOffset;
+    if (ctx->elseBlock() != nullptr) jOffset = jumpOffset + 1;
+    else jOffset = finalJump;
+    cout << "    je      .L" << jOffset << endl;
 
-    bool stop = false;
-    if (ctx->statement() != nullptr) {
-        stop = any_cast<bool>(visitStatement(ctx->statement()));
-    } else if (ctx->block() != nullptr) {
-        stop = any_cast<bool>(visitBlock(ctx->block()));
-    }
+    int temp = finalJump;
+    finalJump = 0;
+    bool stop = any_cast<bool>(visitStatement(ctx->statement()));
+
+    finalJump = temp;
 
     if (ctx->elseBlock() != nullptr) {
         cout << "    jmp      .L" << finalJump << endl;
-        stop = stop && any_cast<bool>(visitElseBlock(ctx->elseBlock()));
+        stop = any_cast<bool>(visitElseBlock(ctx->elseBlock())) && stop;
     }
 
     if (finish) {
@@ -76,7 +78,7 @@ antlrcpp::Any
 CodeGenVisitor::visitElseBlock(ifccParser::ElseBlockContext *ctx) {
     jumpOffset++;
     cout << ".L" << jumpOffset << ":" << endl;
-    return visitChildren(ctx);
+    return visitStatement(ctx->statement());
 }
 
 /**
@@ -244,7 +246,7 @@ CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
-    if (ctx->op->getText() == "+"){
+    if (ctx->op->getText() == "+") {
         int offset = any_cast<int>(visit(ctx->expression()));
         return offset;
     } else {
@@ -301,9 +303,6 @@ antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
     }
     cout << "    " << instruction << " %al" << endl;
     cout << "    movzbl  %al, %eax" << endl;
-    string res;
-    if (op == "%") res = "edx";
-    else res = "eax";
     currentVariable = temp;
     int offset;
     if (currentVariable.empty()) {
@@ -312,7 +311,7 @@ antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
     } else {
         offset = symbolTable[currentVariable];
     }
-    cout << "    movl    %" << res << ", " << offset
+    cout << "    movl    %eax, " << offset
          << "(%rbp) #v" << currentVariable << endl;
     return offset;
 }
@@ -336,9 +335,6 @@ antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
     }
     cout << "    " << instruction << " %al" << endl;
     cout << "    movzbl  %al, %eax" << endl;
-    string res;
-    if (op == "%") res = "edx";
-    else res = "eax";
     currentVariable = temp;
     int offset;
     if (currentVariable.empty()) {
@@ -347,12 +343,13 @@ antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
     } else {
         offset = symbolTable[currentVariable];
     }
-    cout << "    movl    %" << res << ", " << offset
+    cout << "    movl    %eax, " << offset
          << "(%rbp) #v" << currentVariable << endl;
     return offset;
 }
 
-antlrcpp::Any CodeGenVisitor::visitBitwiseand(ifccParser::BitwiseandContext *ctx) {
+antlrcpp::Any
+CodeGenVisitor::visitBitwiseand(ifccParser::BitwiseandContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -363,10 +360,11 @@ antlrcpp::Any CodeGenVisitor::visitBitwiseand(ifccParser::BitwiseandContext *ctx
     cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
     string op = ctx->op->getText();
     string instruction;
-    if(op == "&"){
+    if (op == "&") {
         instruction = "andl";
     }
-    cout << "    " << instruction << "    " << roffset << "(%rbp), %eax" << endl;
+    cout << "    " << instruction << "    " << roffset << "(%rbp), %eax"
+         << endl;
     currentVariable = temp;
     int offset;
     if (currentVariable.empty()) {
@@ -380,7 +378,8 @@ antlrcpp::Any CodeGenVisitor::visitBitwiseand(ifccParser::BitwiseandContext *ctx
     return offset;
 }
 
-antlrcpp::Any CodeGenVisitor::visitBitwisexor(ifccParser::BitwisexorContext *ctx) {
+antlrcpp::Any
+CodeGenVisitor::visitBitwisexor(ifccParser::BitwisexorContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -391,10 +390,11 @@ antlrcpp::Any CodeGenVisitor::visitBitwisexor(ifccParser::BitwisexorContext *ctx
     cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
     string op = ctx->op->getText();
     string instruction;
-    if(op == "^"){
+    if (op == "^") {
         instruction = "xorl";
     }
-    cout << "    " << instruction << "    " << roffset << "(%rbp), %eax" << endl;
+    cout << "    " << instruction << "    " << roffset << "(%rbp), %eax"
+         << endl;
     currentVariable = temp;
     int offset;
     if (currentVariable.empty()) {
@@ -408,7 +408,8 @@ antlrcpp::Any CodeGenVisitor::visitBitwisexor(ifccParser::BitwisexorContext *ctx
     return offset;
 }
 
-antlrcpp::Any CodeGenVisitor::visitBitwiseor(ifccParser::BitwiseorContext *ctx) {
+antlrcpp::Any
+CodeGenVisitor::visitBitwiseor(ifccParser::BitwiseorContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -419,10 +420,11 @@ antlrcpp::Any CodeGenVisitor::visitBitwiseor(ifccParser::BitwiseorContext *ctx) 
     cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
     string op = ctx->op->getText();
     string instruction;
-    if(op == "|"){
+    if (op == "|") {
         instruction = "orl";
     }
-    cout << "    " << instruction << "    " << roffset << "(%rbp), %eax" << endl;
+    cout << "    " << instruction << "    " << roffset << "(%rbp), %eax"
+         << endl;
     currentVariable = temp;
     int offset;
     if (currentVariable.empty()) {
@@ -449,9 +451,9 @@ antlrcpp::Any CodeGenVisitor::visitShift(ifccParser::ShiftContext *ctx) {
     cout << "    movl    %eax, %ecx" << endl;
     string op = ctx->op->getText();
     string instruction;
-    if(op == "<<"){
+    if (op == "<<") {
         instruction = "sall";
-    } else if(op == ">>"){
+    } else if (op == ">>") {
         instruction = "sarl";
     }
     cout << "    " << instruction << "    %cl, %edx" << endl;
@@ -469,7 +471,8 @@ antlrcpp::Any CodeGenVisitor::visitShift(ifccParser::ShiftContext *ctx) {
     return offset;
 }
 
-antlrcpp::Any CodeGenVisitor::visitLogicaland(ifccParser::LogicalandContext *ctx) {
+antlrcpp::Any
+CodeGenVisitor::visitLogicaland(ifccParser::LogicalandContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -485,7 +488,7 @@ antlrcpp::Any CodeGenVisitor::visitLogicaland(ifccParser::LogicalandContext *ctx
     cout << "    movl    $1, %eax" << endl;
     jumpOffset++;
     cout << "    jmp     .L" << jumpOffset << endl;
-    cout << " .L" << jumpOffset-1 << ":" << endl;
+    cout << " .L" << jumpOffset - 1 << ":" << endl;
     cout << "    movl    $0, %eax" << endl;
     cout << " .L" << jumpOffset << ":" << endl;
     cout << "    movzbl  %al, %eax" << endl;
@@ -502,7 +505,8 @@ antlrcpp::Any CodeGenVisitor::visitLogicaland(ifccParser::LogicalandContext *ctx
     return offset;
 }
 
-antlrcpp::Any CodeGenVisitor::visitLogicalor(ifccParser::LogicalorContext *ctx) {
+antlrcpp::Any
+CodeGenVisitor::visitLogicalor(ifccParser::LogicalorContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -516,11 +520,11 @@ antlrcpp::Any CodeGenVisitor::visitLogicalor(ifccParser::LogicalorContext *ctx) 
     cout << "    cmpl    $0, " << roffset << "(%rbp)" << endl;
     jumpOffset++;
     cout << "    je      .L" << jumpOffset << endl;
-    cout << " .L" << jumpOffset-1 << ":" << endl;
+    cout << " .L" << jumpOffset - 1 << ":" << endl;
     cout << "    movl    $1, %eax" << endl;
     jumpOffset++;
     cout << "    jmp     .L" << jumpOffset << endl;
-    cout << " .L" << jumpOffset-1 << ":" << endl;
+    cout << " .L" << jumpOffset - 1 << ":" << endl;
     cout << "    movl    $0, %eax" << endl;
     cout << " .L" << jumpOffset << ":" << endl;
     cout << "    movzbl  %al, %eax" << endl;

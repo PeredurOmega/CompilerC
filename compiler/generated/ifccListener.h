@@ -35,6 +35,12 @@ public:
   virtual void enterStatement(ifccParser::StatementContext *ctx) = 0;
   virtual void exitStatement(ifccParser::StatementContext *ctx) = 0;
 
+  virtual void enterIfBlock(ifccParser::IfBlockContext *ctx) = 0;
+  virtual void exitIfBlock(ifccParser::IfBlockContext *ctx) = 0;
+
+  virtual void enterElseBlock(ifccParser::ElseBlockContext *ctx) = 0;
+  virtual void exitElseBlock(ifccParser::ElseBlockContext *ctx) = 0;
+
   virtual void enterRet(ifccParser::RetContext *ctx) = 0;
   virtual void exitRet(ifccParser::RetContext *ctx) = 0;
 
@@ -91,12 +97,6 @@ public:
 
   virtual void enterLogicalor(ifccParser::LogicalorContext *ctx) = 0;
   virtual void exitLogicalor(ifccParser::LogicalorContext *ctx) = 0;
-
-  virtual void enterIfBlock(ifccParser::IfBlockContext *ctx) = 0;
-  virtual void exitIfBlock(ifccParser::IfBlockContext *ctx) = 0;
-
-  virtual void enterElseBlock(ifccParser::ElseBlockContext *ctx) = 0;
-  virtual void exitElseBlock(ifccParser::ElseBlockContext *ctx) = 0;
 
 
 };
