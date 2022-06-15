@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -59,10 +59,6 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitTimes(ifccParser::TimesContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual std::any visitCompare(ifccParser::CompareContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -71,11 +67,19 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitLogicaland(ifccParser::LogicalandContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitVarexpr(ifccParser::VarexprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual std::any visitVariable(ifccParser::VariableContext *ctx) override {
+  virtual std::any visitShift(ifccParser::ShiftContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitBitwisexor(ifccParser::BitwisexorContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -87,7 +91,31 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitBitwiseand(ifccParser::BitwiseandContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitParenthesis(ifccParser::ParenthesisContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitEqual(ifccParser::EqualContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitTimes(ifccParser::TimesContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitVariable(ifccParser::VariableContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitBitwiseor(ifccParser::BitwiseorContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitLogicalor(ifccParser::LogicalorContext *ctx) override {
     return visitChildren(ctx);
   }
 

@@ -23,10 +23,17 @@ expression : VAR #variable
             |CONST #constant
             |VAR'='expression #varexpr
             |'(' expression ')' #parenthesis
+            |op=('-'|'!'|'+'|'~') expression #unary
             |expression op=('*' | '/' | '%') expression #times
             |expression op=('+' | '-') expression #addsub
-            |op=('-'|'!') expression #unary
-            |expression op=('<' | '<=' | '==' | '!=' | '>=' | '>') expression #compare
+            |expression op=('<<' | '>>') expression #shift
+            |expression op=('<' | '<=' | '>=' | '>') expression #compare
+            |expression op=('==' | '!=') expression #equal
+            |expression op='&' expression #bitwiseand
+            |expression op='^' expression #bitwisexor
+            |expression op='|' expression #bitwiseor
+            |expression op='&&' expression #logicaland
+            |expression op='||' expression #logicalor
             ;
 
 ifBlock: IF '(' expression ')' (block | statement) elseBlock?;

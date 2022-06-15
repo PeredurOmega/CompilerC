@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -41,21 +41,35 @@ public:
 
     virtual std::any visitAffectation(ifccParser::AffectationContext *context) = 0;
 
-    virtual std::any visitTimes(ifccParser::TimesContext *context) = 0;
-
     virtual std::any visitCompare(ifccParser::CompareContext *context) = 0;
 
     virtual std::any visitConstant(ifccParser::ConstantContext *context) = 0;
 
+    virtual std::any visitLogicaland(ifccParser::LogicalandContext *context) = 0;
+
     virtual std::any visitVarexpr(ifccParser::VarexprContext *context) = 0;
 
-    virtual std::any visitVariable(ifccParser::VariableContext *context) = 0;
+    virtual std::any visitShift(ifccParser::ShiftContext *context) = 0;
+
+    virtual std::any visitBitwisexor(ifccParser::BitwisexorContext *context) = 0;
 
     virtual std::any visitAddsub(ifccParser::AddsubContext *context) = 0;
 
     virtual std::any visitUnary(ifccParser::UnaryContext *context) = 0;
 
+    virtual std::any visitBitwiseand(ifccParser::BitwiseandContext *context) = 0;
+
     virtual std::any visitParenthesis(ifccParser::ParenthesisContext *context) = 0;
+
+    virtual std::any visitEqual(ifccParser::EqualContext *context) = 0;
+
+    virtual std::any visitTimes(ifccParser::TimesContext *context) = 0;
+
+    virtual std::any visitVariable(ifccParser::VariableContext *context) = 0;
+
+    virtual std::any visitBitwiseor(ifccParser::BitwiseorContext *context) = 0;
+
+    virtual std::any visitLogicalor(ifccParser::LogicalorContext *context) = 0;
 
     virtual std::any visitIfBlock(ifccParser::IfBlockContext *context) = 0;
 
