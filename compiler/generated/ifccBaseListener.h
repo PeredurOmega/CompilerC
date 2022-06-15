@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/bmayouddup/CLionProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -36,6 +36,12 @@ public:
 
   virtual void enterStatement(ifccParser::StatementContext * /*ctx*/) override { }
   virtual void exitStatement(ifccParser::StatementContext * /*ctx*/) override { }
+
+  virtual void enterIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }
+  virtual void exitIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }
+
+  virtual void enterElseBlock(ifccParser::ElseBlockContext * /*ctx*/) override { }
+  virtual void exitElseBlock(ifccParser::ElseBlockContext * /*ctx*/) override { }
 
   virtual void enterRet(ifccParser::RetContext * /*ctx*/) override { }
   virtual void exitRet(ifccParser::RetContext * /*ctx*/) override { }
@@ -93,12 +99,6 @@ public:
 
   virtual void enterLogicalor(ifccParser::LogicalorContext * /*ctx*/) override { }
   virtual void exitLogicalor(ifccParser::LogicalorContext * /*ctx*/) override { }
-
-  virtual void enterIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }
-  virtual void exitIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }
-
-  virtual void enterElseBlock(ifccParser::ElseBlockContext * /*ctx*/) override { }
-  virtual void exitElseBlock(ifccParser::ElseBlockContext * /*ctx*/) override { }
 
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

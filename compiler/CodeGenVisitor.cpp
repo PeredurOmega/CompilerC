@@ -43,15 +43,18 @@ antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
+    currentVariable = "";
     jumpOffset++;
     bool finish = finalJump == 0;
     if (finish) {
         finalJump = jumpOffset;
-        jumpOffset++;
     }
     int offset = any_cast<int>(visit(ctx->expression()));
     cout << "    cmpl    $0, " << offset << "(%rbp)" << endl;
-    cout << "    je      .L" << jumpOffset << endl;
+    int jOffset;
+    if (ctx->elseBlock() != nullptr)jOffset=jumpOffset+1;
+    else jOffset=finalJump;
+    cout << "    je      .L" << jOffset << endl;
 
     bool stop = false;
     if (ctx->statement() != nullptr) {
@@ -62,7 +65,7 @@ antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
 
     if (ctx->elseBlock() != nullptr) {
         cout << "    jmp      .L" << finalJump << endl;
-        stop = stop && any_cast<bool>(visitElseBlock(ctx->elseBlock()));
+        stop = any_cast<bool>(visitElseBlock(ctx->elseBlock())) && stop;
     }
 
     if (finish) {
@@ -301,9 +304,6 @@ antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
     }
     cout << "    " << instruction << " %al" << endl;
     cout << "    movzbl  %al, %eax" << endl;
-    string res;
-    if (op == "%") res = "edx";
-    else res = "eax";
     currentVariable = temp;
     int offset;
     if (currentVariable.empty()) {
@@ -312,7 +312,7 @@ antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
     } else {
         offset = symbolTable[currentVariable];
     }
-    cout << "    movl    %" << res << ", " << offset
+    cout << "    movl    %eax, " << offset
          << "(%rbp) #v" << currentVariable << endl;
     return offset;
 }
@@ -336,9 +336,6 @@ antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
     }
     cout << "    " << instruction << " %al" << endl;
     cout << "    movzbl  %al, %eax" << endl;
-    string res;
-    if (op == "%") res = "edx";
-    else res = "eax";
     currentVariable = temp;
     int offset;
     if (currentVariable.empty()) {
@@ -347,7 +344,7 @@ antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
     } else {
         offset = symbolTable[currentVariable];
     }
-    cout << "    movl    %" << res << ", " << offset
+    cout << "    movl    %eax, " << offset
          << "(%rbp) #v" << currentVariable << endl;
     return offset;
 }
