@@ -2,8 +2,10 @@ grammar ifcc;
 
 axiom : prog ;
 
-prog : 'int' 'main' '(' ')' '{' ';'* statement* ';'* '}' ;
-statement : declaration
+prog : 'int' 'main' '(' ')' block;
+block : '{' statement* '}';
+statement : ';'
+          | declaration
           | affectation
           | ret;
 ret : RETURN expression ';'+;

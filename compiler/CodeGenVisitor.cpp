@@ -7,10 +7,7 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
             " main: \n"
             "    pushq   %rbp\n"
             "    movq    %rsp, %rbp\n";
-    for (auto statement: ctx->statement()) {
-        bool stop = any_cast<bool>(visitStatement(statement));
-        if (stop) break;
-    }
+    visit(ctx->block());
     if (!hasReturn){
         cout << "    movl    $0, %eax" << endl;
     }
@@ -19,6 +16,13 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
 
     return 0;
 
+}
+
+antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
+    for (auto statement: ctx->statement()) {
+        bool stop = any_cast<bool>(visitStatement(statement));
+        if (stop) break;
+    }
 }
 
 antlrcpp::Any
