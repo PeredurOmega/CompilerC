@@ -17,7 +17,12 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
          << "    movq    %rsp, %rbp" << endl;
     visitBlock(ctx->block());
     if (!hasReturn) {
-        cout << "    nop" << endl;
+        if (ctx->VAR()->getText() == "main" &&
+            ctx->TYPE()->getText() == "int") {
+            cout << "    movl    $0, %eax" << endl;
+        } else {
+            cout << "    nop" << endl;
+        }
     }
     cout << "    popq %rbp" << endl
          << "    ret" << endl;
