@@ -179,6 +179,8 @@ for jobname in jobs:
 
     if currentDir != jobname.split('/')[1].split('-')[1]:
         currentDir = jobname.split('/')[1].split('-')[1]
+        print(jobname)
+        print(currentDir)
         list_files = os.listdir("testfiles/" + currentDir)
         directory_cpt = 0
         directory_size = len(list_files)
