@@ -20,9 +20,10 @@ public:
   };
 
   enum {
-    RuleAxiom = 0, RuleProg = 1, RuleFunction = 2, RuleBlock = 3, RuleStatement = 4, 
-    RuleRet = 5, RuleDeclaration = 6, RuleInit = 7, RuleAffectation = 8, 
-    RuleExpression = 9, RuleIfBlock = 10, RuleElseBlock = 11
+    RuleAxiom = 0, RuleProg = 1, RuleFunction = 2, RuleParameters = 3, RuleParameter = 4, 
+    RuleBlock = 5, RuleStatement = 6, RuleRet = 7, RuleDeclaration = 8, 
+    RuleInit = 9, RuleAffectation = 10, RuleExpression = 11, RuleIfBlock = 12, 
+    RuleElseBlock = 13
   };
 
   explicit ifccParser(antlr4::TokenStream *input);
@@ -45,6 +46,8 @@ public:
   class AxiomContext;
   class ProgContext;
   class FunctionContext;
+  class ParametersContext;
+  class ParameterContext;
   class BlockContext;
   class StatementContext;
   class RetContext;
@@ -94,6 +97,7 @@ public:
     antlr4::tree::TerminalNode *VAR();
     BlockContext *block();
     antlr4::tree::TerminalNode *TYPE();
+    ParametersContext *parameters();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -103,6 +107,38 @@ public:
   };
 
   FunctionContext* function();
+
+  class  ParametersContext : public antlr4::ParserRuleContext {
+  public:
+    ParametersContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<ParameterContext *> parameter();
+    ParameterContext* parameter(size_t i);
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ParametersContext* parameters();
+
+  class  ParameterContext : public antlr4::ParserRuleContext {
+  public:
+    ParameterContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *TYPE();
+    antlr4::tree::TerminalNode *VAR();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ParameterContext* parameter();
 
   class  BlockContext : public antlr4::ParserRuleContext {
   public:

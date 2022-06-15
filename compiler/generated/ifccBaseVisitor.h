@@ -27,6 +27,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitParameters(ifccParser::ParametersContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitParameter(ifccParser::ParameterContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitBlock(ifccParser::BlockContext *ctx) override {
     return visitChildren(ctx);
   }
