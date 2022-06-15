@@ -7,7 +7,8 @@ block : '{' statement* '}';
 statement : ';'
           | declaration
           | affectation
-          | ret;
+          | ret
+          | ifBlock;
 ret : RETURN expression ';'+;
 declaration : TYPE (init| VAR) (',' (init| VAR))* ';'+;
 init : VAR '=' expression ;
@@ -21,6 +22,12 @@ expression : VAR #variable
             |op='-' expression #unary
             |expression op=('<' | '<=' | '==' | '!=' | '>=' | '>') expression #compare
             ;
+
+ifBlock: IF '(' expression ')' (block | statement) elseBlock?;
+elseBlock: ELSE (ifBlock|block|statement);
+
+IF : 'if';
+ELSE: 'else';
 
 RETURN : 'return' ;
 TYPE : 'int';
