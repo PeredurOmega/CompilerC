@@ -18,6 +18,8 @@ public:
 
     antlrcpp::Any visitElseBlock(ifccParser::ElseBlockContext *ctx) override;
 
+    antlrcpp::Any visitWhileBlock(ifccParser::WhileBlockContext *ctx) override;
+
     antlrcpp::Any visitStatement(ifccParser::StatementContext *ctx) override;
 
     antlrcpp::Any
