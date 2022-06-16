@@ -11,16 +11,18 @@
 #include "Block.h"
 #include "TypeSymbol.h"
 
-class Function : IrElement {
+class Function : Block {
 public:
     //TODO HANDLE PARAMETERS
-    explicit Function(string name, const IrType* returnType);
+    explicit Function(string name, const IrType *returnType);
 
     void renderX86(ostream &o) const override;
 
+    void setBlock(Block *block);
+
 private:
     const string MAIN = "main";
-    const IrType* returnType;
+    const IrType *returnType;
     const string name;
     bool alwaysReturn = false;
     //vector<IrInstr> blocks;

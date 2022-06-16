@@ -25,7 +25,8 @@ public:
     antlrcpp::Any
     visitDeclaration(ifccParser::DeclarationContext *ctx) override;
 
-    antlrcpp::Any visitInit(ifccParser::InitContext *ctx) override;
+    antlrcpp::Any
+    visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) override;
 
     antlrcpp::Any
     visitAffectation(ifccParser::AffectationContext *ctx) override;

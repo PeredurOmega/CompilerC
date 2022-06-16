@@ -19,10 +19,10 @@ statement : ';'
 ifBlock: IF '(' expression ')' statement elseBlock?;
 elseBlock: ELSE statement;
 
-ret : RETURN expression ';'+;
-declaration : TYPE (init| VAR) (',' (init| VAR))* ';'+;
-init : VAR '=' expression ;
-affectation : VAR '=' expression ';'+;
+ret : RETURN expression ';';
+declaration : TYPE rawDeclaration (',' rawDeclaration)* ';';
+rawDeclaration : VAR ('=' expression)?;
+affectation : VAR '=' expression ';';
 
 expression : VAR #variable
             |CONST #constant

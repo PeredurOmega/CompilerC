@@ -18,7 +18,8 @@ void Function::renderX86(ostream &o) const {
       << "    pushq   %rbp" << endl
       << "    movq    %rsp, %rbp" << endl;
 
-    //TODO VISIT ALL BLOCKS
+    Block::renderX86(o);
+
     if (!alwaysReturn) {
         if (name == MAIN && *returnType == PrimaryType::INT) {
             o << "    movl    $0, %eax" << endl;
@@ -29,4 +30,9 @@ void Function::renderX86(ostream &o) const {
 
     o << "    popq %rbp" << endl
       << "    ret" << endl;
+}
+
+void Function::setBlock(Block *block) {
+    alwaysReturn = block->alwaysReturn;
+    block->attachTo(this);
 }

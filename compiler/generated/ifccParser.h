@@ -1,5 +1,5 @@
 
-// Generated from ./ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -23,7 +23,7 @@ public:
   enum {
     RuleAxiom = 0, RuleProg = 1, RuleFunction = 2, RuleParameters = 3, RuleParameter = 4, 
     RuleBlock = 5, RuleStatement = 6, RuleIfBlock = 7, RuleElseBlock = 8, 
-    RuleRet = 9, RuleDeclaration = 10, RuleInit = 11, RuleAffectation = 12, 
+    RuleRet = 9, RuleDeclaration = 10, RuleRawDeclaration = 11, RuleAffectation = 12, 
     RuleExpression = 13
   };
 
@@ -55,7 +55,7 @@ public:
   class ElseBlockContext;
   class RetContext;
   class DeclarationContext;
-  class InitContext;
+  class RawDeclarationContext;
   class AffectationContext;
   class ExpressionContext; 
 
@@ -231,10 +231,8 @@ public:
     DeclarationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *TYPE();
-    std::vector<InitContext *> init();
-    InitContext* init(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> VAR();
-    antlr4::tree::TerminalNode* VAR(size_t i);
+    std::vector<RawDeclarationContext *> rawDeclaration();
+    RawDeclarationContext* rawDeclaration(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -245,9 +243,9 @@ public:
 
   DeclarationContext* declaration();
 
-  class  InitContext : public antlr4::ParserRuleContext {
+  class  RawDeclarationContext : public antlr4::ParserRuleContext {
   public:
-    InitContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    RawDeclarationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VAR();
     ExpressionContext *expression();
@@ -259,7 +257,7 @@ public:
    
   };
 
-  InitContext* init();
+  RawDeclarationContext* rawDeclaration();
 
   class  AffectationContext : public antlr4::ParserRuleContext {
   public:

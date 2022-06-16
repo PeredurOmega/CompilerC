@@ -1,5 +1,7 @@
 #include "CodeGenVisitor.h"
 #include "ir/Prog.h"
+#include "ir/Declaration.h"
+#include "ir/Expression.h"
 
 using namespace std;
 
@@ -18,7 +20,6 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
-
     //TODO HANDLE INVALID FUN TYPE
     IrType *returnType;
     string rawReturnType = ctx->TYPE()->getText();
@@ -33,10 +34,9 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
         }
     }
 
-    //TODO ADD BLOCKS
-    visitBlock(ctx->block());
-
-    Function *fun = new Function(ctx->VAR()->getText(), returnType);
+    auto *fun = new Function(ctx->VAR()->getText(), returnType);
+    auto block = visitBlock(ctx->block());
+    fun->setBlock(any_cast<Block *>(block));
     return fun;
 }
 
@@ -46,11 +46,15 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
  * @return Whether or not the block "stop" the function via a return.
  */
 antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
+    auto *block = new Block();
     for (auto statement: ctx->statement()) {
-        bool stop = any_cast<bool>(visitStatement(statement));
-        if (stop) return true;
+        auto *instruction = any_cast<IrInstruction *>(
+                visitStatement(statement));
+        block->addInstruction(instruction);
+        bool stop = instruction->alwaysReturn;
+        if (stop) break;
     }
-    return false;
+    return block;
 }
 
 antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
@@ -99,92 +103,66 @@ CodeGenVisitor::visitElseBlock(ifccParser::ElseBlockContext *ctx) {
  */
 antlrcpp::Any
 CodeGenVisitor::visitStatement(ifccParser::StatementContext *ctx) {
-    antlrcpp::Any result = visitChildren(ctx);
-    if (ctx->block() != nullptr) {
-        return any_cast<bool>(result);
-    } else if (ctx->ret() != nullptr) {
-        hasReturn = true;
-        return true;
-    } else {
-        return false;
-    }
+    auto t = visitChildren(ctx);
+    auto *instruction = any_cast<IrInstruction *>(t);
+    return instruction;
 }
 
 antlrcpp::Any
 CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *ctx) {
     string type = ctx->TYPE()->getText();
-    for (auto &var: ctx->VAR()) {
-        currentOffset += 4;
-        symbolTable[var->getText()] = -currentOffset;
+    try {
+        auto *declaration = new Declaration(PrimaryType::parse(type));
+        for (auto &rawDeclaration: ctx->rawDeclaration()) {
+            auto *rd = any_cast<RawDeclaration *>(
+                    visitRawDeclaration(rawDeclaration));
+            declaration->addRawDeclaration(rd);
+        }
+        return (IrInstruction *) declaration;
+    } catch (InvalidType &e) {
+        //TODO
+        throw e;
     }
-    for (auto &initCtx: ctx->init()) {
-        visitInit(initCtx);
-    }
-    return ctx->VAR();
 }
 
-antlrcpp::Any CodeGenVisitor::visitInit(ifccParser::InitContext *ctx) {
-    string variable = ctx->VAR()->getText();
-    currentOffset += 4;
-    symbolTable[variable] = -currentOffset;
-    currentVariable = variable;
-    return visitChildren(ctx);
+antlrcpp::Any
+CodeGenVisitor::visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) {
+    auto *name = new string(ctx->VAR()->getText());
+    if (ctx->expression() != nullptr) { // Init is optional
+        auto *expr = any_cast<IrInstruction *>(visit(ctx->expression()));
+        return new RawDeclaration(name, (Expression *) expr);
+    } else return new RawDeclaration(name, (Expression *) nullptr);
 }
 
 antlrcpp::Any
 CodeGenVisitor::visitAffectation(ifccParser::AffectationContext *ctx) {
-    currentVariable = ctx->VAR()->getText();
-    return visitChildren(ctx);
+    return (IrInstruction *) new Assignment(ctx->VAR()->getText(),
+                                            (Expression *) any_cast<IrInstruction *>(
+                                                    visit(ctx->expression())));
 }
 
 antlrcpp::Any CodeGenVisitor::visitConstant(ifccParser::ConstantContext *ctx) {
-    int offset;
-    if (currentVariable.empty()) {
-        currentOffset += 4;
-        offset = -currentOffset;
-    } else {
-        offset = symbolTable[currentVariable];
+    try {
+        return (IrInstruction *) new Constant(stoi(ctx->CONST()->getText()));
+    } catch (exception &e) {
+        throw e;//TODO
     }
-    cout << "    movl    $" << ctx->CONST()->getText() << ", " << offset
-         << "(%rbp) #v" << currentVariable << endl;
-    return offset;
 }
 
 antlrcpp::Any CodeGenVisitor::visitVariable(ifccParser::VariableContext *ctx) {
-    if (currentVariable.empty()) {
-        return symbolTable[ctx->VAR()->getText()];
-    }
-    int loffset = symbolTable[currentVariable];
-    int roffset = symbolTable[ctx->VAR()->getText()];
-    cout << "    movl    " << roffset << "(%rbp), %eax #"
-         << ctx->VAR()->getText() << endl;
-    cout << "    movl    %eax, " << loffset << "(%rbp) #" << currentVariable
-         << endl;
-    return loffset;
+    return (IrInstruction *) new Variable(ctx->VAR()->getText());
 }
 
 antlrcpp::Any CodeGenVisitor::visitVarexpr(ifccParser::VarexprContext *ctx) {
-    string temp = currentVariable;
-    currentVariable = ctx->VAR()->getText();
-    int loffset = any_cast<int>(visitChildren(ctx));
-
-    if (!temp.empty()) {
-        // Case when we recursively assign variables
-        loffset = symbolTable[temp];
-        int roffset = symbolTable[ctx->VAR()->getText()];
-        cout << "    movl    " << roffset << "(%rbp), %eax #"
-             << ctx->VAR()->getText() << endl;
-        cout << "    movl    %eax, " << loffset << "(%rbp) #" << temp << endl;
-    }
-
-    return loffset;
+    return (IrInstruction *) new Assignment(ctx->VAR()->getText(),
+                                            (Expression *) any_cast<IrInstruction *>(
+                                                    visit(ctx->expression())));
 }
 
 antlrcpp::Any CodeGenVisitor::visitRet(ifccParser::RetContext *ctx) {
-    currentVariable = "";
-    int offset = any_cast<int>(visit(ctx->expression()));
-    cout << "    movl    " << offset << "(%rbp), %eax" << endl;
-    return offset;
+    auto result = visit(ctx->expression());
+    auto *expression = (Expression *) any_cast<IrInstruction *>(result);
+    return (IrInstruction *) new Return(expression);
 }
 
 antlrcpp::Any CodeGenVisitor::visitAddsub(ifccParser::AddsubContext *ctx) {

@@ -6,10 +6,23 @@
 #define LIBANTLR4_BLOCK_H
 
 
+#include <vector>
 #include "IrScope.h"
+#include "IrInstruction.h"
 
-class Block: IrScope {
+class Block : IrScope {
+public:
+    bool alwaysReturn = false;
 
+    explicit Block();
+
+    void addInstruction(IrInstruction *instruction);
+
+    void renderX86(ostream &o) const override;
+
+    void attachTo(Block* block);
+private:
+    vector<IrInstruction *> instructions;
 };
 
 

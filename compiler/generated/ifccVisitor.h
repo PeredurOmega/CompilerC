@@ -1,5 +1,5 @@
 
-// Generated from ./ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -41,7 +41,7 @@ public:
 
     virtual std::any visitDeclaration(ifccParser::DeclarationContext *context) = 0;
 
-    virtual std::any visitInit(ifccParser::InitContext *context) = 0;
+    virtual std::any visitRawDeclaration(ifccParser::RawDeclarationContext *context) = 0;
 
     virtual std::any visitAffectation(ifccParser::AffectationContext *context) = 0;
 
