@@ -135,7 +135,7 @@ CodeGenVisitor::visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) {
 }
 
 antlrcpp::Any
-CodeGenVisitor::visitAffectation(ifccParser::AffectationContext *ctx) {
+CodeGenVisitor::visitAssignment(ifccParser::AssignmentContext *ctx) {
     return (IrInstruction *) new Assignment(ctx->VAR()->getText(),
                                             (Expression *) any_cast<IrInstruction *>(
                                                     visit(ctx->expression())));
@@ -153,7 +153,7 @@ antlrcpp::Any CodeGenVisitor::visitVariable(ifccParser::VariableContext *ctx) {
     return (IrInstruction *) new Variable(ctx->VAR()->getText());
 }
 
-antlrcpp::Any CodeGenVisitor::visitVarexpr(ifccParser::VarexprContext *ctx) {
+antlrcpp::Any CodeGenVisitor::visitVarExpr(ifccParser::VarExprContext *ctx) {
     return (IrInstruction *) new Assignment(ctx->VAR()->getText(),
                                             (Expression *) any_cast<IrInstruction *>(
                                                     visit(ctx->expression())));
@@ -165,7 +165,7 @@ antlrcpp::Any CodeGenVisitor::visitRet(ifccParser::RetContext *ctx) {
     return (IrInstruction *) new Return(expression);
 }
 
-antlrcpp::Any CodeGenVisitor::visitAddsub(ifccParser::AddsubContext *ctx) {
+antlrcpp::Any CodeGenVisitor::visitAddSub(ifccParser::AddSubContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -195,7 +195,8 @@ antlrcpp::Any CodeGenVisitor::visitAddsub(ifccParser::AddsubContext *ctx) {
     return offset;
 }
 
-antlrcpp::Any CodeGenVisitor::visitTimes(ifccParser::TimesContext *ctx) {
+antlrcpp::Any
+CodeGenVisitor::visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -338,7 +339,7 @@ antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
 }
 
 antlrcpp::Any
-CodeGenVisitor::visitBitwiseand(ifccParser::BitwiseandContext *ctx) {
+CodeGenVisitor::visitBitwiseAnd(ifccParser::BitwiseAndContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -368,7 +369,7 @@ CodeGenVisitor::visitBitwiseand(ifccParser::BitwiseandContext *ctx) {
 }
 
 antlrcpp::Any
-CodeGenVisitor::visitBitwisexor(ifccParser::BitwisexorContext *ctx) {
+CodeGenVisitor::visitBitwiseXor(ifccParser::BitwiseXorContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -398,7 +399,7 @@ CodeGenVisitor::visitBitwisexor(ifccParser::BitwisexorContext *ctx) {
 }
 
 antlrcpp::Any
-CodeGenVisitor::visitBitwiseor(ifccParser::BitwiseorContext *ctx) {
+CodeGenVisitor::visitBitwiseOr(ifccParser::BitwiseOrContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -461,7 +462,7 @@ antlrcpp::Any CodeGenVisitor::visitShift(ifccParser::ShiftContext *ctx) {
 }
 
 antlrcpp::Any
-CodeGenVisitor::visitLogicaland(ifccParser::LogicalandContext *ctx) {
+CodeGenVisitor::visitLogicalAnd(ifccParser::LogicalAndContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];
@@ -495,7 +496,7 @@ CodeGenVisitor::visitLogicaland(ifccParser::LogicalandContext *ctx) {
 }
 
 antlrcpp::Any
-CodeGenVisitor::visitLogicalor(ifccParser::LogicalorContext *ctx) {
+CodeGenVisitor::visitLogicalOr(ifccParser::LogicalOrContext *ctx) {
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
     ifccParser::ExpressionContext *lexpr = expr[0];

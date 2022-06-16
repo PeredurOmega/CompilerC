@@ -52,8 +52,8 @@ public:
   virtual void enterRawDeclaration(ifccParser::RawDeclarationContext * /*ctx*/) override { }
   virtual void exitRawDeclaration(ifccParser::RawDeclarationContext * /*ctx*/) override { }
 
-  virtual void enterAffectation(ifccParser::AffectationContext * /*ctx*/) override { }
-  virtual void exitAffectation(ifccParser::AffectationContext * /*ctx*/) override { }
+  virtual void enterAssignment(ifccParser::AssignmentContext * /*ctx*/) override { }
+  virtual void exitAssignment(ifccParser::AssignmentContext * /*ctx*/) override { }
 
   virtual void enterCompare(ifccParser::CompareContext * /*ctx*/) override { }
   virtual void exitCompare(ifccParser::CompareContext * /*ctx*/) override { }
@@ -61,44 +61,44 @@ public:
   virtual void enterConstant(ifccParser::ConstantContext * /*ctx*/) override { }
   virtual void exitConstant(ifccParser::ConstantContext * /*ctx*/) override { }
 
-  virtual void enterLogicaland(ifccParser::LogicalandContext * /*ctx*/) override { }
-  virtual void exitLogicaland(ifccParser::LogicalandContext * /*ctx*/) override { }
-
-  virtual void enterVarexpr(ifccParser::VarexprContext * /*ctx*/) override { }
-  virtual void exitVarexpr(ifccParser::VarexprContext * /*ctx*/) override { }
-
   virtual void enterShift(ifccParser::ShiftContext * /*ctx*/) override { }
   virtual void exitShift(ifccParser::ShiftContext * /*ctx*/) override { }
 
-  virtual void enterBitwisexor(ifccParser::BitwisexorContext * /*ctx*/) override { }
-  virtual void exitBitwisexor(ifccParser::BitwisexorContext * /*ctx*/) override { }
+  virtual void enterBitwiseXor(ifccParser::BitwiseXorContext * /*ctx*/) override { }
+  virtual void exitBitwiseXor(ifccParser::BitwiseXorContext * /*ctx*/) override { }
 
-  virtual void enterAddsub(ifccParser::AddsubContext * /*ctx*/) override { }
-  virtual void exitAddsub(ifccParser::AddsubContext * /*ctx*/) override { }
+  virtual void enterLogicalAnd(ifccParser::LogicalAndContext * /*ctx*/) override { }
+  virtual void exitLogicalAnd(ifccParser::LogicalAndContext * /*ctx*/) override { }
+
+  virtual void enterAddSub(ifccParser::AddSubContext * /*ctx*/) override { }
+  virtual void exitAddSub(ifccParser::AddSubContext * /*ctx*/) override { }
 
   virtual void enterUnary(ifccParser::UnaryContext * /*ctx*/) override { }
   virtual void exitUnary(ifccParser::UnaryContext * /*ctx*/) override { }
 
-  virtual void enterBitwiseand(ifccParser::BitwiseandContext * /*ctx*/) override { }
-  virtual void exitBitwiseand(ifccParser::BitwiseandContext * /*ctx*/) override { }
+  virtual void enterBitwiseAnd(ifccParser::BitwiseAndContext * /*ctx*/) override { }
+  virtual void exitBitwiseAnd(ifccParser::BitwiseAndContext * /*ctx*/) override { }
 
   virtual void enterParenthesis(ifccParser::ParenthesisContext * /*ctx*/) override { }
   virtual void exitParenthesis(ifccParser::ParenthesisContext * /*ctx*/) override { }
 
+  virtual void enterTimesDivModulo(ifccParser::TimesDivModuloContext * /*ctx*/) override { }
+  virtual void exitTimesDivModulo(ifccParser::TimesDivModuloContext * /*ctx*/) override { }
+
   virtual void enterEqual(ifccParser::EqualContext * /*ctx*/) override { }
   virtual void exitEqual(ifccParser::EqualContext * /*ctx*/) override { }
 
-  virtual void enterTimes(ifccParser::TimesContext * /*ctx*/) override { }
-  virtual void exitTimes(ifccParser::TimesContext * /*ctx*/) override { }
+  virtual void enterVarExpr(ifccParser::VarExprContext * /*ctx*/) override { }
+  virtual void exitVarExpr(ifccParser::VarExprContext * /*ctx*/) override { }
 
   virtual void enterVariable(ifccParser::VariableContext * /*ctx*/) override { }
   virtual void exitVariable(ifccParser::VariableContext * /*ctx*/) override { }
 
-  virtual void enterBitwiseor(ifccParser::BitwiseorContext * /*ctx*/) override { }
-  virtual void exitBitwiseor(ifccParser::BitwiseorContext * /*ctx*/) override { }
+  virtual void enterBitwiseOr(ifccParser::BitwiseOrContext * /*ctx*/) override { }
+  virtual void exitBitwiseOr(ifccParser::BitwiseOrContext * /*ctx*/) override { }
 
-  virtual void enterLogicalor(ifccParser::LogicalorContext * /*ctx*/) override { }
-  virtual void exitLogicalor(ifccParser::LogicalorContext * /*ctx*/) override { }
+  virtual void enterLogicalOr(ifccParser::LogicalOrContext * /*ctx*/) override { }
+  virtual void exitLogicalOr(ifccParser::LogicalOrContext * /*ctx*/) override { }
 
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

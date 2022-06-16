@@ -29,19 +29,19 @@ public:
     visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) override;
 
     antlrcpp::Any
-    visitAffectation(ifccParser::AffectationContext *ctx) override;
+    visitAssignment(ifccParser::AssignmentContext *ctx) override;
 
     antlrcpp::Any visitConstant(ifccParser::ConstantContext *ctx) override;
 
     antlrcpp::Any visitVariable(ifccParser::VariableContext *ctx) override;
 
-    antlrcpp::Any visitVarexpr(ifccParser::VarexprContext *ctx) override;
+    antlrcpp::Any visitVarExpr(ifccParser::VarExprContext *ctx) override;
 
     antlrcpp::Any visitRet(ifccParser::RetContext *ctx) override;
 
-    antlrcpp::Any visitAddsub(ifccParser::AddsubContext *ctx) override;
+    antlrcpp::Any visitAddSub(ifccParser::AddSubContext *ctx) override;
 
-    antlrcpp::Any visitTimes(ifccParser::TimesContext *ctx) override;
+    antlrcpp::Any visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) override;
 
     antlrcpp::Any
     visitParenthesis(ifccParser::ParenthesisContext *ctx) override;
@@ -52,17 +52,17 @@ public:
 
     antlrcpp::Any visitEqual(ifccParser::EqualContext *ctx) override;
 
-    antlrcpp::Any visitBitwiseand(ifccParser::BitwiseandContext *ctx) override;
+    antlrcpp::Any visitBitwiseAnd(ifccParser::BitwiseAndContext *ctx) override;
 
-    antlrcpp::Any visitBitwisexor(ifccParser::BitwisexorContext *ctx) override;
+    antlrcpp::Any visitBitwiseXor(ifccParser::BitwiseXorContext *ctx) override;
 
-    antlrcpp::Any visitBitwiseor(ifccParser::BitwiseorContext *ctx) override;
+    antlrcpp::Any visitBitwiseOr(ifccParser::BitwiseOrContext *ctx) override;
 
     antlrcpp::Any visitShift(ifccParser::ShiftContext *ctx) override;
 
-    antlrcpp::Any visitLogicaland(ifccParser::LogicalandContext *ctx) override;
+    antlrcpp::Any visitLogicalAnd(ifccParser::LogicalAndContext *ctx) override;
 
-    antlrcpp::Any visitLogicalor(ifccParser::LogicalorContext *ctx) override;
+    antlrcpp::Any visitLogicalOr(ifccParser::LogicalOrContext *ctx) override;
 
 private:
     unordered_map<string, int> symbolTable;

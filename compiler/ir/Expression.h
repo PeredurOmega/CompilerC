@@ -70,4 +70,8 @@ public:
     void affect(IrScope *owner) override;
 };
 
+class OpExpression: Expression {
+
+};
+
 #endif //LIBANTLR4_EXPRESSION_H

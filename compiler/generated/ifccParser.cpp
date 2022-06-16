@@ -45,7 +45,7 @@ void ifccParserInitialize() {
   auto staticData = std::make_unique<IfccParserStaticData>(
     std::vector<std::string>{
       "axiom", "prog", "function", "parameters", "parameter", "block", "statement", 
-      "ifBlock", "elseBlock", "ret", "declaration", "rawDeclaration", "affectation", 
+      "ifBlock", "elseBlock", "ret", "declaration", "rawDeclaration", "assignment", 
       "expression"
     },
     std::vector<std::string>{
@@ -642,8 +642,8 @@ ifccParser::DeclarationContext* ifccParser::StatementContext::declaration() {
   return getRuleContext<ifccParser::DeclarationContext>(0);
 }
 
-ifccParser::AffectationContext* ifccParser::StatementContext::affectation() {
-  return getRuleContext<ifccParser::AffectationContext>(0);
+ifccParser::AssignmentContext* ifccParser::StatementContext::assignment() {
+  return getRuleContext<ifccParser::AssignmentContext>(0);
 }
 
 ifccParser::RetContext* ifccParser::StatementContext::ret() {
@@ -715,7 +715,7 @@ ifccParser::StatementContext* ifccParser::statement() {
       case ifccParser::VAR: {
         enterOuterAlt(_localctx, 3);
         setState(68);
-        affectation();
+        assignment();
         break;
       }
 
@@ -1146,48 +1146,48 @@ ifccParser::RawDeclarationContext* ifccParser::rawDeclaration() {
   return _localctx;
 }
 
-//----------------- AffectationContext ------------------------------------------------------------------
+//----------------- AssignmentContext ------------------------------------------------------------------
 
-ifccParser::AffectationContext::AffectationContext(ParserRuleContext *parent, size_t invokingState)
+ifccParser::AssignmentContext::AssignmentContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* ifccParser::AffectationContext::VAR() {
+tree::TerminalNode* ifccParser::AssignmentContext::VAR() {
   return getToken(ifccParser::VAR, 0);
 }
 
-ifccParser::ExpressionContext* ifccParser::AffectationContext::expression() {
+ifccParser::ExpressionContext* ifccParser::AssignmentContext::expression() {
   return getRuleContext<ifccParser::ExpressionContext>(0);
 }
 
 
-size_t ifccParser::AffectationContext::getRuleIndex() const {
-  return ifccParser::RuleAffectation;
+size_t ifccParser::AssignmentContext::getRuleIndex() const {
+  return ifccParser::RuleAssignment;
 }
 
-void ifccParser::AffectationContext::enterRule(tree::ParseTreeListener *listener) {
+void ifccParser::AssignmentContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterAffectation(this);
+    parserListener->enterAssignment(this);
 }
 
-void ifccParser::AffectationContext::exitRule(tree::ParseTreeListener *listener) {
+void ifccParser::AssignmentContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitAffectation(this);
+    parserListener->exitAssignment(this);
 }
 
 
-std::any ifccParser::AffectationContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any ifccParser::AssignmentContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitAffectation(this);
+    return parserVisitor->visitAssignment(this);
   else
     return visitor->visitChildren(this);
 }
 
-ifccParser::AffectationContext* ifccParser::affectation() {
-  AffectationContext *_localctx = _tracker.createInstance<AffectationContext>(_ctx, getState());
-  enterRule(_localctx, 24, ifccParser::RuleAffectation);
+ifccParser::AssignmentContext* ifccParser::assignment() {
+  AssignmentContext *_localctx = _tracker.createInstance<AssignmentContext>(_ctx, getState());
+  enterRule(_localctx, 24, ifccParser::RuleAssignment);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1286,64 +1286,6 @@ std::any ifccParser::ConstantContext::accept(tree::ParseTreeVisitor *visitor) {
   else
     return visitor->visitChildren(this);
 }
-//----------------- LogicalandContext ------------------------------------------------------------------
-
-std::vector<ifccParser::ExpressionContext *> ifccParser::LogicalandContext::expression() {
-  return getRuleContexts<ifccParser::ExpressionContext>();
-}
-
-ifccParser::ExpressionContext* ifccParser::LogicalandContext::expression(size_t i) {
-  return getRuleContext<ifccParser::ExpressionContext>(i);
-}
-
-ifccParser::LogicalandContext::LogicalandContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
-void ifccParser::LogicalandContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<ifccListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterLogicaland(this);
-}
-void ifccParser::LogicalandContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<ifccListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitLogicaland(this);
-}
-
-std::any ifccParser::LogicalandContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitLogicaland(this);
-  else
-    return visitor->visitChildren(this);
-}
-//----------------- VarexprContext ------------------------------------------------------------------
-
-tree::TerminalNode* ifccParser::VarexprContext::VAR() {
-  return getToken(ifccParser::VAR, 0);
-}
-
-ifccParser::ExpressionContext* ifccParser::VarexprContext::expression() {
-  return getRuleContext<ifccParser::ExpressionContext>(0);
-}
-
-ifccParser::VarexprContext::VarexprContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
-void ifccParser::VarexprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<ifccListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterVarexpr(this);
-}
-void ifccParser::VarexprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<ifccListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitVarexpr(this);
-}
-
-std::any ifccParser::VarexprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitVarexpr(this);
-  else
-    return visitor->visitChildren(this);
-}
 //----------------- ShiftContext ------------------------------------------------------------------
 
 std::vector<ifccParser::ExpressionContext *> ifccParser::ShiftContext::expression() {
@@ -1373,61 +1315,90 @@ std::any ifccParser::ShiftContext::accept(tree::ParseTreeVisitor *visitor) {
   else
     return visitor->visitChildren(this);
 }
-//----------------- BitwisexorContext ------------------------------------------------------------------
+//----------------- BitwiseXorContext ------------------------------------------------------------------
 
-std::vector<ifccParser::ExpressionContext *> ifccParser::BitwisexorContext::expression() {
+std::vector<ifccParser::ExpressionContext *> ifccParser::BitwiseXorContext::expression() {
   return getRuleContexts<ifccParser::ExpressionContext>();
 }
 
-ifccParser::ExpressionContext* ifccParser::BitwisexorContext::expression(size_t i) {
+ifccParser::ExpressionContext* ifccParser::BitwiseXorContext::expression(size_t i) {
   return getRuleContext<ifccParser::ExpressionContext>(i);
 }
 
-ifccParser::BitwisexorContext::BitwisexorContext(ExpressionContext *ctx) { copyFrom(ctx); }
+ifccParser::BitwiseXorContext::BitwiseXorContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-void ifccParser::BitwisexorContext::enterRule(tree::ParseTreeListener *listener) {
+void ifccParser::BitwiseXorContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterBitwisexor(this);
+    parserListener->enterBitwiseXor(this);
 }
-void ifccParser::BitwisexorContext::exitRule(tree::ParseTreeListener *listener) {
+void ifccParser::BitwiseXorContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitBitwisexor(this);
+    parserListener->exitBitwiseXor(this);
 }
 
-std::any ifccParser::BitwisexorContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any ifccParser::BitwiseXorContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitBitwisexor(this);
+    return parserVisitor->visitBitwiseXor(this);
   else
     return visitor->visitChildren(this);
 }
-//----------------- AddsubContext ------------------------------------------------------------------
+//----------------- LogicalAndContext ------------------------------------------------------------------
 
-std::vector<ifccParser::ExpressionContext *> ifccParser::AddsubContext::expression() {
+std::vector<ifccParser::ExpressionContext *> ifccParser::LogicalAndContext::expression() {
   return getRuleContexts<ifccParser::ExpressionContext>();
 }
 
-ifccParser::ExpressionContext* ifccParser::AddsubContext::expression(size_t i) {
+ifccParser::ExpressionContext* ifccParser::LogicalAndContext::expression(size_t i) {
   return getRuleContext<ifccParser::ExpressionContext>(i);
 }
 
-ifccParser::AddsubContext::AddsubContext(ExpressionContext *ctx) { copyFrom(ctx); }
+ifccParser::LogicalAndContext::LogicalAndContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-void ifccParser::AddsubContext::enterRule(tree::ParseTreeListener *listener) {
+void ifccParser::LogicalAndContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterAddsub(this);
+    parserListener->enterLogicalAnd(this);
 }
-void ifccParser::AddsubContext::exitRule(tree::ParseTreeListener *listener) {
+void ifccParser::LogicalAndContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitAddsub(this);
+    parserListener->exitLogicalAnd(this);
 }
 
-std::any ifccParser::AddsubContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any ifccParser::LogicalAndContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitAddsub(this);
+    return parserVisitor->visitLogicalAnd(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- AddSubContext ------------------------------------------------------------------
+
+std::vector<ifccParser::ExpressionContext *> ifccParser::AddSubContext::expression() {
+  return getRuleContexts<ifccParser::ExpressionContext>();
+}
+
+ifccParser::ExpressionContext* ifccParser::AddSubContext::expression(size_t i) {
+  return getRuleContext<ifccParser::ExpressionContext>(i);
+}
+
+ifccParser::AddSubContext::AddSubContext(ExpressionContext *ctx) { copyFrom(ctx); }
+
+void ifccParser::AddSubContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterAddSub(this);
+}
+void ifccParser::AddSubContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitAddSub(this);
+}
+
+std::any ifccParser::AddSubContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
+    return parserVisitor->visitAddSub(this);
   else
     return visitor->visitChildren(this);
 }
@@ -1456,32 +1427,32 @@ std::any ifccParser::UnaryContext::accept(tree::ParseTreeVisitor *visitor) {
   else
     return visitor->visitChildren(this);
 }
-//----------------- BitwiseandContext ------------------------------------------------------------------
+//----------------- BitwiseAndContext ------------------------------------------------------------------
 
-std::vector<ifccParser::ExpressionContext *> ifccParser::BitwiseandContext::expression() {
+std::vector<ifccParser::ExpressionContext *> ifccParser::BitwiseAndContext::expression() {
   return getRuleContexts<ifccParser::ExpressionContext>();
 }
 
-ifccParser::ExpressionContext* ifccParser::BitwiseandContext::expression(size_t i) {
+ifccParser::ExpressionContext* ifccParser::BitwiseAndContext::expression(size_t i) {
   return getRuleContext<ifccParser::ExpressionContext>(i);
 }
 
-ifccParser::BitwiseandContext::BitwiseandContext(ExpressionContext *ctx) { copyFrom(ctx); }
+ifccParser::BitwiseAndContext::BitwiseAndContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-void ifccParser::BitwiseandContext::enterRule(tree::ParseTreeListener *listener) {
+void ifccParser::BitwiseAndContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterBitwiseand(this);
+    parserListener->enterBitwiseAnd(this);
 }
-void ifccParser::BitwiseandContext::exitRule(tree::ParseTreeListener *listener) {
+void ifccParser::BitwiseAndContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitBitwiseand(this);
+    parserListener->exitBitwiseAnd(this);
 }
 
-std::any ifccParser::BitwiseandContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any ifccParser::BitwiseAndContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitBitwiseand(this);
+    return parserVisitor->visitBitwiseAnd(this);
   else
     return visitor->visitChildren(this);
 }
@@ -1507,6 +1478,35 @@ void ifccParser::ParenthesisContext::exitRule(tree::ParseTreeListener *listener)
 std::any ifccParser::ParenthesisContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
     return parserVisitor->visitParenthesis(this);
+  else
+    return visitor->visitChildren(this);
+}
+//----------------- TimesDivModuloContext ------------------------------------------------------------------
+
+std::vector<ifccParser::ExpressionContext *> ifccParser::TimesDivModuloContext::expression() {
+  return getRuleContexts<ifccParser::ExpressionContext>();
+}
+
+ifccParser::ExpressionContext* ifccParser::TimesDivModuloContext::expression(size_t i) {
+  return getRuleContext<ifccParser::ExpressionContext>(i);
+}
+
+ifccParser::TimesDivModuloContext::TimesDivModuloContext(ExpressionContext *ctx) { copyFrom(ctx); }
+
+void ifccParser::TimesDivModuloContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterTimesDivModulo(this);
+}
+void ifccParser::TimesDivModuloContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitTimesDivModulo(this);
+}
+
+std::any ifccParser::TimesDivModuloContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
+    return parserVisitor->visitTimesDivModulo(this);
   else
     return visitor->visitChildren(this);
 }
@@ -1539,32 +1539,32 @@ std::any ifccParser::EqualContext::accept(tree::ParseTreeVisitor *visitor) {
   else
     return visitor->visitChildren(this);
 }
-//----------------- TimesContext ------------------------------------------------------------------
+//----------------- VarExprContext ------------------------------------------------------------------
 
-std::vector<ifccParser::ExpressionContext *> ifccParser::TimesContext::expression() {
-  return getRuleContexts<ifccParser::ExpressionContext>();
+tree::TerminalNode* ifccParser::VarExprContext::VAR() {
+  return getToken(ifccParser::VAR, 0);
 }
 
-ifccParser::ExpressionContext* ifccParser::TimesContext::expression(size_t i) {
-  return getRuleContext<ifccParser::ExpressionContext>(i);
+ifccParser::ExpressionContext* ifccParser::VarExprContext::expression() {
+  return getRuleContext<ifccParser::ExpressionContext>(0);
 }
 
-ifccParser::TimesContext::TimesContext(ExpressionContext *ctx) { copyFrom(ctx); }
+ifccParser::VarExprContext::VarExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-void ifccParser::TimesContext::enterRule(tree::ParseTreeListener *listener) {
+void ifccParser::VarExprContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterTimes(this);
+    parserListener->enterVarExpr(this);
 }
-void ifccParser::TimesContext::exitRule(tree::ParseTreeListener *listener) {
+void ifccParser::VarExprContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitTimes(this);
+    parserListener->exitVarExpr(this);
 }
 
-std::any ifccParser::TimesContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any ifccParser::VarExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitTimes(this);
+    return parserVisitor->visitVarExpr(this);
   else
     return visitor->visitChildren(this);
 }
@@ -1593,61 +1593,61 @@ std::any ifccParser::VariableContext::accept(tree::ParseTreeVisitor *visitor) {
   else
     return visitor->visitChildren(this);
 }
-//----------------- BitwiseorContext ------------------------------------------------------------------
+//----------------- BitwiseOrContext ------------------------------------------------------------------
 
-std::vector<ifccParser::ExpressionContext *> ifccParser::BitwiseorContext::expression() {
+std::vector<ifccParser::ExpressionContext *> ifccParser::BitwiseOrContext::expression() {
   return getRuleContexts<ifccParser::ExpressionContext>();
 }
 
-ifccParser::ExpressionContext* ifccParser::BitwiseorContext::expression(size_t i) {
+ifccParser::ExpressionContext* ifccParser::BitwiseOrContext::expression(size_t i) {
   return getRuleContext<ifccParser::ExpressionContext>(i);
 }
 
-ifccParser::BitwiseorContext::BitwiseorContext(ExpressionContext *ctx) { copyFrom(ctx); }
+ifccParser::BitwiseOrContext::BitwiseOrContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-void ifccParser::BitwiseorContext::enterRule(tree::ParseTreeListener *listener) {
+void ifccParser::BitwiseOrContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterBitwiseor(this);
+    parserListener->enterBitwiseOr(this);
 }
-void ifccParser::BitwiseorContext::exitRule(tree::ParseTreeListener *listener) {
+void ifccParser::BitwiseOrContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitBitwiseor(this);
+    parserListener->exitBitwiseOr(this);
 }
 
-std::any ifccParser::BitwiseorContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any ifccParser::BitwiseOrContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitBitwiseor(this);
+    return parserVisitor->visitBitwiseOr(this);
   else
     return visitor->visitChildren(this);
 }
-//----------------- LogicalorContext ------------------------------------------------------------------
+//----------------- LogicalOrContext ------------------------------------------------------------------
 
-std::vector<ifccParser::ExpressionContext *> ifccParser::LogicalorContext::expression() {
+std::vector<ifccParser::ExpressionContext *> ifccParser::LogicalOrContext::expression() {
   return getRuleContexts<ifccParser::ExpressionContext>();
 }
 
-ifccParser::ExpressionContext* ifccParser::LogicalorContext::expression(size_t i) {
+ifccParser::ExpressionContext* ifccParser::LogicalOrContext::expression(size_t i) {
   return getRuleContext<ifccParser::ExpressionContext>(i);
 }
 
-ifccParser::LogicalorContext::LogicalorContext(ExpressionContext *ctx) { copyFrom(ctx); }
+ifccParser::LogicalOrContext::LogicalOrContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
-void ifccParser::LogicalorContext::enterRule(tree::ParseTreeListener *listener) {
+void ifccParser::LogicalOrContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterLogicalor(this);
+    parserListener->enterLogicalOr(this);
 }
-void ifccParser::LogicalorContext::exitRule(tree::ParseTreeListener *listener) {
+void ifccParser::LogicalOrContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitLogicalor(this);
+    parserListener->exitLogicalOr(this);
 }
 
-std::any ifccParser::LogicalorContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any ifccParser::LogicalOrContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitLogicalor(this);
+    return parserVisitor->visitLogicalOr(this);
   else
     return visitor->visitChildren(this);
 }
@@ -1700,7 +1700,7 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
     }
 
     case 3: {
-      _localctx = _tracker.createInstance<VarexprContext>(_localctx);
+      _localctx = _tracker.createInstance<VarExprContext>(_localctx);
       _ctx = _localctx;
       previousContext = _localctx;
       setState(113);
@@ -1764,20 +1764,20 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
         _errHandler->sync(this);
         switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx)) {
         case 1: {
-          auto newContext = _tracker.createInstance<TimesContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
+          auto newContext = _tracker.createInstance<TimesDivModuloContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
           setState(124);
 
           if (!(precpred(_ctx, 10))) throw FailedPredicateException(this, "precpred(_ctx, 10)");
           setState(125);
-          antlrcpp::downCast<TimesContext *>(_localctx)->op = _input->LT(1);
+          antlrcpp::downCast<TimesDivModuloContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!((((_la & ~ 0x3fULL) == 0) &&
             ((1ULL << _la) & ((1ULL << ifccParser::T__12)
             | (1ULL << ifccParser::T__13)
             | (1ULL << ifccParser::T__14))) != 0))) {
-            antlrcpp::downCast<TimesContext *>(_localctx)->op = _errHandler->recoverInline(this);
+            antlrcpp::downCast<TimesDivModuloContext *>(_localctx)->op = _errHandler->recoverInline(this);
           }
           else {
             _errHandler->reportMatch(this);
@@ -1789,19 +1789,19 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
         }
 
         case 2: {
-          auto newContext = _tracker.createInstance<AddsubContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
+          auto newContext = _tracker.createInstance<AddSubContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
           setState(127);
 
           if (!(precpred(_ctx, 9))) throw FailedPredicateException(this, "precpred(_ctx, 9)");
           setState(128);
-          antlrcpp::downCast<AddsubContext *>(_localctx)->op = _input->LT(1);
+          antlrcpp::downCast<AddSubContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!(_la == ifccParser::T__8
 
           || _la == ifccParser::T__10)) {
-            antlrcpp::downCast<AddsubContext *>(_localctx)->op = _errHandler->recoverInline(this);
+            antlrcpp::downCast<AddSubContext *>(_localctx)->op = _errHandler->recoverInline(this);
           }
           else {
             _errHandler->reportMatch(this);
@@ -1887,70 +1887,70 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
         }
 
         case 6: {
-          auto newContext = _tracker.createInstance<BitwiseandContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
+          auto newContext = _tracker.createInstance<BitwiseAndContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
           setState(139);
 
           if (!(precpred(_ctx, 5))) throw FailedPredicateException(this, "precpred(_ctx, 5)");
           setState(140);
-          antlrcpp::downCast<BitwiseandContext *>(_localctx)->op = match(ifccParser::T__23);
+          antlrcpp::downCast<BitwiseAndContext *>(_localctx)->op = match(ifccParser::T__23);
           setState(141);
           expression(6);
           break;
         }
 
         case 7: {
-          auto newContext = _tracker.createInstance<BitwisexorContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
+          auto newContext = _tracker.createInstance<BitwiseXorContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
           setState(142);
 
           if (!(precpred(_ctx, 4))) throw FailedPredicateException(this, "precpred(_ctx, 4)");
           setState(143);
-          antlrcpp::downCast<BitwisexorContext *>(_localctx)->op = match(ifccParser::T__24);
+          antlrcpp::downCast<BitwiseXorContext *>(_localctx)->op = match(ifccParser::T__24);
           setState(144);
           expression(5);
           break;
         }
 
         case 8: {
-          auto newContext = _tracker.createInstance<BitwiseorContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
+          auto newContext = _tracker.createInstance<BitwiseOrContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
           setState(145);
 
           if (!(precpred(_ctx, 3))) throw FailedPredicateException(this, "precpred(_ctx, 3)");
           setState(146);
-          antlrcpp::downCast<BitwiseorContext *>(_localctx)->op = match(ifccParser::T__25);
+          antlrcpp::downCast<BitwiseOrContext *>(_localctx)->op = match(ifccParser::T__25);
           setState(147);
           expression(4);
           break;
         }
 
         case 9: {
-          auto newContext = _tracker.createInstance<LogicalandContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
+          auto newContext = _tracker.createInstance<LogicalAndContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
           setState(148);
 
           if (!(precpred(_ctx, 2))) throw FailedPredicateException(this, "precpred(_ctx, 2)");
           setState(149);
-          antlrcpp::downCast<LogicalandContext *>(_localctx)->op = match(ifccParser::T__26);
+          antlrcpp::downCast<LogicalAndContext *>(_localctx)->op = match(ifccParser::T__26);
           setState(150);
           expression(3);
           break;
         }
 
         case 10: {
-          auto newContext = _tracker.createInstance<LogicalorContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
+          auto newContext = _tracker.createInstance<LogicalOrContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
           setState(151);
 
           if (!(precpred(_ctx, 1))) throw FailedPredicateException(this, "precpred(_ctx, 1)");
           setState(152);
-          antlrcpp::downCast<LogicalorContext *>(_localctx)->op = match(ifccParser::T__27);
+          antlrcpp::downCast<LogicalOrContext *>(_localctx)->op = match(ifccParser::T__27);
           setState(153);
           expression(2);
           break;

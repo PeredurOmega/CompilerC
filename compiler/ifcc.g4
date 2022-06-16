@@ -11,7 +11,7 @@ parameter : TYPE VAR ;
 block : '{' statement* '}';
 statement : ';'
           | declaration
-          | affectation
+          | assignment
           | ret
           | ifBlock
           | block;
@@ -22,23 +22,23 @@ elseBlock: ELSE statement;
 ret : RETURN expression ';';
 declaration : TYPE rawDeclaration (',' rawDeclaration)* ';';
 rawDeclaration : VAR ('=' expression)?;
-affectation : VAR '=' expression ';';
+assignment : VAR '=' expression ';';
 
 expression : VAR #variable
             |CONST #constant
-            |VAR'='expression #varexpr
+            |VAR'='expression #varExpr
             |'(' expression ')' #parenthesis
             |op=('-'|'!'|'+'|'~') expression #unary
-            |expression op=('*' | '/' | '%') expression #times
-            |expression op=('+' | '-') expression #addsub
+            |expression op=('*' | '/' | '%') expression #timesDivModulo
+            |expression op=('+' | '-') expression #addSub
             |expression op=('<<' | '>>') expression #shift
             |expression op=('<' | '<=' | '>=' | '>') expression #compare
             |expression op=('==' | '!=') expression #equal
-            |expression op='&' expression #bitwiseand
-            |expression op='^' expression #bitwisexor
-            |expression op='|' expression #bitwiseor
-            |expression op='&&' expression #logicaland
-            |expression op='||' expression #logicalor
+            |expression op='&' expression #bitwiseAnd
+            |expression op='^' expression #bitwiseXor
+            |expression op='|' expression #bitwiseOr
+            |expression op='&&' expression #logicalAnd
+            |expression op='||' expression #logicalOr
             ;
 
 

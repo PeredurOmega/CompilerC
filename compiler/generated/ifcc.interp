@@ -91,7 +91,7 @@ elseBlock
 ret
 declaration
 rawDeclaration
-affectation
+assignment
 expression
 
 

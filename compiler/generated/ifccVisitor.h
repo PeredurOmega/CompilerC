@@ -43,37 +43,37 @@ public:
 
     virtual std::any visitRawDeclaration(ifccParser::RawDeclarationContext *context) = 0;
 
-    virtual std::any visitAffectation(ifccParser::AffectationContext *context) = 0;
+    virtual std::any visitAssignment(ifccParser::AssignmentContext *context) = 0;
 
     virtual std::any visitCompare(ifccParser::CompareContext *context) = 0;
 
     virtual std::any visitConstant(ifccParser::ConstantContext *context) = 0;
 
-    virtual std::any visitLogicaland(ifccParser::LogicalandContext *context) = 0;
-
-    virtual std::any visitVarexpr(ifccParser::VarexprContext *context) = 0;
-
     virtual std::any visitShift(ifccParser::ShiftContext *context) = 0;
 
-    virtual std::any visitBitwisexor(ifccParser::BitwisexorContext *context) = 0;
+    virtual std::any visitBitwiseXor(ifccParser::BitwiseXorContext *context) = 0;
 
-    virtual std::any visitAddsub(ifccParser::AddsubContext *context) = 0;
+    virtual std::any visitLogicalAnd(ifccParser::LogicalAndContext *context) = 0;
+
+    virtual std::any visitAddSub(ifccParser::AddSubContext *context) = 0;
 
     virtual std::any visitUnary(ifccParser::UnaryContext *context) = 0;
 
-    virtual std::any visitBitwiseand(ifccParser::BitwiseandContext *context) = 0;
+    virtual std::any visitBitwiseAnd(ifccParser::BitwiseAndContext *context) = 0;
 
     virtual std::any visitParenthesis(ifccParser::ParenthesisContext *context) = 0;
 
+    virtual std::any visitTimesDivModulo(ifccParser::TimesDivModuloContext *context) = 0;
+
     virtual std::any visitEqual(ifccParser::EqualContext *context) = 0;
 
-    virtual std::any visitTimes(ifccParser::TimesContext *context) = 0;
+    virtual std::any visitVarExpr(ifccParser::VarExprContext *context) = 0;
 
     virtual std::any visitVariable(ifccParser::VariableContext *context) = 0;
 
-    virtual std::any visitBitwiseor(ifccParser::BitwiseorContext *context) = 0;
+    virtual std::any visitBitwiseOr(ifccParser::BitwiseOrContext *context) = 0;
 
-    virtual std::any visitLogicalor(ifccParser::LogicalorContext *context) = 0;
+    virtual std::any visitLogicalOr(ifccParser::LogicalOrContext *context) = 0;
 
 
 };

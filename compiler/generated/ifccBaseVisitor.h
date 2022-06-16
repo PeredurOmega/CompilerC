@@ -63,7 +63,7 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitAffectation(ifccParser::AffectationContext *ctx) override {
+  virtual std::any visitAssignment(ifccParser::AssignmentContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -75,23 +75,19 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitLogicaland(ifccParser::LogicalandContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitVarexpr(ifccParser::VarexprContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual std::any visitShift(ifccParser::ShiftContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual std::any visitBitwisexor(ifccParser::BitwisexorContext *ctx) override {
+  virtual std::any visitBitwiseXor(ifccParser::BitwiseXorContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual std::any visitAddsub(ifccParser::AddsubContext *ctx) override {
+  virtual std::any visitLogicalAnd(ifccParser::LogicalAndContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitAddSub(ifccParser::AddSubContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -99,7 +95,7 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitBitwiseand(ifccParser::BitwiseandContext *ctx) override {
+  virtual std::any visitBitwiseAnd(ifccParser::BitwiseAndContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -107,11 +103,15 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitEqual(ifccParser::EqualContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual std::any visitTimes(ifccParser::TimesContext *ctx) override {
+  virtual std::any visitVarExpr(ifccParser::VarExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -119,11 +119,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitBitwiseor(ifccParser::BitwiseorContext *ctx) override {
+  virtual std::any visitBitwiseOr(ifccParser::BitwiseOrContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual std::any visitLogicalor(ifccParser::LogicalorContext *ctx) override {
+  virtual std::any visitLogicalOr(ifccParser::LogicalOrContext *ctx) override {
     return visitChildren(ctx);
   }
 
