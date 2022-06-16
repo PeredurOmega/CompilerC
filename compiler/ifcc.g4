@@ -14,10 +14,13 @@ statement : ';'
           | affectation
           | ret
           | ifBlock
+          | whileBlock
           | block;
 
 ifBlock: IF '(' expression ')' statement elseBlock?;
 elseBlock: ELSE statement;
+
+whileBlock: WHILE '(' expression ')' statement;
 
 ret : RETURN expression ';'+;
 declaration : TYPE (init| VAR) (',' (init| VAR))* ';'+;
@@ -44,6 +47,7 @@ expression : VAR #variable
 
 IF : 'if';
 ELSE: 'else';
+WHILE: 'while';
 
 RETURN : 'return' ;
 TYPE : 'int';
