@@ -41,7 +41,7 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
 
     auto *fun = new Function(ctx->VAR()->getText(), returnType);
     auto block = visitBlock(ctx->block());
-    fun->setBlock(any_cast<Block *>(block));
+    fun->setBlock((Block *) any_cast<IrInstruction *>(block));
     return fun;
 }
 
@@ -54,7 +54,7 @@ antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
         bool stop = instruction->alwaysReturn;
         if (stop) break;
     }
-    return block;
+    return (IrInstruction *) block;
 }
 
 antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
