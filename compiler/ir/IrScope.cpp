@@ -35,3 +35,15 @@ int IrScope::insertTempVariable() {
     currentOffset -= 4;
     return currentOffset;
 }
+
+void IrScope::setOwner(IrScope *_owner) {
+    currentOffset = _owner->currentOffset;
+    owner = _owner;
+    label = owner->label;
+}
+
+int IrScope::getNewLabel() {
+    *label = *label + 1;
+    return *label;
+}
+

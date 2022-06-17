@@ -22,7 +22,7 @@ public:
 
     virtual void affect(IrScope* owner) = 0;
 
-    void setOwner(IrScope *owner);
+    virtual void setOwner(IrScope *owner);
 
     void renderX86(ostream &o) const override = 0;
 };

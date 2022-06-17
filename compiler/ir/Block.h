@@ -10,7 +10,7 @@
 #include "IrScope.h"
 #include "IrInstruction.h"
 
-class Block : IrScope {
+class Block : public IrScope {
 public:
     bool alwaysReturn = false;
 
@@ -21,6 +21,8 @@ public:
     void renderX86(ostream &o) const override;
 
     void attachTo(Block* block);
+
+    void affect(IrScope* owner);
 private:
     vector<IrInstruction *> instructions;
 };

@@ -3,6 +3,7 @@
 #include "ir/Declaration.h"
 #include "ir/Expression.h"
 #include "ir/OpExpression.h"
+#include "ir/IfElse.h"
 #include "ir/UnaryOp.h"
 
 using namespace std;
@@ -18,6 +19,7 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
         prog->addFunction(any_cast<Function *>(visit(f)));
     }
 
+    prog->affect();
     return prog;
 }
 
@@ -43,11 +45,6 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
     return fun;
 }
 
-/**
- *
- * @param ctx
- * @return Whether or not the block "stop" the function via a return.
- */
 antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
     auto *block = new Block();
     for (auto statement: ctx->statement()) {
@@ -61,51 +58,49 @@ antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
-    currentVariable = "";
-    jumpOffset++;
-    bool finish = finalJump == 0;
-    if (finish) {
-        finalJump = jumpOffset;
+    IrInstruction *compare;
+    if (ctx->statementWithoutAssignment() != nullptr) {
+        compare = any_cast<IrInstruction *>(visit(ctx->expression()));
+    } else {
+        compare = any_cast<IrInstruction *>(visit(ctx->expAssignment()));
     }
-    int offset = any_cast<int>(visit(ctx->expression()));
-    cout << "    cmpl    $0, " << offset << "(%rbp)" << endl;
-    int jOffset;
-    if (ctx->elseBlock() != nullptr) jOffset = jumpOffset + 1;
-    else jOffset = finalJump;
-    cout << "    je      .L" << jOffset << endl;
 
-    int temp = finalJump;
-    finalJump = 0;
-    bool stop = any_cast<bool>(visitStatement(ctx->statement()));
+    auto *content = any_cast<IrInstruction *>(
+            visit(ctx->statementWithoutAssignment()));
 
-    finalJump = temp;
-
+    bool alwaysReturn = content->alwaysReturn;
+    ElseStatement *elseStatement = nullptr;
     if (ctx->elseBlock() != nullptr) {
-        cout << "    jmp      .L" << finalJump << endl;
-        stop = any_cast<bool>(visitElseBlock(ctx->elseBlock())) && stop;
+        elseStatement = (ElseStatement *) any_cast<IrInstruction *>(
+                visitElseBlock(ctx->elseBlock()));
+        alwaysReturn = alwaysReturn & elseStatement->alwaysReturn;
     }
 
-    if (finish) {
-        cout << ".L" << finalJump << ":" << endl;
-        finalJump = 0;
-    }
-    return stop;
+    auto *ifBlock = new IfStatement((Expression *) compare, content,
+                                    elseStatement);
+    ifBlock->alwaysReturn = alwaysReturn;
+    return (IrInstruction *) ifBlock;
 }
 
 antlrcpp::Any
 CodeGenVisitor::visitElseBlock(ifccParser::ElseBlockContext *ctx) {
-    jumpOffset++;
-    cout << ".L" << jumpOffset << ":" << endl;
-    return visitStatement(ctx->statement());
+    auto *statement = any_cast<IrInstruction *>(
+            visitStatement(ctx->statement()));
+    auto *elseStatement = new ElseStatement(statement);
+    elseStatement->alwaysReturn = statement->alwaysReturn;
+    return (IrInstruction *) elseStatement;
 }
 
-/**
- *
- * @param ctx
- * @return Whether or not the statement "stop" the function via a return.
- */
 antlrcpp::Any
 CodeGenVisitor::visitStatement(ifccParser::StatementContext *ctx) {
+    auto t = visitChildren(ctx);
+    auto *instruction = any_cast<IrInstruction *>(t);
+    return instruction;
+}
+
+antlrcpp::Any
+CodeGenVisitor::visitStatementWithoutAssignment(
+        ifccParser::StatementWithoutAssignmentContext *ctx) {
     auto t = visitChildren(ctx);
     auto *instruction = any_cast<IrInstruction *>(t);
     return instruction;
@@ -266,10 +261,10 @@ antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
 
 antlrcpp::Any
 CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
-    if (ctx->expression() != nullptr){
+    if (ctx->expression() != nullptr) {
         auto *expr = (Expression *) any_cast<IrInstruction *>(
                 visit(ctx->expression()));
-        return (IrInstruction*) expr;
+        return (IrInstruction *) expr;
     } else {
         return visitExpAssignment(ctx->expAssignment());
     }
@@ -318,7 +313,8 @@ CodeGenVisitor::visitBitwiseOr(ifccParser::BitwiseOrContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(ctx->expression()));
+    auto *rExpr = (Expression *) any_cast<IrInstruction *>(
+            visit(ctx->expression()));
     if (ctx->op->getText() == "-") {
         return (IrInstruction *) new MinusUnary(rExpr);
     } else if (ctx->op->getText() == "~") {

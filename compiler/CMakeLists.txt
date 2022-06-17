@@ -14,7 +14,7 @@ set(compiler-GENERATED_SRC
 
 set(compiler-IR_SRC
         ${PROJECT_SOURCE_DIR}/compiler/ir/Prog.cpp
-        ir/IrElement.cpp ir/IrElement.h ir/Function.cpp ir/Function.h ir/IrScope.cpp ir/IrScope.h ir/Block.cpp ir/Block.h ir/TypeSymbol.cpp ir/TypeSymbol.h ir/IrInstruction.cpp ir/IrInstruction.h ir/Declaration.cpp ir/Declaration.h ir/Expression.cpp ir/Expression.h ir/OpExpression.cpp ir/OpExpression.h ir/UnaryOp.cpp ir/UnaryOp.h)
+        ir/IrElement.cpp ir/IrElement.h ir/Function.cpp ir/Function.h ir/IrScope.cpp ir/IrScope.h ir/Block.cpp ir/Block.h ir/TypeSymbol.cpp ir/TypeSymbol.h ir/IrInstruction.cpp ir/IrInstruction.h ir/Declaration.cpp ir/Declaration.h ir/Expression.cpp ir/Expression.h ir/OpExpression.cpp ir/OpExpression.h ir/IfElse.cpp ir/IfElse.h ir/UnaryOp.cpp ir/UnaryOp.h)
 
 foreach (src_file ${compiler-GENERATED_SRC})
     set_source_files_properties(

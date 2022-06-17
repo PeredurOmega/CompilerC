@@ -33,6 +33,5 @@ void Function::renderX86(ostream &o) const {
 }
 
 void Function::setBlock(Block *block) {
-    alwaysReturn = block->alwaysReturn;
     block->attachTo(this);
 }

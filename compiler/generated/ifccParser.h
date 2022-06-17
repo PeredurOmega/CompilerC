@@ -22,9 +22,10 @@ public:
 
   enum {
     RuleAxiom = 0, RuleProg = 1, RuleFunction = 2, RuleParameters = 3, RuleParameter = 4, 
-    RuleBlock = 5, RuleStatement = 6, RuleIfBlock = 7, RuleElseBlock = 8, 
-    RuleRet = 9, RuleDeclaration = 10, RuleRawDeclaration = 11, RuleExpAssignment = 12, 
-    RuleAssignment = 13, RuleExpression = 14
+    RuleBlock = 5, RuleStatement = 6, RuleStatementWithoutAssignment = 7, 
+    RuleIfBlock = 8, RuleElseBlock = 9, RuleRet = 10, RuleDeclaration = 11, 
+    RuleRawDeclaration = 12, RuleExpAssignment = 13, RuleAssignment = 14, 
+    RuleExpression = 15
   };
 
   explicit ifccParser(antlr4::TokenStream *input);
@@ -51,6 +52,7 @@ public:
   class ParameterContext;
   class BlockContext;
   class StatementContext;
+  class StatementWithoutAssignmentContext;
   class IfBlockContext;
   class ElseBlockContext;
   class RetContext;
@@ -162,8 +164,23 @@ public:
   public:
     StatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    DeclarationContext *declaration();
+    StatementWithoutAssignmentContext *statementWithoutAssignment();
     AssignmentContext *assignment();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  StatementContext* statement();
+
+  class  StatementWithoutAssignmentContext : public antlr4::ParserRuleContext {
+  public:
+    StatementWithoutAssignmentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    DeclarationContext *declaration();
     RetContext *ret();
     IfBlockContext *ifBlock();
     BlockContext *block();
@@ -175,14 +192,14 @@ public:
    
   };
 
-  StatementContext* statement();
+  StatementWithoutAssignmentContext* statementWithoutAssignment();
 
   class  IfBlockContext : public antlr4::ParserRuleContext {
   public:
     IfBlockContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *IF();
-    StatementContext *statement();
+    StatementWithoutAssignmentContext *statementWithoutAssignment();
     ExpressionContext *expression();
     ExpAssignmentContext *expAssignment();
     ElseBlockContext *elseBlock();

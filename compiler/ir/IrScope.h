@@ -22,7 +22,12 @@ public:
 
     int getOffset(string &varName);
 
+    int getNewLabel();
+
+    void setOwner(IrScope *owner);
+
 protected:
+    int* label;
     IrScope *owner;
     unordered_map<string, int> symbolTable;
 };

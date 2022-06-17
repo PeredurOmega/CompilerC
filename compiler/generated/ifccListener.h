@@ -35,6 +35,9 @@ public:
   virtual void enterStatement(ifccParser::StatementContext *ctx) = 0;
   virtual void exitStatement(ifccParser::StatementContext *ctx) = 0;
 
+  virtual void enterStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext *ctx) = 0;
+  virtual void exitStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext *ctx) = 0;
+
   virtual void enterIfBlock(ifccParser::IfBlockContext *ctx) = 0;
   virtual void exitIfBlock(ifccParser::IfBlockContext *ctx) = 0;
 

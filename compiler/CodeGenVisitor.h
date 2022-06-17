@@ -22,6 +22,9 @@ public:
 
     antlrcpp::Any visitStatement(ifccParser::StatementContext *ctx) override;
 
+    antlrcpp::Any visitStatementWithoutAssignment(
+            ifccParser::StatementWithoutAssignmentContext *ctx) override;
+
     antlrcpp::Any
     visitDeclaration(ifccParser::DeclarationContext *ctx) override;
 
@@ -42,7 +45,8 @@ public:
 
     antlrcpp::Any visitAddSub(ifccParser::AddSubContext *ctx) override;
 
-    antlrcpp::Any visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) override;
+    antlrcpp::Any
+    visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) override;
 
     antlrcpp::Any
     visitParenthesis(ifccParser::ParenthesisContext *ctx) override;

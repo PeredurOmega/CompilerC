@@ -21,6 +21,8 @@ public:
 
     void addFunction(Function *function);
 
+    void affect();
+
 private:
     string entry;
     vector<Function *> functions;

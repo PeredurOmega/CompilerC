@@ -43,6 +43,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitIfBlock(ifccParser::IfBlockContext *ctx) override {
     return visitChildren(ctx);
   }

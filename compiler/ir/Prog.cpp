@@ -9,6 +9,7 @@
 
 Prog::Prog(string entry) {
     this->entry = std::move(entry);
+    this->label = new int(0);
 }
 
 void Prog::renderX86(ostream &o) const {
@@ -22,4 +23,10 @@ void Prog::renderX86(ostream &o) const {
 void Prog::addFunction(Function *function) {
     //TODO CHECK FUNCTION IS NOT ALREADY DECLARED
     functions.push_back(function);
+}
+
+void Prog::affect() {
+    for (Function *function: functions) {
+        function->affect(this);
+    }
 }

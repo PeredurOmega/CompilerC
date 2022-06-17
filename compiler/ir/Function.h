@@ -11,7 +11,7 @@
 #include "Block.h"
 #include "TypeSymbol.h"
 
-class Function : Block {
+class Function : public Block {
 public:
     //TODO HANDLE PARAMETERS
     explicit Function(string name, const IrType *returnType);
@@ -24,7 +24,6 @@ private:
     const string MAIN = "main";
     const IrType *returnType;
     const string name;
-    bool alwaysReturn = false;
     //vector<IrInstr> blocks;
 };
 

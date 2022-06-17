@@ -33,6 +33,8 @@ public:
 
     virtual std::any visitStatement(ifccParser::StatementContext *context) = 0;
 
+    virtual std::any visitStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext *context) = 0;
+
     virtual std::any visitIfBlock(ifccParser::IfBlockContext *context) = 0;
 
     virtual std::any visitElseBlock(ifccParser::ElseBlockContext *context) = 0;

@@ -5,7 +5,6 @@
 #include "Block.h"
 
 void Block::addInstruction(IrInstruction *instruction) {
-    //instruction->affect(this);
     if (instruction->alwaysReturn) alwaysReturn = true;
     instructions.push_back(instruction);
 }
@@ -17,8 +16,15 @@ void Block::renderX86(ostream &o) const {
 }
 
 void Block::attachTo(Block *block) {
+    block->alwaysReturn = alwaysReturn;
     for (auto i: instructions) {
         block->addInstruction(i);
+    }
+}
+
+void Block::affect(IrScope *owner) {
+    setOwner(owner);
+    for (auto i: instructions) {
         i->affect(this);
     }
 }

@@ -37,6 +37,9 @@ public:
   virtual void enterStatement(ifccParser::StatementContext * /*ctx*/) override { }
   virtual void exitStatement(ifccParser::StatementContext * /*ctx*/) override { }
 
+  virtual void enterStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext * /*ctx*/) override { }
+  virtual void exitStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext * /*ctx*/) override { }
+
   virtual void enterIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }
   virtual void exitIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }
 

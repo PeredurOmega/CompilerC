@@ -9,14 +9,18 @@ parameters : parameter (',' parameter)* ;
 parameter : TYPE VAR ;
 
 block : '{' statement* '}';
-statement : ';'
-          | declaration
-          | assignment
-          | ret
-          | ifBlock
-          | block;
+statement : statementWithoutAssignment
+          | assignment;
 
-ifBlock: IF '(' (expression | expAssignment) ')' statement elseBlock?;
+// Statement without assignment for inline statment (next to if, while...)
+statementWithoutAssignment:  ';'
+                          | declaration
+                          | ret
+                          | ifBlock
+                          | block;
+
+ifBlock: IF '(' (expression | expAssignment) ')' statementWithoutAssignment elseBlock?;
+
 elseBlock: ELSE statement;
 
 ret : RETURN (expression | expAssignment) ';';
