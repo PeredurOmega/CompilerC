@@ -216,7 +216,13 @@ CodeGenVisitor::visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) {
 
 antlrcpp::Any
 CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
-    return visitChildren(ctx);
+    if (ctx->expression() != nullptr){
+        auto *expr = (Expression *) any_cast<IrInstruction *>(
+                visit(ctx->expression()));
+        return (IrInstruction*) expr;
+    } else {
+        return visitExpAssignment(ctx->expAssignment());
+    }
 }
 
 antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
