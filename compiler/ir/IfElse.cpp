@@ -54,7 +54,8 @@ void ElseStatement::affect(IrScope *owner) {
 }
 
 ElseStatement::ElseStatement(IrInstruction *content)
-        : Expression(false), content(content) {
+        : Expression(content->alwaysReturn), content(content) {
+
 }
 
 void ElseStatement::renderX86(ostream &o) const {

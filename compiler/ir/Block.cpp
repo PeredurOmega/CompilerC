@@ -24,6 +24,7 @@ void Block::attachTo(Block *block) {
 
 void Block::affect(IrScope *owner) {
     setOwner(owner);
+    owner->alwaysReturn = alwaysReturn;
     for (auto i: instructions) {
         i->affect(this);
     }

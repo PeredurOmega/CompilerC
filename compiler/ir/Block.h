@@ -12,8 +12,6 @@
 
 class Block : public IrScope {
 public:
-    bool alwaysReturn = false;
-
     explicit Block();
 
     void addInstruction(IrInstruction *instruction);

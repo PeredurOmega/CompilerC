@@ -73,7 +73,7 @@ antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
     if (ctx->elseBlock() != nullptr) {
         elseStatement = (ElseStatement *) any_cast<IrInstruction *>(
                 visitElseBlock(ctx->elseBlock()));
-        alwaysReturn = alwaysReturn & elseStatement->alwaysReturn;
+        alwaysReturn = alwaysReturn && elseStatement->alwaysReturn;
     }
 
     auto *ifBlock = new IfStatement((Expression *) compare, content,
