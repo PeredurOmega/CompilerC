@@ -58,4 +58,13 @@ public:
     void affect(IrScope *owner) override;
 };
 
+class ModuloOperation : public OpExpression {
+public:
+    explicit ModuloOperation(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
 #endif //LIBANTLR4_OPEXPRESSION_H

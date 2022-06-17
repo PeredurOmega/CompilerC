@@ -109,12 +109,38 @@ void DivOperation::renderX86(ostream &o) const {
     if (assignTo != nullptr) {
         o << *assignTo;
     } else {
-        o << "Temp operation result '*'";
+        o << "Temp operation result '/'";
     }
     o << endl;
 }
 
 void DivOperation::affect(IrScope *owner) {
+    OpExpression::affect(owner);
+    if (assignTo != nullptr) {
+        offset = owner->getOffset(*assignTo);
+    } else {
+        offset = owner->insertTempVariable();
+    }
+}
+
+ModuloOperation::ModuloOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
+
+void ModuloOperation::renderX86(ostream &o) const {
+    OpExpression::renderX86(o);
+    o << "    movl    " << lExpr->offset << "(%rbp), %eax" << endl;
+    o << "    cltd" << endl;
+    o << "    idivl    " << rExpr->offset << "(%rbp)" << endl;
+
+    o << "    movl    %edx, " << offset << "(%rbp) #";
+    if (assignTo != nullptr) {
+        o << *assignTo;
+    } else {
+        o << "Temp operation result '%'";
+    }
+    o << endl;
+}
+
+void ModuloOperation::affect(IrScope *owner) {
     OpExpression::affect(owner);
     if (assignTo != nullptr) {
         offset = owner->getOffset(*assignTo);

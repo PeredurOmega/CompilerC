@@ -206,7 +206,7 @@ CodeGenVisitor::visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) {
     } else if (ctx->op->getText() == "/") {
         return (IrInstruction *) new DivOperation(lExpr, rExpr);
     } else if (ctx->op->getText() == "%") {
-        return (IrInstruction *) new DivOperation(lExpr, rExpr);
+        return (IrInstruction *) new ModuloOperation(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
