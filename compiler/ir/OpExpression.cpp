@@ -369,7 +369,7 @@ void BitwiseAnd::renderX86(ostream &o) const {
     if (assignTo != nullptr) {
         o << *assignTo;
     } else {
-        o << "Temp operation result '!='";
+        o << "Temp operation result '&'";
     }
     o << endl;
 }
@@ -393,7 +393,7 @@ void BitwiseXor::renderX86(ostream &o) const {
     if (assignTo != nullptr) {
         o << *assignTo;
     } else {
-        o << "Temp operation result '!='";
+        o << "Temp operation result '^'";
     }
     o << endl;
 }
@@ -417,12 +417,56 @@ void BitwiseOr::renderX86(ostream &o) const {
     if (assignTo != nullptr) {
         o << *assignTo;
     } else {
-        o << "Temp operation result '!='";
+        o << "Temp operation result '|'";
     }
     o << endl;
 }
 
 void BitwiseOr::affect(IrScope *owner) {
+    OpExpression::affect(owner);
+    if (assignTo != nullptr) {
+        offset = owner->getOffset(*assignTo);
+    } else {
+        offset = owner->insertTempVariable();
+    }
+}
+
+LogicalAnd::LogicalAnd(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+
+void LogicalAnd::renderX86(ostream &o) const {
+    OpExpression::renderX86(o);
+
+    if (assignTo != nullptr) {
+        o << *assignTo;
+    } else {
+        o << "Temp operation result '&&'";
+    }
+    o << endl;
+}
+
+void LogicalAnd::affect(IrScope *owner) {
+    OpExpression::affect(owner);
+    if (assignTo != nullptr) {
+        offset = owner->getOffset(*assignTo);
+    } else {
+        offset = owner->insertTempVariable();
+    }
+}
+
+LogicalOr::LogicalOr(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+
+void LogicalOr::renderX86(ostream &o) const {
+    OpExpression::renderX86(o);
+
+    if (assignTo != nullptr) {
+        o << *assignTo;
+    } else {
+        o << "Temp operation result '||'";
+    }
+    o << endl;
+}
+
+void LogicalOr::affect(IrScope *owner) {
     OpExpression::affect(owner);
     if (assignTo != nullptr) {
         offset = owner->getOffset(*assignTo);

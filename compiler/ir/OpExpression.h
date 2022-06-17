@@ -166,4 +166,22 @@ public:
     void affect(IrScope *owner) override;
 };
 
+class LogicalAnd : public OpExpression {
+public:
+    explicit LogicalAnd(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class LogicalOr : public OpExpression {
+public:
+    explicit LogicalOr(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
 #endif //LIBANTLR4_OPEXPRESSION_H
