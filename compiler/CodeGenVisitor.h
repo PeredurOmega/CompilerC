@@ -31,11 +31,12 @@ public:
     antlrcpp::Any
     visitAssignment(ifccParser::AssignmentContext *ctx) override;
 
+    antlrcpp::Any
+    visitExpAssignment(ifccParser::ExpAssignmentContext *ctx) override;
+
     antlrcpp::Any visitConstant(ifccParser::ConstantContext *ctx) override;
 
     antlrcpp::Any visitVariable(ifccParser::VariableContext *ctx) override;
-
-    antlrcpp::Any visitVarExpr(ifccParser::VarExprContext *ctx) override;
 
     antlrcpp::Any visitRet(ifccParser::RetContext *ctx) override;
 

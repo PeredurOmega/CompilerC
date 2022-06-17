@@ -16,18 +16,18 @@ statement : ';'
           | ifBlock
           | block;
 
-ifBlock: IF '(' expression ')' statement elseBlock?;
+ifBlock: IF '(' (expression | expAssignment) ')' statement elseBlock?;
 elseBlock: ELSE statement;
 
-ret : RETURN expression ';';
+ret : RETURN (expression | expAssignment) ';';
 declaration : TYPE rawDeclaration (',' rawDeclaration)* ';';
-rawDeclaration : VAR ('=' expression)?;
-assignment : VAR '=' expression ';';
+rawDeclaration : VAR ('=' (VAR '=')* expression)?;
+expAssignment : (VAR '=')+ expression;
+assignment : expAssignment ';';
 
 expression : VAR #variable
             |CONST #constant
-            |VAR'='expression #varExpr
-            |'(' expression ')' #parenthesis
+            |'(' (expression | expAssignment)')' #parenthesis
             |op=('-'|'!'|'+'|'~') expression #unary
             |expression op=('*' | '/' | '%') expression #timesDivModulo
             |expression op=('+' | '-') expression #addSub

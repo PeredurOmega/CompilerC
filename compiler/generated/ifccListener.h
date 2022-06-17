@@ -50,6 +50,9 @@ public:
   virtual void enterRawDeclaration(ifccParser::RawDeclarationContext *ctx) = 0;
   virtual void exitRawDeclaration(ifccParser::RawDeclarationContext *ctx) = 0;
 
+  virtual void enterExpAssignment(ifccParser::ExpAssignmentContext *ctx) = 0;
+  virtual void exitExpAssignment(ifccParser::ExpAssignmentContext *ctx) = 0;
+
   virtual void enterAssignment(ifccParser::AssignmentContext *ctx) = 0;
   virtual void exitAssignment(ifccParser::AssignmentContext *ctx) = 0;
 
@@ -85,9 +88,6 @@ public:
 
   virtual void enterEqual(ifccParser::EqualContext *ctx) = 0;
   virtual void exitEqual(ifccParser::EqualContext *ctx) = 0;
-
-  virtual void enterVarExpr(ifccParser::VarExprContext *ctx) = 0;
-  virtual void exitVarExpr(ifccParser::VarExprContext *ctx) = 0;
 
   virtual void enterVariable(ifccParser::VariableContext *ctx) = 0;
   virtual void exitVariable(ifccParser::VariableContext *ctx) = 0;

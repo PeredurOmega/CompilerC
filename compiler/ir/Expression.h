@@ -6,6 +6,7 @@
 #define LIBANTLR4_EXPRESSION_H
 
 #include <string>
+#include <vector>
 #include "IrElement.h"
 #include "IrScope.h"
 #include "IrInstruction.h"
@@ -20,25 +21,17 @@ public:
      * Initialized when added to a Block through affect.
      */
     int offset;
+
+    /**
+     * Optional in case the expression is followed by an assignment.
+     * When not nullptr, we should store the value of the expression in %eax.
+     */
+    string *assignTo= nullptr;
 };
 
 class Return : public Expression {
 public:
     explicit Return(Expression *expression);
-
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
-
-private:
-    Expression *expression;
-};
-
-class Assignment : public Expression {
-public:
-    string to;
-
-    explicit Assignment(string to, Expression *expression);
 
     void renderX86(ostream &o) const override;
 
@@ -70,8 +63,19 @@ public:
     void affect(IrScope *owner) override;
 };
 
-class OpExpression: Expression {
+class VarExpr : public Expression {
+public:
+    explicit VarExpr(vector<string *> *varNames, Expression *expr);
 
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+
+private:
+    vector<string *> varNames;
+    Expression *expression;
+    vector<int> offsets;
 };
+
 
 #endif //LIBANTLR4_EXPRESSION_H

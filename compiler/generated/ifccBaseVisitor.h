@@ -63,6 +63,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitExpAssignment(ifccParser::ExpAssignmentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitAssignment(ifccParser::AssignmentContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -108,10 +112,6 @@ public:
   }
 
   virtual std::any visitEqual(ifccParser::EqualContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual std::any visitVarExpr(ifccParser::VarExprContext *ctx) override {
     return visitChildren(ctx);
   }
 

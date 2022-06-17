@@ -52,6 +52,9 @@ public:
   virtual void enterRawDeclaration(ifccParser::RawDeclarationContext * /*ctx*/) override { }
   virtual void exitRawDeclaration(ifccParser::RawDeclarationContext * /*ctx*/) override { }
 
+  virtual void enterExpAssignment(ifccParser::ExpAssignmentContext * /*ctx*/) override { }
+  virtual void exitExpAssignment(ifccParser::ExpAssignmentContext * /*ctx*/) override { }
+
   virtual void enterAssignment(ifccParser::AssignmentContext * /*ctx*/) override { }
   virtual void exitAssignment(ifccParser::AssignmentContext * /*ctx*/) override { }
 
@@ -87,9 +90,6 @@ public:
 
   virtual void enterEqual(ifccParser::EqualContext * /*ctx*/) override { }
   virtual void exitEqual(ifccParser::EqualContext * /*ctx*/) override { }
-
-  virtual void enterVarExpr(ifccParser::VarExprContext * /*ctx*/) override { }
-  virtual void exitVarExpr(ifccParser::VarExprContext * /*ctx*/) override { }
 
   virtual void enterVariable(ifccParser::VariableContext * /*ctx*/) override { }
   virtual void exitVariable(ifccParser::VariableContext * /*ctx*/) override { }

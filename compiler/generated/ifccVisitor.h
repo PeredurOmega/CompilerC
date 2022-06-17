@@ -43,6 +43,8 @@ public:
 
     virtual std::any visitRawDeclaration(ifccParser::RawDeclarationContext *context) = 0;
 
+    virtual std::any visitExpAssignment(ifccParser::ExpAssignmentContext *context) = 0;
+
     virtual std::any visitAssignment(ifccParser::AssignmentContext *context) = 0;
 
     virtual std::any visitCompare(ifccParser::CompareContext *context) = 0;
@@ -66,8 +68,6 @@ public:
     virtual std::any visitTimesDivModulo(ifccParser::TimesDivModuloContext *context) = 0;
 
     virtual std::any visitEqual(ifccParser::EqualContext *context) = 0;
-
-    virtual std::any visitVarExpr(ifccParser::VarExprContext *context) = 0;
 
     virtual std::any visitVariable(ifccParser::VariableContext *context) = 0;
 

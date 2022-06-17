@@ -45,8 +45,8 @@ void ifccParserInitialize() {
   auto staticData = std::make_unique<IfccParserStaticData>(
     std::vector<std::string>{
       "axiom", "prog", "function", "parameters", "parameter", "block", "statement", 
-      "ifBlock", "elseBlock", "ret", "declaration", "rawDeclaration", "assignment", 
-      "expression"
+      "ifBlock", "elseBlock", "ret", "declaration", "rawDeclaration", "expAssignment", 
+      "assignment", "expression"
     },
     std::vector<std::string>{
       "", "'void'", "'('", "')'", "','", "'{'", "'}'", "';'", "'='", "'-'", 
@@ -61,58 +61,65 @@ void ifccParserInitialize() {
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,37,160,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
-  	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,1,0,1,0,
-  	1,0,1,1,5,1,33,8,1,10,1,12,1,36,9,1,1,2,1,2,1,2,1,2,3,2,42,8,2,1,2,1,
-  	2,1,2,1,3,1,3,1,3,5,3,50,8,3,10,3,12,3,53,9,3,1,4,1,4,1,4,1,5,1,5,5,5,
-  	60,8,5,10,5,12,5,63,9,5,1,5,1,5,1,6,1,6,1,6,1,6,1,6,1,6,3,6,73,8,6,1,
-  	7,1,7,1,7,1,7,1,7,1,7,3,7,81,8,7,1,8,1,8,1,8,1,9,1,9,1,9,1,9,1,10,1,10,
-  	1,10,1,10,5,10,94,8,10,10,10,12,10,97,9,10,1,10,1,10,1,11,1,11,1,11,3,
-  	11,104,8,11,1,12,1,12,1,12,1,12,1,12,1,13,1,13,1,13,1,13,1,13,1,13,1,
-  	13,1,13,1,13,1,13,1,13,1,13,3,13,123,8,13,1,13,1,13,1,13,1,13,1,13,1,
-  	13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,
-  	13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,1,13,5,13,155,8,13,10,
-  	13,12,13,158,9,13,1,13,0,1,26,14,0,2,4,6,8,10,12,14,16,18,20,22,24,26,
-  	0,7,2,0,1,1,32,32,1,0,9,12,1,0,13,15,2,0,9,9,11,11,1,0,16,17,1,0,18,21,
-  	1,0,22,23,171,0,28,1,0,0,0,2,34,1,0,0,0,4,37,1,0,0,0,6,46,1,0,0,0,8,54,
-  	1,0,0,0,10,57,1,0,0,0,12,72,1,0,0,0,14,74,1,0,0,0,16,82,1,0,0,0,18,85,
-  	1,0,0,0,20,89,1,0,0,0,22,100,1,0,0,0,24,105,1,0,0,0,26,122,1,0,0,0,28,
-  	29,3,2,1,0,29,30,5,0,0,1,30,1,1,0,0,0,31,33,3,4,2,0,32,31,1,0,0,0,33,
-  	36,1,0,0,0,34,32,1,0,0,0,34,35,1,0,0,0,35,3,1,0,0,0,36,34,1,0,0,0,37,
-  	38,7,0,0,0,38,39,5,35,0,0,39,41,5,2,0,0,40,42,3,6,3,0,41,40,1,0,0,0,41,
-  	42,1,0,0,0,42,43,1,0,0,0,43,44,5,3,0,0,44,45,3,10,5,0,45,5,1,0,0,0,46,
-  	51,3,8,4,0,47,48,5,4,0,0,48,50,3,8,4,0,49,47,1,0,0,0,50,53,1,0,0,0,51,
-  	49,1,0,0,0,51,52,1,0,0,0,52,7,1,0,0,0,53,51,1,0,0,0,54,55,5,32,0,0,55,
-  	56,5,35,0,0,56,9,1,0,0,0,57,61,5,5,0,0,58,60,3,12,6,0,59,58,1,0,0,0,60,
-  	63,1,0,0,0,61,59,1,0,0,0,61,62,1,0,0,0,62,64,1,0,0,0,63,61,1,0,0,0,64,
-  	65,5,6,0,0,65,11,1,0,0,0,66,73,5,7,0,0,67,73,3,20,10,0,68,73,3,24,12,
-  	0,69,73,3,18,9,0,70,73,3,14,7,0,71,73,3,10,5,0,72,66,1,0,0,0,72,67,1,
-  	0,0,0,72,68,1,0,0,0,72,69,1,0,0,0,72,70,1,0,0,0,72,71,1,0,0,0,73,13,1,
-  	0,0,0,74,75,5,29,0,0,75,76,5,2,0,0,76,77,3,26,13,0,77,78,5,3,0,0,78,80,
-  	3,12,6,0,79,81,3,16,8,0,80,79,1,0,0,0,80,81,1,0,0,0,81,15,1,0,0,0,82,
-  	83,5,30,0,0,83,84,3,12,6,0,84,17,1,0,0,0,85,86,5,31,0,0,86,87,3,26,13,
-  	0,87,88,5,7,0,0,88,19,1,0,0,0,89,90,5,32,0,0,90,95,3,22,11,0,91,92,5,
-  	4,0,0,92,94,3,22,11,0,93,91,1,0,0,0,94,97,1,0,0,0,95,93,1,0,0,0,95,96,
-  	1,0,0,0,96,98,1,0,0,0,97,95,1,0,0,0,98,99,5,7,0,0,99,21,1,0,0,0,100,103,
-  	5,35,0,0,101,102,5,8,0,0,102,104,3,26,13,0,103,101,1,0,0,0,103,104,1,
-  	0,0,0,104,23,1,0,0,0,105,106,5,35,0,0,106,107,5,8,0,0,107,108,3,26,13,
-  	0,108,109,5,7,0,0,109,25,1,0,0,0,110,111,6,13,-1,0,111,123,5,35,0,0,112,
-  	123,5,34,0,0,113,114,5,35,0,0,114,115,5,8,0,0,115,123,3,26,13,13,116,
-  	117,5,2,0,0,117,118,3,26,13,0,118,119,5,3,0,0,119,123,1,0,0,0,120,121,
-  	7,1,0,0,121,123,3,26,13,11,122,110,1,0,0,0,122,112,1,0,0,0,122,113,1,
-  	0,0,0,122,116,1,0,0,0,122,120,1,0,0,0,123,156,1,0,0,0,124,125,10,10,0,
-  	0,125,126,7,2,0,0,126,155,3,26,13,11,127,128,10,9,0,0,128,129,7,3,0,0,
-  	129,155,3,26,13,10,130,131,10,8,0,0,131,132,7,4,0,0,132,155,3,26,13,9,
-  	133,134,10,7,0,0,134,135,7,5,0,0,135,155,3,26,13,8,136,137,10,6,0,0,137,
-  	138,7,6,0,0,138,155,3,26,13,7,139,140,10,5,0,0,140,141,5,24,0,0,141,155,
-  	3,26,13,6,142,143,10,4,0,0,143,144,5,25,0,0,144,155,3,26,13,5,145,146,
-  	10,3,0,0,146,147,5,26,0,0,147,155,3,26,13,4,148,149,10,2,0,0,149,150,
-  	5,27,0,0,150,155,3,26,13,3,151,152,10,1,0,0,152,153,5,28,0,0,153,155,
-  	3,26,13,2,154,124,1,0,0,0,154,127,1,0,0,0,154,130,1,0,0,0,154,133,1,0,
-  	0,0,154,136,1,0,0,0,154,139,1,0,0,0,154,142,1,0,0,0,154,145,1,0,0,0,154,
-  	148,1,0,0,0,154,151,1,0,0,0,155,158,1,0,0,0,156,154,1,0,0,0,156,157,1,
-  	0,0,0,157,27,1,0,0,0,158,156,1,0,0,0,11,34,41,51,61,72,80,95,103,122,
-  	154,156
+  	4,1,37,181,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
+  	14,1,0,1,0,1,0,1,1,5,1,35,8,1,10,1,12,1,38,9,1,1,2,1,2,1,2,1,2,3,2,44,
+  	8,2,1,2,1,2,1,2,1,3,1,3,1,3,5,3,52,8,3,10,3,12,3,55,9,3,1,4,1,4,1,4,1,
+  	5,1,5,5,5,62,8,5,10,5,12,5,65,9,5,1,5,1,5,1,6,1,6,1,6,1,6,1,6,1,6,3,6,
+  	75,8,6,1,7,1,7,1,7,1,7,3,7,81,8,7,1,7,1,7,1,7,3,7,86,8,7,1,8,1,8,1,8,
+  	1,9,1,9,1,9,3,9,94,8,9,1,9,1,9,1,10,1,10,1,10,1,10,5,10,102,8,10,10,10,
+  	12,10,105,9,10,1,10,1,10,1,11,1,11,1,11,1,11,5,11,113,8,11,10,11,12,11,
+  	116,9,11,1,11,3,11,119,8,11,1,12,1,12,4,12,123,8,12,11,12,12,12,124,1,
+  	12,1,12,1,13,1,13,1,13,1,14,1,14,1,14,1,14,1,14,1,14,3,14,138,8,14,1,
+  	14,1,14,1,14,1,14,3,14,144,8,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,
+  	14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,
+  	14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,5,14,176,8,14,10,14,12,14,
+  	179,9,14,1,14,0,1,28,15,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,0,7,2,
+  	0,1,1,32,32,1,0,9,12,1,0,13,15,2,0,9,9,11,11,1,0,16,17,1,0,18,21,1,0,
+  	22,23,195,0,30,1,0,0,0,2,36,1,0,0,0,4,39,1,0,0,0,6,48,1,0,0,0,8,56,1,
+  	0,0,0,10,59,1,0,0,0,12,74,1,0,0,0,14,76,1,0,0,0,16,87,1,0,0,0,18,90,1,
+  	0,0,0,20,97,1,0,0,0,22,108,1,0,0,0,24,122,1,0,0,0,26,128,1,0,0,0,28,143,
+  	1,0,0,0,30,31,3,2,1,0,31,32,5,0,0,1,32,1,1,0,0,0,33,35,3,4,2,0,34,33,
+  	1,0,0,0,35,38,1,0,0,0,36,34,1,0,0,0,36,37,1,0,0,0,37,3,1,0,0,0,38,36,
+  	1,0,0,0,39,40,7,0,0,0,40,41,5,35,0,0,41,43,5,2,0,0,42,44,3,6,3,0,43,42,
+  	1,0,0,0,43,44,1,0,0,0,44,45,1,0,0,0,45,46,5,3,0,0,46,47,3,10,5,0,47,5,
+  	1,0,0,0,48,53,3,8,4,0,49,50,5,4,0,0,50,52,3,8,4,0,51,49,1,0,0,0,52,55,
+  	1,0,0,0,53,51,1,0,0,0,53,54,1,0,0,0,54,7,1,0,0,0,55,53,1,0,0,0,56,57,
+  	5,32,0,0,57,58,5,35,0,0,58,9,1,0,0,0,59,63,5,5,0,0,60,62,3,12,6,0,61,
+  	60,1,0,0,0,62,65,1,0,0,0,63,61,1,0,0,0,63,64,1,0,0,0,64,66,1,0,0,0,65,
+  	63,1,0,0,0,66,67,5,6,0,0,67,11,1,0,0,0,68,75,5,7,0,0,69,75,3,20,10,0,
+  	70,75,3,26,13,0,71,75,3,18,9,0,72,75,3,14,7,0,73,75,3,10,5,0,74,68,1,
+  	0,0,0,74,69,1,0,0,0,74,70,1,0,0,0,74,71,1,0,0,0,74,72,1,0,0,0,74,73,1,
+  	0,0,0,75,13,1,0,0,0,76,77,5,29,0,0,77,80,5,2,0,0,78,81,3,28,14,0,79,81,
+  	3,24,12,0,80,78,1,0,0,0,80,79,1,0,0,0,81,82,1,0,0,0,82,83,5,3,0,0,83,
+  	85,3,12,6,0,84,86,3,16,8,0,85,84,1,0,0,0,85,86,1,0,0,0,86,15,1,0,0,0,
+  	87,88,5,30,0,0,88,89,3,12,6,0,89,17,1,0,0,0,90,93,5,31,0,0,91,94,3,28,
+  	14,0,92,94,3,24,12,0,93,91,1,0,0,0,93,92,1,0,0,0,94,95,1,0,0,0,95,96,
+  	5,7,0,0,96,19,1,0,0,0,97,98,5,32,0,0,98,103,3,22,11,0,99,100,5,4,0,0,
+  	100,102,3,22,11,0,101,99,1,0,0,0,102,105,1,0,0,0,103,101,1,0,0,0,103,
+  	104,1,0,0,0,104,106,1,0,0,0,105,103,1,0,0,0,106,107,5,7,0,0,107,21,1,
+  	0,0,0,108,118,5,35,0,0,109,114,5,8,0,0,110,111,5,35,0,0,111,113,5,8,0,
+  	0,112,110,1,0,0,0,113,116,1,0,0,0,114,112,1,0,0,0,114,115,1,0,0,0,115,
+  	117,1,0,0,0,116,114,1,0,0,0,117,119,3,28,14,0,118,109,1,0,0,0,118,119,
+  	1,0,0,0,119,23,1,0,0,0,120,121,5,35,0,0,121,123,5,8,0,0,122,120,1,0,0,
+  	0,123,124,1,0,0,0,124,122,1,0,0,0,124,125,1,0,0,0,125,126,1,0,0,0,126,
+  	127,3,28,14,0,127,25,1,0,0,0,128,129,3,24,12,0,129,130,5,7,0,0,130,27,
+  	1,0,0,0,131,132,6,14,-1,0,132,144,5,35,0,0,133,144,5,34,0,0,134,137,5,
+  	2,0,0,135,138,3,28,14,0,136,138,3,24,12,0,137,135,1,0,0,0,137,136,1,0,
+  	0,0,138,139,1,0,0,0,139,140,5,3,0,0,140,144,1,0,0,0,141,142,7,1,0,0,142,
+  	144,3,28,14,11,143,131,1,0,0,0,143,133,1,0,0,0,143,134,1,0,0,0,143,141,
+  	1,0,0,0,144,177,1,0,0,0,145,146,10,10,0,0,146,147,7,2,0,0,147,176,3,28,
+  	14,11,148,149,10,9,0,0,149,150,7,3,0,0,150,176,3,28,14,10,151,152,10,
+  	8,0,0,152,153,7,4,0,0,153,176,3,28,14,9,154,155,10,7,0,0,155,156,7,5,
+  	0,0,156,176,3,28,14,8,157,158,10,6,0,0,158,159,7,6,0,0,159,176,3,28,14,
+  	7,160,161,10,5,0,0,161,162,5,24,0,0,162,176,3,28,14,6,163,164,10,4,0,
+  	0,164,165,5,25,0,0,165,176,3,28,14,5,166,167,10,3,0,0,167,168,5,26,0,
+  	0,168,176,3,28,14,4,169,170,10,2,0,0,170,171,5,27,0,0,171,176,3,28,14,
+  	3,172,173,10,1,0,0,173,174,5,28,0,0,174,176,3,28,14,2,175,145,1,0,0,0,
+  	175,148,1,0,0,0,175,151,1,0,0,0,175,154,1,0,0,0,175,157,1,0,0,0,175,160,
+  	1,0,0,0,175,163,1,0,0,0,175,166,1,0,0,0,175,169,1,0,0,0,175,172,1,0,0,
+  	0,176,179,1,0,0,0,177,175,1,0,0,0,177,178,1,0,0,0,178,29,1,0,0,0,179,
+  	177,1,0,0,0,16,36,43,53,63,74,80,85,93,103,114,118,124,137,143,175,177
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -213,9 +220,9 @@ ifccParser::AxiomContext* ifccParser::axiom() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(28);
+    setState(30);
     prog();
-    setState(29);
+    setState(31);
     match(ifccParser::EOF);
    
   }
@@ -281,15 +288,15 @@ ifccParser::ProgContext* ifccParser::prog() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(34);
+    setState(36);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == ifccParser::T__0
 
     || _la == ifccParser::TYPE) {
-      setState(31);
+      setState(33);
       function();
-      setState(36);
+      setState(38);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
@@ -365,7 +372,7 @@ ifccParser::FunctionContext* ifccParser::function() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(37);
+    setState(39);
     _la = _input->LA(1);
     if (!(_la == ifccParser::T__0
 
@@ -376,21 +383,21 @@ ifccParser::FunctionContext* ifccParser::function() {
       _errHandler->reportMatch(this);
       consume();
     }
-    setState(38);
+    setState(40);
     match(ifccParser::VAR);
-    setState(39);
-    match(ifccParser::T__1);
     setState(41);
+    match(ifccParser::T__1);
+    setState(43);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == ifccParser::TYPE) {
-      setState(40);
+      setState(42);
       parameters();
     }
-    setState(43);
+    setState(45);
     match(ifccParser::T__2);
-    setState(44);
+    setState(46);
     block();
    
   }
@@ -456,17 +463,17 @@ ifccParser::ParametersContext* ifccParser::parameters() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(46);
+    setState(48);
     parameter();
-    setState(51);
+    setState(53);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == ifccParser::T__3) {
-      setState(47);
+      setState(49);
       match(ifccParser::T__3);
-      setState(48);
+      setState(50);
       parameter();
-      setState(53);
+      setState(55);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
@@ -533,9 +540,9 @@ ifccParser::ParameterContext* ifccParser::parameter() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(54);
+    setState(56);
     match(ifccParser::TYPE);
-    setState(55);
+    setState(57);
     match(ifccParser::VAR);
    
   }
@@ -601,9 +608,9 @@ ifccParser::BlockContext* ifccParser::block() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(57);
+    setState(59);
     match(ifccParser::T__4);
-    setState(61);
+    setState(63);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
@@ -613,13 +620,13 @@ ifccParser::BlockContext* ifccParser::block() {
       | (1ULL << ifccParser::RETURN)
       | (1ULL << ifccParser::TYPE)
       | (1ULL << ifccParser::VAR))) != 0)) {
-      setState(58);
+      setState(60);
       statement();
-      setState(63);
+      setState(65);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(64);
+    setState(66);
     match(ifccParser::T__5);
    
   }
@@ -695,47 +702,47 @@ ifccParser::StatementContext* ifccParser::statement() {
     exitRule();
   });
   try {
-    setState(72);
+    setState(74);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case ifccParser::T__6: {
         enterOuterAlt(_localctx, 1);
-        setState(66);
+        setState(68);
         match(ifccParser::T__6);
         break;
       }
 
       case ifccParser::TYPE: {
         enterOuterAlt(_localctx, 2);
-        setState(67);
+        setState(69);
         declaration();
         break;
       }
 
       case ifccParser::VAR: {
         enterOuterAlt(_localctx, 3);
-        setState(68);
+        setState(70);
         assignment();
         break;
       }
 
       case ifccParser::RETURN: {
         enterOuterAlt(_localctx, 4);
-        setState(69);
+        setState(71);
         ret();
         break;
       }
 
       case ifccParser::IF: {
         enterOuterAlt(_localctx, 5);
-        setState(70);
+        setState(72);
         ifBlock();
         break;
       }
 
       case ifccParser::T__4: {
         enterOuterAlt(_localctx, 6);
-        setState(71);
+        setState(73);
         block();
         break;
       }
@@ -764,12 +771,16 @@ tree::TerminalNode* ifccParser::IfBlockContext::IF() {
   return getToken(ifccParser::IF, 0);
 }
 
+ifccParser::StatementContext* ifccParser::IfBlockContext::statement() {
+  return getRuleContext<ifccParser::StatementContext>(0);
+}
+
 ifccParser::ExpressionContext* ifccParser::IfBlockContext::expression() {
   return getRuleContext<ifccParser::ExpressionContext>(0);
 }
 
-ifccParser::StatementContext* ifccParser::IfBlockContext::statement() {
-  return getRuleContext<ifccParser::StatementContext>(0);
+ifccParser::ExpAssignmentContext* ifccParser::IfBlockContext::expAssignment() {
+  return getRuleContext<ifccParser::ExpAssignmentContext>(0);
 }
 
 ifccParser::ElseBlockContext* ifccParser::IfBlockContext::elseBlock() {
@@ -814,22 +825,38 @@ ifccParser::IfBlockContext* ifccParser::ifBlock() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(74);
-    match(ifccParser::IF);
-    setState(75);
-    match(ifccParser::T__1);
     setState(76);
-    expression(0);
+    match(ifccParser::IF);
     setState(77);
-    match(ifccParser::T__2);
-    setState(78);
-    statement();
+    match(ifccParser::T__1);
     setState(80);
     _errHandler->sync(this);
-
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 5, _ctx)) {
     case 1: {
+      setState(78);
+      expression(0);
+      break;
+    }
+
+    case 2: {
       setState(79);
+      expAssignment();
+      break;
+    }
+
+    default:
+      break;
+    }
+    setState(82);
+    match(ifccParser::T__2);
+    setState(83);
+    statement();
+    setState(85);
+    _errHandler->sync(this);
+
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 6, _ctx)) {
+    case 1: {
+      setState(84);
       elseBlock();
       break;
     }
@@ -900,9 +927,9 @@ ifccParser::ElseBlockContext* ifccParser::elseBlock() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(82);
+    setState(87);
     match(ifccParser::ELSE);
-    setState(83);
+    setState(88);
     statement();
    
   }
@@ -927,6 +954,10 @@ tree::TerminalNode* ifccParser::RetContext::RETURN() {
 
 ifccParser::ExpressionContext* ifccParser::RetContext::expression() {
   return getRuleContext<ifccParser::ExpressionContext>(0);
+}
+
+ifccParser::ExpAssignmentContext* ifccParser::RetContext::expAssignment() {
+  return getRuleContext<ifccParser::ExpAssignmentContext>(0);
 }
 
 
@@ -967,11 +998,27 @@ ifccParser::RetContext* ifccParser::ret() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(85);
+    setState(90);
     match(ifccParser::RETURN);
-    setState(86);
-    expression(0);
-    setState(87);
+    setState(93);
+    _errHandler->sync(this);
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 7, _ctx)) {
+    case 1: {
+      setState(91);
+      expression(0);
+      break;
+    }
+
+    case 2: {
+      setState(92);
+      expAssignment();
+      break;
+    }
+
+    default:
+      break;
+    }
+    setState(95);
     match(ifccParser::T__6);
    
   }
@@ -1041,23 +1088,23 @@ ifccParser::DeclarationContext* ifccParser::declaration() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(89);
+    setState(97);
     match(ifccParser::TYPE);
-    setState(90);
+    setState(98);
     rawDeclaration();
-    setState(95);
+    setState(103);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == ifccParser::T__3) {
-      setState(91);
+      setState(99);
       match(ifccParser::T__3);
-      setState(92);
+      setState(100);
       rawDeclaration();
-      setState(97);
+      setState(105);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(98);
+    setState(106);
     match(ifccParser::T__6);
    
   }
@@ -1076,8 +1123,12 @@ ifccParser::RawDeclarationContext::RawDeclarationContext(ParserRuleContext *pare
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* ifccParser::RawDeclarationContext::VAR() {
-  return getToken(ifccParser::VAR, 0);
+std::vector<tree::TerminalNode *> ifccParser::RawDeclarationContext::VAR() {
+  return getTokens(ifccParser::VAR);
+}
+
+tree::TerminalNode* ifccParser::RawDeclarationContext::VAR(size_t i) {
+  return getToken(ifccParser::VAR, i);
 }
 
 ifccParser::ExpressionContext* ifccParser::RawDeclarationContext::expression() {
@@ -1122,19 +1173,124 @@ ifccParser::RawDeclarationContext* ifccParser::rawDeclaration() {
     exitRule();
   });
   try {
+    size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(100);
+    setState(108);
     match(ifccParser::VAR);
-    setState(103);
+    setState(118);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == ifccParser::T__7) {
-      setState(101);
+      setState(109);
       match(ifccParser::T__7);
-      setState(102);
+      setState(114);
+      _errHandler->sync(this);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx);
+      while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
+        if (alt == 1) {
+          setState(110);
+          match(ifccParser::VAR);
+          setState(111);
+          match(ifccParser::T__7); 
+        }
+        setState(116);
+        _errHandler->sync(this);
+        alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx);
+      }
+      setState(117);
       expression(0);
     }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ExpAssignmentContext ------------------------------------------------------------------
+
+ifccParser::ExpAssignmentContext::ExpAssignmentContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+ifccParser::ExpressionContext* ifccParser::ExpAssignmentContext::expression() {
+  return getRuleContext<ifccParser::ExpressionContext>(0);
+}
+
+std::vector<tree::TerminalNode *> ifccParser::ExpAssignmentContext::VAR() {
+  return getTokens(ifccParser::VAR);
+}
+
+tree::TerminalNode* ifccParser::ExpAssignmentContext::VAR(size_t i) {
+  return getToken(ifccParser::VAR, i);
+}
+
+
+size_t ifccParser::ExpAssignmentContext::getRuleIndex() const {
+  return ifccParser::RuleExpAssignment;
+}
+
+void ifccParser::ExpAssignmentContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterExpAssignment(this);
+}
+
+void ifccParser::ExpAssignmentContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<ifccListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitExpAssignment(this);
+}
+
+
+std::any ifccParser::ExpAssignmentContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
+    return parserVisitor->visitExpAssignment(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+ifccParser::ExpAssignmentContext* ifccParser::expAssignment() {
+  ExpAssignmentContext *_localctx = _tracker.createInstance<ExpAssignmentContext>(_ctx, getState());
+  enterRule(_localctx, 24, ifccParser::RuleExpAssignment);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    size_t alt;
+    enterOuterAlt(_localctx, 1);
+    setState(122); 
+    _errHandler->sync(this);
+    alt = 1;
+    do {
+      switch (alt) {
+        case 1: {
+              setState(120);
+              match(ifccParser::VAR);
+              setState(121);
+              match(ifccParser::T__7);
+              break;
+            }
+
+      default:
+        throw NoViableAltException(this);
+      }
+      setState(124); 
+      _errHandler->sync(this);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 11, _ctx);
+    } while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER);
+    setState(126);
+    expression(0);
    
   }
   catch (RecognitionException &e) {
@@ -1152,12 +1308,8 @@ ifccParser::AssignmentContext::AssignmentContext(ParserRuleContext *parent, size
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* ifccParser::AssignmentContext::VAR() {
-  return getToken(ifccParser::VAR, 0);
-}
-
-ifccParser::ExpressionContext* ifccParser::AssignmentContext::expression() {
-  return getRuleContext<ifccParser::ExpressionContext>(0);
+ifccParser::ExpAssignmentContext* ifccParser::AssignmentContext::expAssignment() {
+  return getRuleContext<ifccParser::ExpAssignmentContext>(0);
 }
 
 
@@ -1187,7 +1339,7 @@ std::any ifccParser::AssignmentContext::accept(tree::ParseTreeVisitor *visitor) 
 
 ifccParser::AssignmentContext* ifccParser::assignment() {
   AssignmentContext *_localctx = _tracker.createInstance<AssignmentContext>(_ctx, getState());
-  enterRule(_localctx, 24, ifccParser::RuleAssignment);
+  enterRule(_localctx, 26, ifccParser::RuleAssignment);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1198,13 +1350,9 @@ ifccParser::AssignmentContext* ifccParser::assignment() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(105);
-    match(ifccParser::VAR);
-    setState(106);
-    match(ifccParser::T__7);
-    setState(107);
-    expression(0);
-    setState(108);
+    setState(128);
+    expAssignment();
+    setState(129);
     match(ifccParser::T__6);
    
   }
@@ -1462,6 +1610,10 @@ ifccParser::ExpressionContext* ifccParser::ParenthesisContext::expression() {
   return getRuleContext<ifccParser::ExpressionContext>(0);
 }
 
+ifccParser::ExpAssignmentContext* ifccParser::ParenthesisContext::expAssignment() {
+  return getRuleContext<ifccParser::ExpAssignmentContext>(0);
+}
+
 ifccParser::ParenthesisContext::ParenthesisContext(ExpressionContext *ctx) { copyFrom(ctx); }
 
 void ifccParser::ParenthesisContext::enterRule(tree::ParseTreeListener *listener) {
@@ -1536,35 +1688,6 @@ void ifccParser::EqualContext::exitRule(tree::ParseTreeListener *listener) {
 std::any ifccParser::EqualContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
     return parserVisitor->visitEqual(this);
-  else
-    return visitor->visitChildren(this);
-}
-//----------------- VarExprContext ------------------------------------------------------------------
-
-tree::TerminalNode* ifccParser::VarExprContext::VAR() {
-  return getToken(ifccParser::VAR, 0);
-}
-
-ifccParser::ExpressionContext* ifccParser::VarExprContext::expression() {
-  return getRuleContext<ifccParser::ExpressionContext>(0);
-}
-
-ifccParser::VarExprContext::VarExprContext(ExpressionContext *ctx) { copyFrom(ctx); }
-
-void ifccParser::VarExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<ifccListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterVarExpr(this);
-}
-void ifccParser::VarExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<ifccListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitVarExpr(this);
-}
-
-std::any ifccParser::VarExprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitVarExpr(this);
   else
     return visitor->visitChildren(this);
 }
@@ -1662,8 +1785,8 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
   ifccParser::ExpressionContext *_localctx = _tracker.createInstance<ExpressionContext>(_ctx, parentState);
   ifccParser::ExpressionContext *previousContext = _localctx;
   (void)previousContext; // Silence compiler, in case the context is not used by generated code.
-  size_t startState = 26;
-  enterRecursionRule(_localctx, 26, ifccParser::RuleExpression, precedence);
+  size_t startState = 28;
+  enterRecursionRule(_localctx, 28, ifccParser::RuleExpression, precedence);
 
     size_t _la = 0;
 
@@ -1677,100 +1800,106 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(122);
+    setState(143);
     _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 8, _ctx)) {
-    case 1: {
-      _localctx = _tracker.createInstance<VariableContext>(_localctx);
-      _ctx = _localctx;
-      previousContext = _localctx;
+    switch (_input->LA(1)) {
+      case ifccParser::VAR: {
+        _localctx = _tracker.createInstance<VariableContext>(_localctx);
+        _ctx = _localctx;
+        previousContext = _localctx;
 
-      setState(111);
-      match(ifccParser::VAR);
-      break;
-    }
-
-    case 2: {
-      _localctx = _tracker.createInstance<ConstantContext>(_localctx);
-      _ctx = _localctx;
-      previousContext = _localctx;
-      setState(112);
-      match(ifccParser::CONST);
-      break;
-    }
-
-    case 3: {
-      _localctx = _tracker.createInstance<VarExprContext>(_localctx);
-      _ctx = _localctx;
-      previousContext = _localctx;
-      setState(113);
-      match(ifccParser::VAR);
-      setState(114);
-      match(ifccParser::T__7);
-      setState(115);
-      expression(13);
-      break;
-    }
-
-    case 4: {
-      _localctx = _tracker.createInstance<ParenthesisContext>(_localctx);
-      _ctx = _localctx;
-      previousContext = _localctx;
-      setState(116);
-      match(ifccParser::T__1);
-      setState(117);
-      expression(0);
-      setState(118);
-      match(ifccParser::T__2);
-      break;
-    }
-
-    case 5: {
-      _localctx = _tracker.createInstance<UnaryContext>(_localctx);
-      _ctx = _localctx;
-      previousContext = _localctx;
-      setState(120);
-      antlrcpp::downCast<UnaryContext *>(_localctx)->op = _input->LT(1);
-      _la = _input->LA(1);
-      if (!((((_la & ~ 0x3fULL) == 0) &&
-        ((1ULL << _la) & ((1ULL << ifccParser::T__8)
-        | (1ULL << ifccParser::T__9)
-        | (1ULL << ifccParser::T__10)
-        | (1ULL << ifccParser::T__11))) != 0))) {
-        antlrcpp::downCast<UnaryContext *>(_localctx)->op = _errHandler->recoverInline(this);
+        setState(132);
+        match(ifccParser::VAR);
+        break;
       }
-      else {
-        _errHandler->reportMatch(this);
-        consume();
+
+      case ifccParser::CONST: {
+        _localctx = _tracker.createInstance<ConstantContext>(_localctx);
+        _ctx = _localctx;
+        previousContext = _localctx;
+        setState(133);
+        match(ifccParser::CONST);
+        break;
       }
-      setState(121);
-      expression(11);
-      break;
-    }
+
+      case ifccParser::T__1: {
+        _localctx = _tracker.createInstance<ParenthesisContext>(_localctx);
+        _ctx = _localctx;
+        previousContext = _localctx;
+        setState(134);
+        match(ifccParser::T__1);
+        setState(137);
+        _errHandler->sync(this);
+        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 12, _ctx)) {
+        case 1: {
+          setState(135);
+          expression(0);
+          break;
+        }
+
+        case 2: {
+          setState(136);
+          expAssignment();
+          break;
+        }
+
+        default:
+          break;
+        }
+        setState(139);
+        match(ifccParser::T__2);
+        break;
+      }
+
+      case ifccParser::T__8:
+      case ifccParser::T__9:
+      case ifccParser::T__10:
+      case ifccParser::T__11: {
+        _localctx = _tracker.createInstance<UnaryContext>(_localctx);
+        _ctx = _localctx;
+        previousContext = _localctx;
+        setState(141);
+        antlrcpp::downCast<UnaryContext *>(_localctx)->op = _input->LT(1);
+        _la = _input->LA(1);
+        if (!((((_la & ~ 0x3fULL) == 0) &&
+          ((1ULL << _la) & ((1ULL << ifccParser::T__8)
+          | (1ULL << ifccParser::T__9)
+          | (1ULL << ifccParser::T__10)
+          | (1ULL << ifccParser::T__11))) != 0))) {
+          antlrcpp::downCast<UnaryContext *>(_localctx)->op = _errHandler->recoverInline(this);
+        }
+        else {
+          _errHandler->reportMatch(this);
+          consume();
+        }
+        setState(142);
+        expression(11);
+        break;
+      }
 
     default:
-      break;
+      throw NoViableAltException(this);
     }
     _ctx->stop = _input->LT(-1);
-    setState(156);
+    setState(177);
     _errHandler->sync(this);
-    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 10, _ctx);
+    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 15, _ctx);
     while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
       if (alt == 1) {
         if (!_parseListeners.empty())
           triggerExitRuleEvent();
         previousContext = _localctx;
-        setState(154);
+        setState(175);
         _errHandler->sync(this);
-        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx)) {
+        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 14, _ctx)) {
         case 1: {
           auto newContext = _tracker.createInstance<TimesDivModuloContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(124);
+          setState(145);
 
           if (!(precpred(_ctx, 10))) throw FailedPredicateException(this, "precpred(_ctx, 10)");
-          setState(125);
+          setState(146);
           antlrcpp::downCast<TimesDivModuloContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!((((_la & ~ 0x3fULL) == 0) &&
@@ -1783,7 +1912,7 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(126);
+          setState(147);
           expression(11);
           break;
         }
@@ -1792,10 +1921,10 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<AddSubContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(127);
+          setState(148);
 
           if (!(precpred(_ctx, 9))) throw FailedPredicateException(this, "precpred(_ctx, 9)");
-          setState(128);
+          setState(149);
           antlrcpp::downCast<AddSubContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!(_la == ifccParser::T__8
@@ -1807,7 +1936,7 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(129);
+          setState(150);
           expression(10);
           break;
         }
@@ -1816,10 +1945,10 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<ShiftContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(130);
+          setState(151);
 
           if (!(precpred(_ctx, 8))) throw FailedPredicateException(this, "precpred(_ctx, 8)");
-          setState(131);
+          setState(152);
           antlrcpp::downCast<ShiftContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!(_la == ifccParser::T__15
@@ -1831,7 +1960,7 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(132);
+          setState(153);
           expression(9);
           break;
         }
@@ -1840,10 +1969,10 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<CompareContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(133);
+          setState(154);
 
           if (!(precpred(_ctx, 7))) throw FailedPredicateException(this, "precpred(_ctx, 7)");
-          setState(134);
+          setState(155);
           antlrcpp::downCast<CompareContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!((((_la & ~ 0x3fULL) == 0) &&
@@ -1857,7 +1986,7 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(135);
+          setState(156);
           expression(8);
           break;
         }
@@ -1866,10 +1995,10 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<EqualContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(136);
+          setState(157);
 
           if (!(precpred(_ctx, 6))) throw FailedPredicateException(this, "precpred(_ctx, 6)");
-          setState(137);
+          setState(158);
           antlrcpp::downCast<EqualContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
           if (!(_la == ifccParser::T__21
@@ -1881,7 +2010,7 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
             _errHandler->reportMatch(this);
             consume();
           }
-          setState(138);
+          setState(159);
           expression(7);
           break;
         }
@@ -1890,12 +2019,12 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<BitwiseAndContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(139);
+          setState(160);
 
           if (!(precpred(_ctx, 5))) throw FailedPredicateException(this, "precpred(_ctx, 5)");
-          setState(140);
+          setState(161);
           antlrcpp::downCast<BitwiseAndContext *>(_localctx)->op = match(ifccParser::T__23);
-          setState(141);
+          setState(162);
           expression(6);
           break;
         }
@@ -1904,12 +2033,12 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<BitwiseXorContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(142);
+          setState(163);
 
           if (!(precpred(_ctx, 4))) throw FailedPredicateException(this, "precpred(_ctx, 4)");
-          setState(143);
+          setState(164);
           antlrcpp::downCast<BitwiseXorContext *>(_localctx)->op = match(ifccParser::T__24);
-          setState(144);
+          setState(165);
           expression(5);
           break;
         }
@@ -1918,12 +2047,12 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<BitwiseOrContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(145);
+          setState(166);
 
           if (!(precpred(_ctx, 3))) throw FailedPredicateException(this, "precpred(_ctx, 3)");
-          setState(146);
+          setState(167);
           antlrcpp::downCast<BitwiseOrContext *>(_localctx)->op = match(ifccParser::T__25);
-          setState(147);
+          setState(168);
           expression(4);
           break;
         }
@@ -1932,12 +2061,12 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<LogicalAndContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(148);
+          setState(169);
 
           if (!(precpred(_ctx, 2))) throw FailedPredicateException(this, "precpred(_ctx, 2)");
-          setState(149);
+          setState(170);
           antlrcpp::downCast<LogicalAndContext *>(_localctx)->op = match(ifccParser::T__26);
-          setState(150);
+          setState(171);
           expression(3);
           break;
         }
@@ -1946,12 +2075,12 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           auto newContext = _tracker.createInstance<LogicalOrContext>(_tracker.createInstance<ExpressionContext>(parentContext, parentState));
           _localctx = newContext;
           pushNewRecursionContext(newContext, startState, RuleExpression);
-          setState(151);
+          setState(172);
 
           if (!(precpred(_ctx, 1))) throw FailedPredicateException(this, "precpred(_ctx, 1)");
-          setState(152);
+          setState(173);
           antlrcpp::downCast<LogicalOrContext *>(_localctx)->op = match(ifccParser::T__27);
-          setState(153);
+          setState(174);
           expression(2);
           break;
         }
@@ -1960,9 +2089,9 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
           break;
         } 
       }
-      setState(158);
+      setState(179);
       _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 10, _ctx);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 15, _ctx);
     }
   }
   catch (RecognitionException &e) {
@@ -1975,7 +2104,7 @@ ifccParser::ExpressionContext* ifccParser::expression(int precedence) {
 
 bool ifccParser::sempred(RuleContext *context, size_t ruleIndex, size_t predicateIndex) {
   switch (ruleIndex) {
-    case 13: return expressionSempred(antlrcpp::downCast<ExpressionContext *>(context), predicateIndex);
+    case 14: return expressionSempred(antlrcpp::downCast<ExpressionContext *>(context), predicateIndex);
 
   default:
     break;

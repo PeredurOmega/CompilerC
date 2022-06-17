@@ -16,10 +16,7 @@ void Declaration::addRawDeclaration(RawDeclaration *rawDec) {
 void Declaration::renderX86(ostream &o) const {
     for (auto d: declarations) {
         if (d->init != nullptr) {
-            auto *assignment = new Assignment(*d->name, d->init);
-            assignment->setOwner(owner);
-            assignment->offset = owner->getOffset(*d->name);
-            assignment->renderX86(o);
+            d->init->renderX86(o);
         } else {
             // Nothing to do when declaring new variables without initializing them
         }
@@ -30,11 +27,10 @@ void Declaration::affect(IrScope *owner) {
     setOwner(owner);
     for (auto d: declarations) {
         if (d->init != nullptr) {
-            // We don't affect constant for optimization purposes
-            if(dynamic_cast<Constant *>(d->init) == nullptr) {
-                d->init->affect(owner);
-            }
+            d->init->assignTo = d->name;
+            // Init is the first thing to happen in C
             owner->insertInitializedVariable(*d->name);
+            d->init->affect(owner);
         } else {
             owner->insertDeclaration(*d->name);
         }
@@ -43,5 +39,4 @@ void Declaration::affect(IrScope *owner) {
 
 RawDeclaration::RawDeclaration(string *name, Expression *init) : name(name),
                                                                  init(init) {
-
 }

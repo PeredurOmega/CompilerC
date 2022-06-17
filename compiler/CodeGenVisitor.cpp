@@ -2,6 +2,7 @@
 #include "ir/Prog.h"
 #include "ir/Declaration.h"
 #include "ir/Expression.h"
+#include "ir/OpExpression.h"
 
 using namespace std;
 
@@ -27,7 +28,8 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
         returnType = (IrType *) PrimaryType::parse(rawReturnType);
     } catch (const InvalidType &e) {
         if (rawReturnType == "void") {
-            returnType = (IrType *) new Void();
+            returnType = (IrType *)
+                    new Void();
         } else {
             //TODO REPLACE BY COMPILATION EXCEPTION
             cerr << e.what() << " at line " << ctx->start->getLine() << endl;
@@ -104,6 +106,7 @@ CodeGenVisitor::visitElseBlock(ifccParser::ElseBlockContext *ctx) {
 antlrcpp::Any
 CodeGenVisitor::visitStatement(ifccParser::StatementContext *ctx) {
     auto t = visitChildren(ctx);
+    cout << ctx->getText() << endl;
     auto *instruction = any_cast<IrInstruction *>(t);
     return instruction;
 }
@@ -114,9 +117,9 @@ CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *ctx) {
     try {
         auto *declaration = new Declaration(PrimaryType::parse(type));
         for (auto &rawDeclaration: ctx->rawDeclaration()) {
-            auto *rd = any_cast<RawDeclaration *>(
+            auto *rd = any_cast<IrInstruction *>(
                     visitRawDeclaration(rawDeclaration));
-            declaration->addRawDeclaration(rd);
+            declaration->addRawDeclaration((RawDeclaration *) rd);
         }
         return (IrInstruction *) declaration;
     } catch (InvalidType &e) {
@@ -127,49 +130,70 @@ CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *ctx) {
 
 antlrcpp::Any
 CodeGenVisitor::visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) {
-    auto *name = new string(ctx->VAR()->getText());
+    auto var = ctx->VAR();
+    auto varNames = new vector<string *>();
+    for (auto v: var) {
+        auto *name = new string(v->getText());
+        varNames->push_back(name);
+    }
     if (ctx->expression() != nullptr) { // Init is optional
-        auto *expr = any_cast<IrInstruction *>(visit(ctx->expression()));
-        return new RawDeclaration(name, (Expression *) expr);
-    } else return new RawDeclaration(name, (Expression *) nullptr);
+        auto *expr = (Expression *) any_cast<IrInstruction *>(
+                visit(ctx->expression()));
+        expr->assignTo = varNames->back();
+        if (varNames->size() > 1) {
+            auto *rawDec = new RawDeclaration(varNames->front(),
+                                              new VarExpr(varNames, expr));
+            return (IrInstruction *) rawDec;
+        } else {
+            return (IrInstruction *) new RawDeclaration(varNames->back(), expr);
+        }
+    } else
+        return (IrInstruction *) new RawDeclaration(varNames->back(),
+                                                    (Expression *) nullptr);
 }
 
 antlrcpp::Any
 CodeGenVisitor::visitAssignment(ifccParser::AssignmentContext *ctx) {
-    return (IrInstruction *) new Assignment(ctx->VAR()->getText(),
-                                            (Expression *) any_cast<IrInstruction *>(
-                                                    visit(ctx->expression())));
+    return visitExpAssignment(ctx->expAssignment());
 }
 
 antlrcpp::Any CodeGenVisitor::visitConstant(ifccParser::ConstantContext *ctx) {
     try {
-        return (IrInstruction *) new Constant(stoi(ctx->CONST()->getText()));
+        auto constant = new Constant(stoi(ctx->CONST()->getText()));
+        return (IrInstruction *) constant;
     } catch (exception &e) {
         throw e;//TODO
     }
 }
 
 antlrcpp::Any CodeGenVisitor::visitVariable(ifccParser::VariableContext *ctx) {
-    return (IrInstruction *) new Variable(ctx->VAR()->getText());
-}
-
-antlrcpp::Any CodeGenVisitor::visitVarExpr(ifccParser::VarExprContext *ctx) {
-    return (IrInstruction *) new Assignment(ctx->VAR()->getText(),
-                                            (Expression *) any_cast<IrInstruction *>(
-                                                    visit(ctx->expression())));
+    return (IrInstruction *)
+            new Variable(ctx->VAR()->getText());
 }
 
 antlrcpp::Any CodeGenVisitor::visitRet(ifccParser::RetContext *ctx) {
-    auto result = visit(ctx->expression());
+    any result;
+    if (ctx->expression() != nullptr) {
+        result = visit(ctx->expression());
+    } else {
+        result = visit(ctx->expAssignment());
+    }
     auto *expression = (Expression *) any_cast<IrInstruction *>(result);
     return (IrInstruction *) new Return(expression);
 }
 
 antlrcpp::Any CodeGenVisitor::visitAddSub(ifccParser::AddSubContext *ctx) {
+
     string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    ifccParser::ExpressionContext *lexpr = expr[0];
-    ifccParser::ExpressionContext *rexpr = expr[1];
+    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    /*if (ctx->op->getText() == "-") {
+        return (IrInstruction *) new SubOperation(expression);
+    } else {
+        return (IrInstruction *) new AddOperation(lExpr, rExpr);
+    }
+
     currentVariable = "";
     int loffset = any_cast<int>(visit(lexpr));
     int roffset = any_cast<int>(visit(rexpr));
@@ -192,7 +216,8 @@ antlrcpp::Any CodeGenVisitor::visitAddSub(ifccParser::AddSubContext *ctx) {
     }
     cout << "    movl    %eax, " << offset
          << "(%rbp) #v" << currentVariable << endl;
-    return offset;
+    return offset;*/
+    return 10;
 }
 
 antlrcpp::Any
@@ -232,7 +257,7 @@ CodeGenVisitor::visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) {
 
 antlrcpp::Any
 CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
-    return visit(ctx->expression());
+    return visitChildren(ctx);
 }
 
 antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
@@ -529,5 +554,23 @@ CodeGenVisitor::visitLogicalOr(ifccParser::LogicalOrContext *ctx) {
     cout << "    movl    %eax, " << offset
          << "(%rbp) #v" << currentVariable << endl;
     return offset;
+}
+
+antlrcpp::Any
+CodeGenVisitor::visitExpAssignment(ifccParser::ExpAssignmentContext *ctx) {
+    auto var = ctx->VAR();
+    auto varNames = new vector<string *>();
+    for (auto v: var) {
+        auto *name = new string(v->getText());
+        varNames->push_back(name);
+    }
+    auto *expr = (Expression *) any_cast<IrInstruction *>(
+            visit(ctx->expression()));
+    expr->assignTo = varNames->back();
+    if (varNames->size() > 1) {
+        return (IrInstruction *) new VarExpr(varNames, expr);
+    } else {
+        return (IrInstruction *) expr;
+    }
 }
 
