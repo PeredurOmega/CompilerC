@@ -6,6 +6,7 @@
 #include <sstream>
 
 void IfStatement::renderX86(ostream &o) const {
+    compare->renderX86(o);
     o << "    cmpl    $0, " << compare->offset << "(%rbp)" << endl;
     int nextLabel;
     if (elseStatement != nullptr) nextLabel = firstLabel + 1;
@@ -27,20 +28,20 @@ void IfStatement::renderX86(ostream &o) const {
 
 void IfStatement::affect(IrScope *owner) {
     setOwner(owner);
+    compare->affect(owner);
     firstLabel = owner->getNewLabel();
     if (finalLabel == 0) finalLabel = owner->getNewLabel();
+    content->affect(owner);
     if (elseStatement != nullptr) {
         elseStatement->finalLabel = finalLabel;
         elseStatement->affect(owner);
     }
-    content->affect(owner);
 }
 
 IfStatement::IfStatement(Expression *compare, IrInstruction *content,
                          ElseStatement *elseStatement) :
         Expression(false), compare(compare), content(content),
         elseStatement(elseStatement) {
-    //TODO HANDLE RETURN
 }
 
 void ElseStatement::affect(IrScope *owner) {
@@ -54,8 +55,6 @@ void ElseStatement::affect(IrScope *owner) {
 
 ElseStatement::ElseStatement(IrInstruction *content)
         : Expression(false), content(content) {
-    //TODO HANDLE RETURN
-
 }
 
 void ElseStatement::renderX86(ostream &o) const {

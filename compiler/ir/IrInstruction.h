@@ -7,20 +7,21 @@
 
 
 #include "IrElement.h"
-#include "IrScope.h"
+
+class IrScope;
 
 class IrInstruction : IrElement {
 public:
     /**
      * Initialized when added to a Block.
      */
-    IrScope *owner;
+    IrScope *owner = nullptr;
 
     bool alwaysReturn;
 
     explicit IrInstruction(bool alwaysReturn);
 
-    virtual void affect(IrScope* owner) = 0;
+    virtual void affect(IrScope *owner) = 0;
 
     virtual void setOwner(IrScope *owner);
 

@@ -7,11 +7,14 @@
 
 #include <unordered_map>
 #include "IrElement.h"
+#include "IrInstruction.h"
 
 using namespace std;
 
-class IrScope : IrElement {
+class IrScope : public IrInstruction {
 public:
+    explicit IrScope();
+
     int currentOffset = 0;
 
     void insertInitializedVariable(string &varName);
@@ -24,11 +27,12 @@ public:
 
     int getNewLabel();
 
-    void setOwner(IrScope *owner);
+    void setOwner(IrScope *owner) override;
+
+    void affect(IrScope *owner) override = 0;
 
 protected:
-    int* label;
-    IrScope *owner;
+    int *label;
     unordered_map<string, int> symbolTable;
 };
 

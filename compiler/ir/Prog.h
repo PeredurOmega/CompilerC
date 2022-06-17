@@ -23,6 +23,10 @@ public:
 
     void affect();
 
+    void setOwner(IrScope *owner) override;
+
+    void affect(IrScope *owner) override;
+
 private:
     string entry;
     vector<Function *> functions;

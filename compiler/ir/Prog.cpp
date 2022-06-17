@@ -30,3 +30,11 @@ void Prog::affect() {
         function->affect(this);
     }
 }
+
+void Prog::affect(IrScope *owner) {
+    //TODO CLEAN
+}
+
+void Prog::setOwner(IrScope *owner) {
+    //TODO CLEAN
+}

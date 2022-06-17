@@ -20,9 +20,10 @@ public:
 
     void renderX86(ostream &o) const override;
 
-    void attachTo(Block* block);
+    void attachTo(Block *block);
 
-    void affect(IrScope* owner);
+    void affect(IrScope *owner) override;
+
 private:
     vector<IrInstruction *> instructions;
 };
