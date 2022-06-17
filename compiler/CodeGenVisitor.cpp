@@ -187,44 +187,31 @@ antlrcpp::Any CodeGenVisitor::visitAddSub(ifccParser::AddSubContext *ctx) {
     auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
     if (ctx->op->getText() == "-") {
         return (IrInstruction *) new SubOperation(lExpr, rExpr);
-    } else {
+    } else if (ctx->op->getText() == "+") {
         return (IrInstruction *) new AddOperation(lExpr, rExpr);
+    } else {
+        BadOperation e = BadOperation();
+        cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
+        throw e;
     }
 }
 
 antlrcpp::Any
 CodeGenVisitor::visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) {
-    string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    ifccParser::ExpressionContext *lexpr = expr[0];
-    ifccParser::ExpressionContext *rexpr = expr[1];
-    currentVariable = "";
-    int loffset = any_cast<int>(visit(lexpr));
-    int roffset = any_cast<int>(visit(rexpr));
-    string op = ctx->op->getText();
-    if (op == "*") {
-        cout << "    movl    " << loffset << "(%rbp), %edx" << endl;
-        cout << "    movl    " << roffset << "(%rbp), %eax" << endl;
-        cout << "    imull    %edx, %eax" << endl;
-    } else if (op == "/" || op == "%") {
-        cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
-        cout << "    cltd" << endl;
-        cout << "    idivl    " << roffset << "(%rbp)" << endl;
-    }
-    string res;
-    if (op == "%") res = "edx";
-    else res = "eax";
-    currentVariable = temp;
-    int offset;
-    if (currentVariable.empty()) {
-        currentOffset += 4;
-        offset = -currentOffset;
+    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    if (ctx->op->getText() == "*") {
+        return (IrInstruction *) new TimesOperation(lExpr, rExpr);
+    } else if (ctx->op->getText() == "/") {
+        return (IrInstruction *) new DivOperation(lExpr, rExpr);
+    } else if (ctx->op->getText() == "%") {
+        return (IrInstruction *) new DivOperation(lExpr, rExpr);
     } else {
-        offset = symbolTable[currentVariable];
+        BadOperation e = BadOperation();
+        cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
+        throw e;
     }
-    cout << "    movl    %" << res << ", " << offset
-         << "(%rbp) #v" << currentVariable << endl;
-    return offset;
 }
 
 antlrcpp::Any

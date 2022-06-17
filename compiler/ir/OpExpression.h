@@ -40,5 +40,22 @@ public:
     void affect(IrScope *owner) override;
 };
 
+class TimesOperation : public OpExpression {
+public:
+    explicit TimesOperation(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class DivOperation : public OpExpression {
+public:
+    explicit DivOperation(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
 
 #endif //LIBANTLR4_OPEXPRESSION_H

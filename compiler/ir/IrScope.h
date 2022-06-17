@@ -38,4 +38,14 @@ public:
     }
 };
 
+class BadOperation : exception {
+public:
+    explicit BadOperation() {
+    }
+
+    [[nodiscard]] const char *what() const noexcept override {
+        return "Bad operation";
+    }
+};
+
 #endif //LIBANTLR4_IRSCOPE_H

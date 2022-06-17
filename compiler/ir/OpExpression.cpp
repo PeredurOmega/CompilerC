@@ -20,10 +20,7 @@ void OpExpression::renderX86(ostream &o) const {
     rExpr->renderX86(o);
 }
 
-AddOperation::AddOperation(Expression *lExpr, Expression *rExpr) :
-        OpExpression(lExpr, rExpr) {
-
-}
+AddOperation::AddOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
 
 void AddOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -49,10 +46,7 @@ void AddOperation::affect(IrScope *owner) {
     }
 }
 
-SubOperation::SubOperation(Expression *lExpr, Expression *rExpr) :
-        OpExpression(lExpr, rExpr) {
-
-}
+SubOperation::SubOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
 
 void SubOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -69,6 +63,58 @@ void SubOperation::renderX86(ostream &o) const {
 }
 
 void SubOperation::affect(IrScope *owner) {
+    OpExpression::affect(owner);
+    if (assignTo != nullptr) {
+        offset = owner->getOffset(*assignTo);
+    } else {
+        offset = owner->insertTempVariable();
+    }
+}
+
+TimesOperation::TimesOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
+
+void TimesOperation::renderX86(ostream &o) const {
+    OpExpression::renderX86(o);
+    o << "    movl    " << lExpr->offset << "(%rbp), %edx" << endl;
+    o << "    movl    " << rExpr->offset << "(%rbp), %eax" << endl;
+    o << "    imull    %edx, %eax" << endl;
+
+    o << "    movl    %eax, " << offset << "(%rbp) #";
+    if (assignTo != nullptr) {
+        o << *assignTo;
+    } else {
+        o << "Temp operation result '*'";
+    }
+    o << endl;
+}
+
+void TimesOperation::affect(IrScope *owner) {
+    OpExpression::affect(owner);
+    if (assignTo != nullptr) {
+        offset = owner->getOffset(*assignTo);
+    } else {
+        offset = owner->insertTempVariable();
+    }
+}
+
+DivOperation::DivOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
+
+void DivOperation::renderX86(ostream &o) const {
+    OpExpression::renderX86(o);
+    o << "    movl    " << lExpr->offset << "(%rbp), %eax" << endl;
+    o << "    cltd" << endl;
+    o << "    idivl    " << rExpr->offset << "(%rbp)" << endl;
+
+    o << "    movl    %eax, " << offset << "(%rbp) #";
+    if (assignTo != nullptr) {
+        o << *assignTo;
+    } else {
+        o << "Temp operation result '*'";
+    }
+    o << endl;
+}
+
+void DivOperation::affect(IrScope *owner) {
     OpExpression::affect(owner);
     if (assignTo != nullptr) {
         offset = owner->getOffset(*assignTo);
