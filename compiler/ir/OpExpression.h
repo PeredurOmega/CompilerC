@@ -139,4 +139,31 @@ public:
     void affect(IrScope *owner) override;
 };
 
+class BitwiseAnd : public OpExpression {
+public:
+    explicit BitwiseAnd(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class BitwiseXor : public OpExpression {
+public:
+    explicit BitwiseXor(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class BitwiseOr : public OpExpression {
+public:
+    explicit BitwiseOr(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
 #endif //LIBANTLR4_OPEXPRESSION_H

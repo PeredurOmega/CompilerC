@@ -358,3 +358,75 @@ void NotEqualCompare::affect(IrScope *owner) {
         offset = owner->insertTempVariable();
     }
 }
+
+BitwiseAnd::BitwiseAnd(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+
+void BitwiseAnd::renderX86(ostream &o) const {
+    OpExpression::renderX86(o);
+    o << "    movl    " << lExpr->offset << "(%rbp), %eax" << endl;
+    o << "    andl    " << rExpr->offset << "(%rbp), %eax" << endl;
+    o << "    movl    %eax, " << offset << "(%rbp) #";
+    if (assignTo != nullptr) {
+        o << *assignTo;
+    } else {
+        o << "Temp operation result '!='";
+    }
+    o << endl;
+}
+
+void BitwiseAnd::affect(IrScope *owner) {
+    OpExpression::affect(owner);
+    if (assignTo != nullptr) {
+        offset = owner->getOffset(*assignTo);
+    } else {
+        offset = owner->insertTempVariable();
+    }
+}
+
+BitwiseXor::BitwiseXor(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+
+void BitwiseXor::renderX86(ostream &o) const {
+    OpExpression::renderX86(o);
+    o << "    movl    " << lExpr->offset << "(%rbp), %eax" << endl;
+    o << "    xorl    " << rExpr->offset << "(%rbp), %eax" << endl;
+    o << "    movl    %eax, " << offset << "(%rbp) #";
+    if (assignTo != nullptr) {
+        o << *assignTo;
+    } else {
+        o << "Temp operation result '!='";
+    }
+    o << endl;
+}
+
+void BitwiseXor::affect(IrScope *owner) {
+    OpExpression::affect(owner);
+    if (assignTo != nullptr) {
+        offset = owner->getOffset(*assignTo);
+    } else {
+        offset = owner->insertTempVariable();
+    }
+}
+
+BitwiseOr::BitwiseOr(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+
+void BitwiseOr::renderX86(ostream &o) const {
+    OpExpression::renderX86(o);
+    o << "    movl    " << lExpr->offset << "(%rbp), %eax" << endl;
+    o << "    orl     " << rExpr->offset << "(%rbp), %eax" << endl;
+    o << "    movl    %eax, " << offset << "(%rbp) #";
+    if (assignTo != nullptr) {
+        o << *assignTo;
+    } else {
+        o << "Temp operation result '!='";
+    }
+    o << endl;
+}
+
+void BitwiseOr::affect(IrScope *owner) {
+    OpExpression::affect(owner);
+    if (assignTo != nullptr) {
+        offset = owner->getOffset(*assignTo);
+    } else {
+        offset = owner->insertTempVariable();
+    }
+}
