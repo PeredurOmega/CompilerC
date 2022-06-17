@@ -214,6 +214,56 @@ CodeGenVisitor::visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) {
     }
 }
 
+antlrcpp::Any CodeGenVisitor::visitShift(ifccParser::ShiftContext *ctx) {
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    if (ctx->op->getText() == ">>") {
+        return (IrInstruction *) new ShiftRightOperation(lExpr, rExpr);
+    } else if (ctx->op->getText() == "<<") {
+        return (IrInstruction *) new ShiftLeftOperation(lExpr, rExpr);
+    } else {
+        BadOperation e = BadOperation();
+        cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
+        throw e;
+    }
+}
+
+antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    if (ctx->op->getText() == ">") {
+        return (IrInstruction *) new GreatCompare(lExpr, rExpr);
+    } else if (ctx->op->getText() == ">=") {
+        return (IrInstruction *) new GreatEqualCompare(lExpr, rExpr);
+    } else if (ctx->op->getText() == "<") {
+        return (IrInstruction *) new LessCompare(lExpr, rExpr);
+    } else if (ctx->op->getText() == "<=") {
+        return (IrInstruction *) new LessEqualCompare(lExpr, rExpr);
+    } else {
+        BadOperation e = BadOperation();
+        cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
+        throw e;
+    }
+}
+
+antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
+    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
+    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    if (ctx->op->getText() == "==") {
+        return (IrInstruction *) new EqualCompare(lExpr, rExpr);
+    } else if (ctx->op->getText() == "!=") {
+        return (IrInstruction *) new NotEqualCompare(lExpr, rExpr);
+    } else {
+        BadOperation e = BadOperation();
+        cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
+        throw e;
+    }
+}
+
+
 antlrcpp::Any
 CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
     if (ctx->expression() != nullptr){
@@ -258,74 +308,6 @@ antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
             return offset;
         }
     }
-}
-
-antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
-    string temp = currentVariable;
-    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    ifccParser::ExpressionContext *lexpr = expr[0];
-    ifccParser::ExpressionContext *rexpr = expr[1];
-    currentVariable = "";
-    int loffset = any_cast<int>(visit(lexpr));
-    int roffset = any_cast<int>(visit(rexpr));
-    string op = ctx->op->getText();
-    cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
-    cout << "    cmpl    " << roffset << "(%rbp), %eax" << endl;
-    string instruction;
-    if (op == "<") {
-        instruction = "setl";
-    } else if (op == "<=") {
-        instruction = "setle";
-    } else if (op == ">=") {
-        instruction = "setge";
-    } else if (op == ">") {
-        instruction = "setg";
-    }
-    cout << "    " << instruction << " %al" << endl;
-    cout << "    movzbl  %al, %eax" << endl;
-    currentVariable = temp;
-    int offset;
-    if (currentVariable.empty()) {
-        currentOffset += 4;
-        offset = -currentOffset;
-    } else {
-        offset = symbolTable[currentVariable];
-    }
-    cout << "    movl    %eax, " << offset
-         << "(%rbp) #v" << currentVariable << endl;
-    return offset;
-}
-
-antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
-    string temp = currentVariable;
-    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    ifccParser::ExpressionContext *lexpr = expr[0];
-    ifccParser::ExpressionContext *rexpr = expr[1];
-    currentVariable = "";
-    int loffset = any_cast<int>(visit(lexpr));
-    int roffset = any_cast<int>(visit(rexpr));
-    string op = ctx->op->getText();
-    cout << "    movl    " << loffset << "(%rbp), %eax" << endl;
-    cout << "    cmpl    " << roffset << "(%rbp), %eax" << endl;
-    string instruction;
-    if (op == "==") {
-        instruction = "sete";
-    } else if (op == "!=") {
-        instruction = "setne";
-    }
-    cout << "    " << instruction << " %al" << endl;
-    cout << "    movzbl  %al, %eax" << endl;
-    currentVariable = temp;
-    int offset;
-    if (currentVariable.empty()) {
-        currentOffset += 4;
-        offset = -currentOffset;
-    } else {
-        offset = symbolTable[currentVariable];
-    }
-    cout << "    movl    %eax, " << offset
-         << "(%rbp) #v" << currentVariable << endl;
-    return offset;
 }
 
 antlrcpp::Any
@@ -418,38 +400,6 @@ CodeGenVisitor::visitBitwiseOr(ifccParser::BitwiseOrContext *ctx) {
     return offset;
 }
 
-antlrcpp::Any CodeGenVisitor::visitShift(ifccParser::ShiftContext *ctx) {
-    string temp = currentVariable;
-    vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    ifccParser::ExpressionContext *lexpr = expr[0];
-    ifccParser::ExpressionContext *rexpr = expr[1];
-    currentVariable = "";
-    int loffset = any_cast<int>(visit(lexpr));
-    int roffset = any_cast<int>(visit(rexpr));
-    cout << "    movl    " << roffset << "(%rbp), %eax" << endl;
-    cout << "    movl    " << loffset << "(%rbp), %edx" << endl;
-    cout << "    movl    %eax, %ecx" << endl;
-    string op = ctx->op->getText();
-    string instruction;
-    if (op == "<<") {
-        instruction = "sall";
-    } else if (op == ">>") {
-        instruction = "sarl";
-    }
-    cout << "    " << instruction << "    %cl, %edx" << endl;
-    cout << "    movl    %edx, %eax" << endl;
-    currentVariable = temp;
-    int offset;
-    if (currentVariable.empty()) {
-        currentOffset += 4;
-        offset = -currentOffset;
-    } else {
-        offset = symbolTable[currentVariable];
-    }
-    cout << "    movl    %eax, " << offset
-         << "(%rbp) #v" << currentVariable << endl;
-    return offset;
-}
 
 antlrcpp::Any
 CodeGenVisitor::visitLogicalAnd(ifccParser::LogicalAndContext *ctx) {

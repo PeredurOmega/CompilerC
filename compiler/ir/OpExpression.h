@@ -67,4 +67,76 @@ public:
     void affect(IrScope *owner) override;
 };
 
+class ShiftRightOperation : public OpExpression {
+public:
+    explicit ShiftRightOperation(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class ShiftLeftOperation : public OpExpression {
+public:
+    explicit ShiftLeftOperation(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class LessCompare : public OpExpression {
+public:
+    explicit LessCompare(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class LessEqualCompare : public OpExpression {
+public:
+    explicit LessEqualCompare(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class GreatCompare : public OpExpression {
+public:
+    explicit GreatCompare(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class GreatEqualCompare : public OpExpression {
+public:
+    explicit GreatEqualCompare(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class EqualCompare : public OpExpression {
+public:
+    explicit EqualCompare(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
+class NotEqualCompare : public OpExpression {
+public:
+    explicit NotEqualCompare(Expression *lExpr, Expression *rExpr);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+};
+
 #endif //LIBANTLR4_OPEXPRESSION_H
