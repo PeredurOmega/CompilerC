@@ -13,21 +13,23 @@ statement : statementWithoutAssignment
           | assignment;
 
 // Statement without assignment for inline statment (next to if, while...)
-statementWithoutAssignment:  ';'
+statementWithoutAssignment:  empty
                           | declaration
                           | ret
                           | ifBlock
                           | block;
 
+empty: SEMICOLON;
+
 ifBlock: IF '(' (expression | expAssignment) ')' statementWithoutAssignment elseBlock?;
 
 elseBlock: ELSE statement;
 
-ret : RETURN (expression | expAssignment) ';';
-declaration : TYPE rawDeclaration (',' rawDeclaration)* ';';
+ret : RETURN (expression | expAssignment) SEMICOLON;
+declaration : TYPE rawDeclaration (',' rawDeclaration)* SEMICOLON;
 rawDeclaration : VAR ('=' (VAR '=')* expression)?;
 expAssignment : (VAR '=')+ expression;
-assignment : expAssignment ';';
+assignment : expAssignment SEMICOLON;
 
 expression : VAR #variable
             |CONST #constant
@@ -45,6 +47,8 @@ expression : VAR #variable
             |expression op='||' expression #logicalOr
             ;
 
+
+SEMICOLON : ';';
 
 IF : 'if';
 ELSE: 'else';

@@ -11,3 +11,15 @@ void IrInstruction::setOwner(IrScope *_owner) {
 IrInstruction::IrInstruction() {
 
 }
+
+Empty::Empty() {
+
+}
+
+void Empty::affect(IrScope *owner) {
+
+}
+
+void Empty::renderX86(ostream &o) const {
+
+}

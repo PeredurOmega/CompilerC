@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -16,16 +16,16 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    T__26 = 27, T__27 = 28, IF = 29, ELSE = 30, RETURN = 31, TYPE = 32, 
+    T__26 = 27, SEMICOLON = 28, IF = 29, ELSE = 30, RETURN = 31, TYPE = 32, 
     COMMENT = 33, CONST = 34, VAR = 35, DIRECTIVE = 36, WS = 37
   };
 
   enum {
     RuleAxiom = 0, RuleProg = 1, RuleFunction = 2, RuleParameters = 3, RuleParameter = 4, 
     RuleBlock = 5, RuleStatement = 6, RuleStatementWithoutAssignment = 7, 
-    RuleIfBlock = 8, RuleElseBlock = 9, RuleRet = 10, RuleDeclaration = 11, 
-    RuleRawDeclaration = 12, RuleExpAssignment = 13, RuleAssignment = 14, 
-    RuleExpression = 15
+    RuleEmpty = 8, RuleIfBlock = 9, RuleElseBlock = 10, RuleRet = 11, RuleDeclaration = 12, 
+    RuleRawDeclaration = 13, RuleExpAssignment = 14, RuleAssignment = 15, 
+    RuleExpression = 16
   };
 
   explicit ifccParser(antlr4::TokenStream *input);
@@ -53,6 +53,7 @@ public:
   class BlockContext;
   class StatementContext;
   class StatementWithoutAssignmentContext;
+  class EmptyContext;
   class IfBlockContext;
   class ElseBlockContext;
   class RetContext;
@@ -180,6 +181,7 @@ public:
   public:
     StatementWithoutAssignmentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    EmptyContext *empty();
     DeclarationContext *declaration();
     RetContext *ret();
     IfBlockContext *ifBlock();
@@ -193,6 +195,21 @@ public:
   };
 
   StatementWithoutAssignmentContext* statementWithoutAssignment();
+
+  class  EmptyContext : public antlr4::ParserRuleContext {
+  public:
+    EmptyContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *SEMICOLON();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  EmptyContext* empty();
 
   class  IfBlockContext : public antlr4::ParserRuleContext {
   public:
@@ -234,6 +251,7 @@ public:
     RetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *RETURN();
+    antlr4::tree::TerminalNode *SEMICOLON();
     ExpressionContext *expression();
     ExpAssignmentContext *expAssignment();
 
@@ -253,6 +271,7 @@ public:
     antlr4::tree::TerminalNode *TYPE();
     std::vector<RawDeclarationContext *> rawDeclaration();
     RawDeclarationContext* rawDeclaration(size_t i);
+    antlr4::tree::TerminalNode *SEMICOLON();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -302,6 +321,7 @@ public:
     AssignmentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     ExpAssignmentContext *expAssignment();
+    antlr4::tree::TerminalNode *SEMICOLON();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

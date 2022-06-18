@@ -422,3 +422,7 @@ CodeGenVisitor::visitExpAssignment(ifccParser::ExpAssignmentContext *ctx) {
     }
 }
 
+antlrcpp::Any CodeGenVisitor::visitEmpty(ifccParser::EmptyContext *ctx) {
+    return (IrInstruction*) new Empty();
+}
+

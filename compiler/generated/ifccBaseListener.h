@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -39,6 +39,9 @@ public:
 
   virtual void enterStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext * /*ctx*/) override { }
   virtual void exitStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext * /*ctx*/) override { }
+
+  virtual void enterEmpty(ifccParser::EmptyContext * /*ctx*/) override { }
+  virtual void exitEmpty(ifccParser::EmptyContext * /*ctx*/) override { }
 
   virtual void enterIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }
   virtual void exitIfBlock(ifccParser::IfBlockContext * /*ctx*/) override { }

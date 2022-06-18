@@ -43,6 +43,8 @@ public:
 
     antlrcpp::Any visitRet(ifccParser::RetContext *ctx) override;
 
+    antlrcpp::Any visitEmpty(ifccParser::EmptyContext *ctx) override;
+
     antlrcpp::Any visitAddSub(ifccParser::AddSubContext *ctx) override;
 
     antlrcpp::Any

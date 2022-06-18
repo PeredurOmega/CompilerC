@@ -29,5 +29,14 @@ public:
     void renderX86(ostream &o) const override = 0;
 };
 
+class Empty : IrInstruction {
+public:
+    explicit Empty();
+
+    void affect(IrScope *owner) override;
+
+    void renderX86(ostream &o) const override;
+};
+
 
 #endif //LIBANTLR4_IRINSTRUCTION_H
