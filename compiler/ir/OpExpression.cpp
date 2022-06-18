@@ -5,7 +5,7 @@
 #include "OpExpression.h"
 
 OpExpression::OpExpression(Expression *lExpr, Expression *rExpr) :
-        Expression(false), lExpr(lExpr), rExpr(rExpr) {
+        Expression(), lExpr(lExpr), rExpr(rExpr) {
 
 }
 
@@ -20,7 +20,7 @@ void OpExpression::renderX86(ostream &o) const {
     rExpr->renderX86(o);
 }
 
-AddOperation::AddOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
+AddOperation::AddOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
 
 void AddOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -46,7 +46,7 @@ void AddOperation::affect(IrScope *owner) {
     }
 }
 
-SubOperation::SubOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
+SubOperation::SubOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
 
 void SubOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -71,7 +71,7 @@ void SubOperation::affect(IrScope *owner) {
     }
 }
 
-TimesOperation::TimesOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
+TimesOperation::TimesOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
 
 void TimesOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -97,7 +97,7 @@ void TimesOperation::affect(IrScope *owner) {
     }
 }
 
-DivOperation::DivOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
+DivOperation::DivOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
 
 void DivOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -123,7 +123,7 @@ void DivOperation::affect(IrScope *owner) {
     }
 }
 
-ModuloOperation::ModuloOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) { }
+ModuloOperation::ModuloOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
 
 void ModuloOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);

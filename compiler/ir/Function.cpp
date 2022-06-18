@@ -27,6 +27,9 @@ void Function::renderX86(ostream &o) const {
             o << "    nop" << endl;
         }
     }
+    if (conditionalReturn) {
+        o << ".L" << endLabel << ":" << endl;
+    }
 
     o << "    popq %rbp" << endl
       << "    ret" << endl;
@@ -34,4 +37,16 @@ void Function::renderX86(ostream &o) const {
 
 void Function::setBlock(Block *block) {
     block->attachTo(this);
+}
+
+int Function::conditionalJump() {
+    if(conditionalReturn) return endLabel;
+    else return -1;
+}
+
+void Function::affect(IrScope *owner) {
+    Block::affect(owner);
+    if(conditionalReturn) {
+        endLabel = owner->getNewLabel();
+    }
 }

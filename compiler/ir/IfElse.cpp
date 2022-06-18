@@ -40,7 +40,7 @@ void IfStatement::affect(IrScope *owner) {
 
 IfStatement::IfStatement(Expression *compare, IrInstruction *content,
                          ElseStatement *elseStatement) :
-        Expression(false), compare(compare), content(content),
+        Expression(), compare(compare), content(content),
         elseStatement(elseStatement) {
 }
 
@@ -53,8 +53,7 @@ void ElseStatement::affect(IrScope *owner) {
     content->affect(owner);
 }
 
-ElseStatement::ElseStatement(IrInstruction *content)
-        : Expression(content->alwaysReturn), content(content) {
+ElseStatement::ElseStatement(IrInstruction *content) : Expression(), content(content) {
 
 }
 

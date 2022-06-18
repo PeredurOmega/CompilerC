@@ -4,8 +4,7 @@
 
 #include "UnaryOp.h"
 
-UnaryOp::UnaryOp(Expression *rExpr) :
-        Expression(false), rExpr(rExpr) {
+UnaryOp::UnaryOp(Expression *rExpr) : Expression(), rExpr(rExpr) {
 }
 
 void UnaryOp::affect(IrScope *owner) {
@@ -17,7 +16,7 @@ void UnaryOp::renderX86(ostream &o) const {
     rExpr->renderX86(o);
 }
 
-MinusUnary::MinusUnary(Expression *rExpr) : UnaryOp(rExpr) { }
+MinusUnary::MinusUnary(Expression *rExpr) : UnaryOp(rExpr) {}
 
 void MinusUnary::renderX86(ostream &o) const {
     UnaryOp::renderX86(o);
@@ -42,7 +41,7 @@ void MinusUnary::affect(IrScope *owner) {
     }
 }
 
-PlusUnary::PlusUnary(Expression *rExpr) : UnaryOp(rExpr) { }
+PlusUnary::PlusUnary(Expression *rExpr) : UnaryOp(rExpr) {}
 
 void PlusUnary::renderX86(ostream &o) const {
     UnaryOp::renderX86(o);
@@ -57,7 +56,7 @@ void PlusUnary::affect(IrScope *owner) {
     }
 }
 
-NotUnary::NotUnary(Expression *rExpr) : UnaryOp(rExpr) { }
+NotUnary::NotUnary(Expression *rExpr) : UnaryOp(rExpr) {}
 
 void NotUnary::renderX86(ostream &o) const {
     UnaryOp::renderX86(o);
@@ -83,7 +82,7 @@ void NotUnary::affect(IrScope *owner) {
     }
 }
 
-BitwiseNotUnary::BitwiseNotUnary(Expression *rExpr) : UnaryOp(rExpr) { }
+BitwiseNotUnary::BitwiseNotUnary(Expression *rExpr) : UnaryOp(rExpr) {}
 
 void BitwiseNotUnary::renderX86(ostream &o) const {
     UnaryOp::renderX86(o);

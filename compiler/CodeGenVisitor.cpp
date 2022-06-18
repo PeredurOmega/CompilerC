@@ -31,8 +31,7 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
         returnType = (IrType *) PrimaryType::parse(rawReturnType);
     } catch (const InvalidType &e) {
         if (rawReturnType == "void") {
-            returnType = (IrType *)
-                    new Void();
+            returnType = (IrType *) new Void();
         } else {
             //TODO REPLACE BY COMPILATION EXCEPTION
             cerr << e.what() << " at line " << ctx->start->getLine() << endl;
@@ -51,8 +50,7 @@ antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
         auto *instruction = any_cast<IrInstruction *>(
                 visitStatement(statement));
         block->addInstruction(instruction);
-        bool stop = instruction->alwaysReturn;
-        if (stop) break;
+        if (instruction->alwaysReturn) break;
     }
     return (IrInstruction *) block;
 }
@@ -69,16 +67,19 @@ antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
             visit(ctx->statementWithoutAssignment()));
 
     bool alwaysReturn = content->alwaysReturn;
+    bool conditionalReturn = content->conditionalReturn;
     ElseStatement *elseStatement = nullptr;
     if (ctx->elseBlock() != nullptr) {
         elseStatement = (ElseStatement *) any_cast<IrInstruction *>(
                 visitElseBlock(ctx->elseBlock()));
-        alwaysReturn = alwaysReturn && elseStatement->alwaysReturn;
-    }
+        conditionalReturn = (alwaysReturn != elseStatement->alwaysReturn && (alwaysReturn || elseStatement->alwaysReturn))
+                || conditionalReturn || elseStatement->conditionalReturn;
+        alwaysReturn = alwaysReturn || elseStatement->alwaysReturn;
+    } else if(alwaysReturn || conditionalReturn) conditionalReturn = true;
 
-    auto *ifBlock = new IfStatement((Expression *) compare, content,
-                                    elseStatement);
+    auto *ifBlock = new IfStatement((Expression *) compare, content, elseStatement);
     ifBlock->alwaysReturn = alwaysReturn;
+    ifBlock->conditionalReturn = conditionalReturn;
     return (IrInstruction *) ifBlock;
 }
 
@@ -88,6 +89,8 @@ CodeGenVisitor::visitElseBlock(ifccParser::ElseBlockContext *ctx) {
             visitStatement(ctx->statement()));
     auto *elseStatement = new ElseStatement(statement);
     elseStatement->alwaysReturn = statement->alwaysReturn;
+    elseStatement->alwaysReturn = statement->alwaysReturn;
+    elseStatement->conditionalReturn = statement->conditionalReturn;
     return (IrInstruction *) elseStatement;
 }
 

@@ -15,7 +15,7 @@ using namespace std;
 
 class Expression : public IrInstruction {
 public:
-    explicit Expression(bool alwaysReturn);
+    explicit Expression();
 
     /**
      * Initialized when added to a Block through affect.
@@ -26,7 +26,7 @@ public:
      * Optional in case the expression is followed by an assignment.
      * When not nullptr, we should store the value of the expression in %eax.
      */
-    string *assignTo= nullptr;
+    string *assignTo = nullptr;
 };
 
 class Return : public Expression {

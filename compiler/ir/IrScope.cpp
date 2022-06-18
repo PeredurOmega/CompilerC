@@ -47,7 +47,7 @@ int IrScope::getNewLabel() {
     return *label;
 }
 
-IrScope::IrScope() : IrInstruction(false) {
+IrScope::IrScope() : IrInstruction() {
 
 }
 

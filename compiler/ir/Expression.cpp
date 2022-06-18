@@ -17,7 +17,7 @@ void Variable::renderX86(ostream &o) const {
     }
 }
 
-Variable::Variable(string name) : Expression(false), name(std::move(name)) {
+Variable::Variable(string name) : Expression(), name(std::move(name)) {
 
 }
 
@@ -36,7 +36,7 @@ void Constant::renderX86(ostream &o) const {
     }
 }
 
-Constant::Constant(int value) : Expression(false), value(value) {
+Constant::Constant(int value) : Expression(), value(value) {
 
 }
 
@@ -49,14 +49,17 @@ void Constant::affect(IrScope *owner) {
     }
 }
 
-Return::Return(Expression *expression) : Expression(true),
-                                         expression(expression) {
-
+Return::Return(Expression *expression) : Expression(), expression(expression) {
+    alwaysReturn = true;
 }
 
 void Return::renderX86(ostream &o) const {
     expression->renderX86(o);
     o << "    movl    " << expression->offset << "(%rbp), %eax" << endl;
+    int conditionalJump = owner->conditionalJump();
+    if (conditionalJump != -1) {
+        o << "    jmp      .L" << conditionalJump << endl;
+    }
 }
 
 void Return::affect(IrScope *owner) {
@@ -64,12 +67,12 @@ void Return::affect(IrScope *owner) {
     expression->affect(owner);
 }
 
-Expression::Expression(bool alwaysReturn) : IrInstruction(alwaysReturn) {
+Expression::Expression() : IrInstruction() {
 
 }
 
 VarExpr::VarExpr(vector<string *> *varNames, Expression *expression) :
-        Expression(false), varNames(*varNames), expression(expression) {
+        Expression(), varNames(*varNames), expression(expression) {
 
 }
 

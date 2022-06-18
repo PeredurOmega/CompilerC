@@ -31,6 +31,11 @@ public:
 
     void affect(IrScope *owner) override = 0;
 
+    /**
+     * If there is a need for conditional jump, jump label is returned, otherwise -1 is return.
+     */
+    virtual int conditionalJump() = 0;
+
 protected:
     int *label;
     unordered_map<string, int> symbolTable;

@@ -38,3 +38,7 @@ void Prog::affect(IrScope *owner) {
 void Prog::setOwner(IrScope *owner) {
     //TODO CLEAN
 }
+
+int Prog::conditionalJump() {
+    return -1;
+}

@@ -22,6 +22,8 @@ public:
 
     void affect(IrScope *owner) override;
 
+    int conditionalJump() override;
+
 private:
     vector<IrInstruction *> instructions;
 };

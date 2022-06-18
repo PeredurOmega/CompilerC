@@ -16,8 +16,7 @@ public:
 
     int finalLabel = 0;
 
-    explicit IfStatement(Expression *compare, IrInstruction *content,
-                         ElseStatement *elseStatement);
+    explicit IfStatement(Expression *compare, IrInstruction *content, ElseStatement *elseStatement);
 
     void renderX86(ostream &o) const override;
 

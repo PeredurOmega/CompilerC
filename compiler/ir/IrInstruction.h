@@ -17,9 +17,10 @@ public:
      */
     IrScope *owner = nullptr;
 
-    bool alwaysReturn;
+    bool alwaysReturn = false;
+    bool conditionalReturn = false;
 
-    explicit IrInstruction(bool alwaysReturn);
+    explicit IrInstruction();
 
     virtual void affect(IrScope *owner) = 0;
 

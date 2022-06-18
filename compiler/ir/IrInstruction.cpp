@@ -4,10 +4,10 @@
 
 #include "IrInstruction.h"
 
-IrInstruction::IrInstruction(bool alwaysReturn) : alwaysReturn(alwaysReturn) {
-
-}
-
 void IrInstruction::setOwner(IrScope *_owner) {
     this->owner = _owner;
+}
+
+IrInstruction::IrInstruction() {
+
 }

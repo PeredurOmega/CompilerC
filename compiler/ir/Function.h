@@ -20,10 +20,15 @@ public:
 
     void setBlock(Block *block);
 
+    int conditionalJump() override;
+
+    void affect(IrScope* owner) override;
+
 private:
     const string MAIN = "main";
     const IrType *returnType;
     const string name;
+    int endLabel = -1;
     //vector<IrInstr> blocks;
 };
 
