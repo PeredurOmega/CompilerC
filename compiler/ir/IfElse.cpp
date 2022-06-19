@@ -9,7 +9,7 @@ void IfStatement::renderX86(ostream &o) const {
     compare->renderX86(o);
     o << "    cmpl    $0, " << compare->offset << "(%rbp)" << endl;
     int nextLabel;
-    if (elseStatement != nullptr) nextLabel = firstLabel + 1;
+    if (elseStatement != nullptr) nextLabel = elseStatement->label;
     else nextLabel = finalLabel;
     o << "    je      .L" << nextLabel << endl;
 

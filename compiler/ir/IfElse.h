@@ -34,6 +34,8 @@ private:
 class ElseStatement : public Expression {
 public:
 
+    int label;
+
     int finalLabel;
 
     explicit ElseStatement(IrInstruction *content);
@@ -43,7 +45,6 @@ public:
     void affect(IrScope *owner) override;
 
 private:
-    int label;
     IrInstruction *content;
 };
 
