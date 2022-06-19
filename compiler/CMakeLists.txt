@@ -1,7 +1,7 @@
 # -*- mode:cmake -*-
-if(NOT UNIX)
+if (NOT UNIX)
     message(WARNING "Unsupported operating system")
-endif()
+endif ()
 
 set(compiler-GENERATED_SRC
         ${PROJECT_SOURCE_DIR}/compiler/generated/ifccBaseListener.cpp
@@ -12,13 +12,17 @@ set(compiler-GENERATED_SRC
         ${PROJECT_SOURCE_DIR}/compiler/generated/ifccVisitor.cpp
         )
 
-foreach(src_file ${compiler-GENERATED_SRC})
+set(compiler-IR_SRC
+        ${PROJECT_SOURCE_DIR}/compiler/ir/Prog.cpp
+        ir/IrElement.cpp ir/IrElement.h ir/Function.cpp ir/Function.h ir/IrScope.cpp ir/IrScope.h ir/Block.cpp ir/Block.h ir/TypeSymbol.cpp ir/TypeSymbol.h ir/IrInstruction.cpp ir/IrInstruction.h ir/Declaration.cpp ir/Declaration.h ir/Expression.cpp ir/Expression.h ir/OpExpression.cpp ir/OpExpression.h ir/IfElse.cpp ir/IfElse.h ir/UnaryOp.cpp ir/UnaryOp.h ir/While.cpp ir/While.h)
+
+foreach (src_file ${compiler-GENERATED_SRC})
     set_source_files_properties(
             ${src_file}
             PROPERTIES
             GENERATED TRUE
     )
-endforeach(src_file ${compiler-GENERATED_SRC})
+endforeach (src_file ${compiler-GENERATED_SRC})
 
 add_custom_target(GenerateParser DEPENDS ${compiler-GENERATED_SRC})
 add_custom_command(OUTPUT ${compiler-GENERATED_SRC}
@@ -41,28 +45,28 @@ include_directories(
 )
 
 #file(GLOB compiler_SRC "${PROJECT_SOURCE_DIR}/compiler/generated/*")
-set(compiler_SRC ${PROJECT_SOURCE_DIR}/compiler/main.cpp ${PROJECT_SOURCE_DIR}/compiler/CodeGenVisitor.cpp ${compiler-GENERATED_SRC})
+set(compiler_SRC ${PROJECT_SOURCE_DIR}/compiler/main.cpp ${PROJECT_SOURCE_DIR}/compiler/CodeGenVisitor.cpp ${compiler-GENERATED_SRC} ${compiler-IR_SRC})
 
-if(NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    set (flags_1 "-Wno-overloaded-virtual")
-else()
-    set (flags_1 "-MP /wd4251")
-endif()
+if (NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    set(flags_1 "-Wno-overloaded-virtual")
+else ()
+    set(flags_1 "-MP /wd4251")
+endif ()
 
-foreach(src_file ${compiler_SRC})
+foreach (src_file ${compiler_SRC})
     set_source_files_properties(
             ${src_file}
             PROPERTIES
             COMPILE_FLAGS "${COMPILE_FLAGS} ${flags_1}"
     )
-endforeach(src_file ${compiler_SRC})
+endforeach (src_file ${compiler_SRC})
 
 add_executable(compiler ${compiler_SRC})
 #add_precompiled_header(compiler ${PROJECT_SOURCE_DIR}/runtime/src/antlrcpp-Prefix.h)
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(compiler PRIVATE "/MT$<$<CONFIG:Debug>:d>")
-endif()
+endif ()
 
 find_package(Threads)
 

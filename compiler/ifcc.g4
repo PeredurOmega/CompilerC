@@ -9,41 +9,47 @@ parameters : parameter (',' parameter)* ;
 parameter : TYPE VAR ;
 
 block : '{' statement* '}';
-statement : ';'
-          | declaration
-          | affectation
-          | ret
-          | ifBlock
-          | whileBlock
-          | block;
+statement : statementWithoutAssignment
+          | assignment;
 
-ifBlock: IF '(' expression ')' statement elseBlock?;
+// Statement without assignment for inline statment (next to if, while...)
+statementWithoutAssignment:  empty
+                          | declaration
+                          | ret
+                          | ifBlock
+                          | block;
+
+empty: SEMICOLON;
+
+ifBlock: IF '(' (expression | expAssignment) ')' statementWithoutAssignment elseBlock?;
 elseBlock: ELSE statement;
 
-whileBlock: WHILE '(' expression ')' statement;
+whileBlock: WHILE '(' expression ')' statementWithoutAssignment;
 
-ret : RETURN expression ';'+;
-declaration : TYPE (init| VAR) (',' (init| VAR))* ';'+;
-init : VAR '=' expression ;
-affectation : VAR '=' expression ';'+;
+ret : RETURN (expression | expAssignment) SEMICOLON;
+declaration : TYPE rawDeclaration (',' rawDeclaration)* SEMICOLON;
+rawDeclaration : VAR ('=' (VAR '=')* expression)?;
+expAssignment : (VAR '=')+ expression;
+assignment : expAssignment SEMICOLON;
 
 expression : VAR #variable
             |CONST #constant
-            |VAR'='expression #varexpr
-            |'(' expression ')' #parenthesis
+            |'(' (expression | expAssignment)')' #parenthesis
             |op=('-'|'!'|'+'|'~') expression #unary
-            |expression op=('*' | '/' | '%') expression #times
-            |expression op=('+' | '-') expression #addsub
+            |expression op=('*' | '/' | '%') expression #timesDivModulo
+            |expression op=('+' | '-') expression #addSub
             |expression op=('<<' | '>>') expression #shift
             |expression op=('<' | '<=' | '>=' | '>') expression #compare
             |expression op=('==' | '!=') expression #equal
-            |expression op='&' expression #bitwiseand
-            |expression op='^' expression #bitwisexor
-            |expression op='|' expression #bitwiseor
-            |expression op='&&' expression #logicaland
-            |expression op='||' expression #logicalor
+            |expression op='&' expression #bitwiseAnd
+            |expression op='^' expression #bitwiseXor
+            |expression op='|' expression #bitwiseOr
+            |expression op='&&' expression #logicalAnd
+            |expression op='||' expression #logicalOr
             ;
 
+
+SEMICOLON : ';';
 
 IF : 'if';
 ELSE: 'else';
