@@ -19,7 +19,7 @@ statementWithoutAssignment:  empty
                           | ifBlock
                           | block;
 
-empty: SEMICOLON;
+empty: expression? SEMICOLON;
 
 ifBlock: IF '(' (expression | expAssignment) ')' statementWithoutAssignment elseBlock?;
 elseBlock: ELSE statement;
