@@ -53,9 +53,9 @@ You will find a full report in the unit test result : https://github.com/Peredur
 
 You can also download the artifact of the test output.
 
-## Features 
+## Roadmap
 
-All of these features are implemented for **x86**
+Features to implement (**x86**):
 
 - [X] Variable declaration
 - [X] Multiple declaration (int a, b, c)
@@ -79,12 +79,16 @@ All of these features are implemented for **x86**
 - [X] Return support
 - [X] Empty function support
 - [X] Empty return support
-- [ ] IR migration
+- [X] IR migration
+- [X] Conditional return support
+- [X] While
+- [X] Always return optimization
+- [X] Do not compile on assignment in single line if-else-else if-while statements
+- [ ] Break and Continue keyword
 - [ ] Char support
 - [ ] Statical analysis (variable scope, shadowing)
 - [ ] Function call
-- [ ] Loop block
-- [ ] Break and Continue keyword
+- [ ] For
 - [ ] Switch case
 - [ ] Arrays
 - [ ] Pointers
