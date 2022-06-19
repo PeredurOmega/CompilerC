@@ -34,7 +34,7 @@ void Block::affect(IrScope *owner) {
 }
 
 int Block::conditionalJump() {
-    if(alwaysReturn) return -1;
+    if (alwaysReturn) return -1;
     else return owner->conditionalJump();
 }
 

@@ -53,7 +53,8 @@ void ElseStatement::affect(IrScope *owner) {
     content->affect(owner);
 }
 
-ElseStatement::ElseStatement(IrInstruction *content) : Expression(), content(content) {
+ElseStatement::ElseStatement(IrInstruction *content)
+        : Expression(), content(content) {
 
 }
 

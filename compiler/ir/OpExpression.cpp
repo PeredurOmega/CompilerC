@@ -20,7 +20,8 @@ void OpExpression::renderX86(ostream &o) const {
     rExpr->renderX86(o);
 }
 
-AddOperation::AddOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+AddOperation::AddOperation(Expression *lExpr, Expression *rExpr) : OpExpression(
+        lExpr, rExpr) {}
 
 void AddOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -46,7 +47,8 @@ void AddOperation::affect(IrScope *owner) {
     }
 }
 
-SubOperation::SubOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+SubOperation::SubOperation(Expression *lExpr, Expression *rExpr) : OpExpression(
+        lExpr, rExpr) {}
 
 void SubOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -71,7 +73,8 @@ void SubOperation::affect(IrScope *owner) {
     }
 }
 
-TimesOperation::TimesOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+TimesOperation::TimesOperation(Expression *lExpr, Expression *rExpr)
+        : OpExpression(lExpr, rExpr) {}
 
 void TimesOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -97,7 +100,8 @@ void TimesOperation::affect(IrScope *owner) {
     }
 }
 
-DivOperation::DivOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+DivOperation::DivOperation(Expression *lExpr, Expression *rExpr) : OpExpression(
+        lExpr, rExpr) {}
 
 void DivOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -123,7 +127,8 @@ void DivOperation::affect(IrScope *owner) {
     }
 }
 
-ModuloOperation::ModuloOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+ModuloOperation::ModuloOperation(Expression *lExpr, Expression *rExpr)
+        : OpExpression(lExpr, rExpr) {}
 
 void ModuloOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -149,7 +154,8 @@ void ModuloOperation::affect(IrScope *owner) {
     }
 }
 
-ShiftRightOperation::ShiftRightOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+ShiftRightOperation::ShiftRightOperation(Expression *lExpr, Expression *rExpr)
+        : OpExpression(lExpr, rExpr) {}
 
 void ShiftRightOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -176,7 +182,8 @@ void ShiftRightOperation::affect(IrScope *owner) {
     }
 }
 
-ShiftLeftOperation::ShiftLeftOperation(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+ShiftLeftOperation::ShiftLeftOperation(Expression *lExpr, Expression *rExpr)
+        : OpExpression(lExpr, rExpr) {}
 
 void ShiftLeftOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -203,7 +210,8 @@ void ShiftLeftOperation::affect(IrScope *owner) {
     }
 }
 
-LessCompare::LessCompare(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+LessCompare::LessCompare(Expression *lExpr, Expression *rExpr) : OpExpression(
+        lExpr, rExpr) {}
 
 void LessCompare::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -229,7 +237,8 @@ void LessCompare::affect(IrScope *owner) {
     }
 }
 
-LessEqualCompare::LessEqualCompare(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+LessEqualCompare::LessEqualCompare(Expression *lExpr, Expression *rExpr)
+        : OpExpression(lExpr, rExpr) {}
 
 void LessEqualCompare::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -255,7 +264,8 @@ void LessEqualCompare::affect(IrScope *owner) {
     }
 }
 
-GreatCompare::GreatCompare(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+GreatCompare::GreatCompare(Expression *lExpr, Expression *rExpr) : OpExpression(
+        lExpr, rExpr) {}
 
 void GreatCompare::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -281,7 +291,8 @@ void GreatCompare::affect(IrScope *owner) {
     }
 }
 
-GreatEqualCompare::GreatEqualCompare(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+GreatEqualCompare::GreatEqualCompare(Expression *lExpr, Expression *rExpr)
+        : OpExpression(lExpr, rExpr) {}
 
 void GreatEqualCompare::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -307,7 +318,8 @@ void GreatEqualCompare::affect(IrScope *owner) {
     }
 }
 
-EqualCompare::EqualCompare(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+EqualCompare::EqualCompare(Expression *lExpr, Expression *rExpr) : OpExpression(
+        lExpr, rExpr) {}
 
 void EqualCompare::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -333,7 +345,8 @@ void EqualCompare::affect(IrScope *owner) {
     }
 }
 
-NotEqualCompare::NotEqualCompare(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+NotEqualCompare::NotEqualCompare(Expression *lExpr, Expression *rExpr)
+        : OpExpression(lExpr, rExpr) {}
 
 void NotEqualCompare::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -359,7 +372,8 @@ void NotEqualCompare::affect(IrScope *owner) {
     }
 }
 
-BitwiseAnd::BitwiseAnd(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+BitwiseAnd::BitwiseAnd(Expression *lExpr, Expression *rExpr) : OpExpression(
+        lExpr, rExpr) {}
 
 void BitwiseAnd::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -383,7 +397,8 @@ void BitwiseAnd::affect(IrScope *owner) {
     }
 }
 
-BitwiseXor::BitwiseXor(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+BitwiseXor::BitwiseXor(Expression *lExpr, Expression *rExpr) : OpExpression(
+        lExpr, rExpr) {}
 
 void BitwiseXor::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -407,7 +422,8 @@ void BitwiseXor::affect(IrScope *owner) {
     }
 }
 
-BitwiseOr::BitwiseOr(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+BitwiseOr::BitwiseOr(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr,
+                                                                          rExpr) {}
 
 void BitwiseOr::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -431,7 +447,8 @@ void BitwiseOr::affect(IrScope *owner) {
     }
 }
 
-LogicalAnd::LogicalAnd(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+LogicalAnd::LogicalAnd(Expression *lExpr, Expression *rExpr) : OpExpression(
+        lExpr, rExpr) {}
 
 void LogicalAnd::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
@@ -453,7 +470,8 @@ void LogicalAnd::affect(IrScope *owner) {
     }
 }
 
-LogicalOr::LogicalOr(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr, rExpr) {}
+LogicalOr::LogicalOr(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr,
+                                                                          rExpr) {}
 
 void LogicalOr::renderX86(ostream &o) const {
     OpExpression::renderX86(o);

@@ -22,7 +22,7 @@ public:
 
     int conditionalJump() override;
 
-    void affect(IrScope* owner) override;
+    void affect(IrScope *owner) override;
 
 private:
     const string MAIN = "main";

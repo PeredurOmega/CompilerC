@@ -22,8 +22,9 @@ statementWithoutAssignment:  empty
 empty: SEMICOLON;
 
 ifBlock: IF '(' (expression | expAssignment) ')' statementWithoutAssignment elseBlock?;
-
 elseBlock: ELSE statement;
+
+whileBlock: WHILE '(' expression ')' statementWithoutAssignment;
 
 ret : RETURN (expression | expAssignment) SEMICOLON;
 declaration : TYPE rawDeclaration (',' rawDeclaration)* SEMICOLON;
@@ -52,6 +53,7 @@ SEMICOLON : ';';
 
 IF : 'if';
 ELSE: 'else';
+WHILE: 'while';
 
 RETURN : 'return' ;
 TYPE : 'int';

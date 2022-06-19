@@ -5,6 +5,7 @@
 #include "ir/OpExpression.h"
 #include "ir/IfElse.h"
 #include "ir/UnaryOp.h"
+#include "ir/While.h"
 
 using namespace std;
 
@@ -72,12 +73,15 @@ antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
     if (ctx->elseBlock() != nullptr) {
         elseStatement = (ElseStatement *) any_cast<IrInstruction *>(
                 visitElseBlock(ctx->elseBlock()));
-        conditionalReturn = (alwaysReturn != elseStatement->alwaysReturn && (alwaysReturn || elseStatement->alwaysReturn))
-                || conditionalReturn || elseStatement->conditionalReturn;
+        conditionalReturn = (alwaysReturn != elseStatement->alwaysReturn &&
+                             (alwaysReturn || elseStatement->alwaysReturn))
+                            || conditionalReturn ||
+                            elseStatement->conditionalReturn;
         alwaysReturn = alwaysReturn || elseStatement->alwaysReturn;
-    } else if(alwaysReturn || conditionalReturn) conditionalReturn = true;
+    } else if (alwaysReturn || conditionalReturn) conditionalReturn = true;
 
-    auto *ifBlock = new IfStatement((Expression *) compare, content, elseStatement);
+    auto *ifBlock = new IfStatement((Expression *) compare, content,
+                                    elseStatement);
     ifBlock->alwaysReturn = alwaysReturn;
     ifBlock->conditionalReturn = conditionalReturn;
     return (IrInstruction *) ifBlock;
@@ -423,6 +427,17 @@ CodeGenVisitor::visitExpAssignment(ifccParser::ExpAssignmentContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitEmpty(ifccParser::EmptyContext *ctx) {
-    return (IrInstruction*) new Empty();
+    return (IrInstruction *) new Empty();
+}
+
+antlrcpp::Any
+CodeGenVisitor::visitWhileBlock(ifccParser::WhileBlockContext *ctx) {
+    auto *compare = (Expression *) any_cast<IrInstruction *>(
+            visit(ctx->expression()));
+    auto *content = any_cast<IrInstruction *>(
+            visitStatementWithoutAssignment(ctx->statementWithoutAssignment()));
+    auto *whileStatement = new WhileStatement(compare, content);
+    if (content->alwaysReturn) whileStatement->conditionalReturn = true;
+    return (IrInstruction *) whileStatement;
 }
 

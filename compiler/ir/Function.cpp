@@ -40,13 +40,13 @@ void Function::setBlock(Block *block) {
 }
 
 int Function::conditionalJump() {
-    if(conditionalReturn) return endLabel;
+    if (conditionalReturn) return endLabel;
     else return -1;
 }
 
 void Function::affect(IrScope *owner) {
     Block::affect(owner);
-    if(conditionalReturn) {
+    if (conditionalReturn) {
         endLabel = owner->getNewLabel();
     }
 }
