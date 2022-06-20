@@ -17,6 +17,7 @@ statementWithoutAssignment:  empty
                           | declaration
                           | ret
                           | ifBlock
+                          | whileBlock
                           | block;
 
 empty: expression? SEMICOLON;

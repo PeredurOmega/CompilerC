@@ -452,7 +452,17 @@ LogicalAnd::LogicalAnd(Expression *lExpr, Expression *rExpr) : OpExpression(
 
 void LogicalAnd::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
-
+    o << "    cmpl    $0, " << lExpr->offset << "(%rbp)" << endl;
+    o << "    je      .L" << firstLabel << endl;
+    o << "    cmpl    $0, " << rExpr->offset << "(%rbp)" << endl;
+    o << "    je      .L" << firstLabel << endl;
+    o << "    movl    $1, %eax" << endl;
+    o << "    jmp     .L" << secondLabel << endl;
+    o << " .L" << firstLabel << ":" << endl;
+    o << "    movl    $0, %eax" << endl;
+    o << " .L" << secondLabel << ":" << endl;
+    o << "    movzbl  %al, %eax" << endl;
+    o << "    movl    %eax, " << offset << "(%rbp) #";
     if (assignTo != nullptr) {
         o << *assignTo;
     } else {
@@ -463,6 +473,8 @@ void LogicalAnd::renderX86(ostream &o) const {
 
 void LogicalAnd::affect(IrScope *owner) {
     OpExpression::affect(owner);
+    firstLabel = owner->getNewLabel();
+    secondLabel = owner->getNewLabel();
     if (assignTo != nullptr) {
         offset = owner->getOffset(*assignTo);
     } else {
@@ -475,17 +487,31 @@ LogicalOr::LogicalOr(Expression *lExpr, Expression *rExpr) : OpExpression(lExpr,
 
 void LogicalOr::renderX86(ostream &o) const {
     OpExpression::renderX86(o);
-
+    o << "    cmpl    $0, " << lExpr->offset << "(%rbp)" << endl;
+    o << "    jne     .L" << firstLabel << endl;
+    o << "    cmpl    $0, " << rExpr->offset << "(%rbp)" << endl;
+    o << "    je      .L" << secondLabel << endl;
+    o << " .L" << firstLabel << ":" << endl;
+    o << "    movl    $1, %eax" << endl;
+    o << "    jmp     .L" << thirdLabel << endl;
+    o << " .L" << secondLabel << ":" << endl;
+    o << "    movl    $0, %eax" << endl;
+    o << " .L" << thirdLabel << ":" << endl;
+    o << "    movzbl  %al, %eax" << endl;
+    o << "    movl    %eax, " << offset << "(%rbp) #";
     if (assignTo != nullptr) {
         o << *assignTo;
     } else {
-        o << "Temp operation result '||'";
+        o << "Temp operation result '&&'";
     }
     o << endl;
 }
 
 void LogicalOr::affect(IrScope *owner) {
     OpExpression::affect(owner);
+    firstLabel = owner->getNewLabel();
+    secondLabel = owner->getNewLabel();
+    thirdLabel = owner->getNewLabel();
     if (assignTo != nullptr) {
         offset = owner->getOffset(*assignTo);
     } else {

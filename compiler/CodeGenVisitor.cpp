@@ -339,72 +339,30 @@ antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
 
 antlrcpp::Any
 CodeGenVisitor::visitLogicalAnd(ifccParser::LogicalAndContext *ctx) {
-    string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    ifccParser::ExpressionContext *lexpr = expr[0];
-    ifccParser::ExpressionContext *rexpr = expr[1];
-    currentVariable = "";
-    int loffset = any_cast<int>(visit(lexpr));
-    int roffset = any_cast<int>(visit(rexpr));
-    cout << "    cmpl    $0, " << loffset << "(%rbp)" << endl;
-    jumpOffset++;
-    cout << "    jne      .L" << jumpOffset << endl;
-    cout << "    cmpl    $0, " << roffset << "(%rbp)" << endl;
-    cout << "    je      .L" << jumpOffset << endl;
-    cout << "    movl    $1, %eax" << endl;
-    jumpOffset++;
-    cout << "    jmp     .L" << jumpOffset << endl;
-    cout << " .L" << jumpOffset - 1 << ":" << endl;
-    cout << "    movl    $0, %eax" << endl;
-    cout << " .L" << jumpOffset << ":" << endl;
-    cout << "    movzbl  %al, %eax" << endl;
-    currentVariable = temp;
-    int offset;
-    if (currentVariable.empty()) {
-        currentOffset += 4;
-        offset = -currentOffset;
+    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    if (ctx->op->getText() == "&&") {
+        return (IrInstruction *) new LogicalAnd(lExpr, rExpr);
     } else {
-        offset = symbolTable[currentVariable];
+        BadOperation e = BadOperation();
+        cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
+        throw e;
     }
-    cout << "    movl    %eax, " << offset
-         << "(%rbp) #v" << currentVariable << endl;
-    return offset;
 }
 
 antlrcpp::Any
 CodeGenVisitor::visitLogicalOr(ifccParser::LogicalOrContext *ctx) {
-    string temp = currentVariable;
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    ifccParser::ExpressionContext *lexpr = expr[0];
-    ifccParser::ExpressionContext *rexpr = expr[1];
-    currentVariable = "";
-    int loffset = any_cast<int>(visit(lexpr));
-    int roffset = any_cast<int>(visit(rexpr));
-    cout << "    cmpl    $0, " << loffset << "(%rbp)" << endl;
-    jumpOffset++;
-    cout << "    jne     .L" << jumpOffset << endl;
-    cout << "    cmpl    $0, " << roffset << "(%rbp)" << endl;
-    jumpOffset++;
-    cout << "    je      .L" << jumpOffset << endl;
-    cout << " .L" << jumpOffset - 1 << ":" << endl;
-    cout << "    movl    $1, %eax" << endl;
-    jumpOffset++;
-    cout << "    jmp     .L" << jumpOffset << endl;
-    cout << " .L" << jumpOffset - 1 << ":" << endl;
-    cout << "    movl    $0, %eax" << endl;
-    cout << " .L" << jumpOffset << ":" << endl;
-    cout << "    movzbl  %al, %eax" << endl;
-    currentVariable = temp;
-    int offset;
-    if (currentVariable.empty()) {
-        currentOffset += 4;
-        offset = -currentOffset;
+    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    if (ctx->op->getText() == "||") {
+        return (IrInstruction *) new LogicalOr(lExpr, rExpr);
     } else {
-        offset = symbolTable[currentVariable];
+        BadOperation e = BadOperation();
+        cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
+        throw e;
     }
-    cout << "    movl    %eax, " << offset
-         << "(%rbp) #v" << currentVariable << endl;
-    return offset;
 }
 
 
