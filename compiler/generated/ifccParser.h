@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -22,7 +22,7 @@ public:
 
   enum {
     RuleAxiom = 0, RuleProg = 1, RuleFunction = 2, RuleParameters = 3, RuleParameter = 4, 
-    RuleBlock = 5, RuleStatement = 6, RuleStatementWithoutAssignment = 7, 
+    RuleBlock = 5, RuleStatement = 6, RuleStatementWithoutDeclaration = 7, 
     RuleEmpty = 8, RuleIfBlock = 9, RuleElseBlock = 10, RuleWhileBlock = 11, 
     RuleRet = 12, RuleDeclaration = 13, RuleRawDeclaration = 14, RuleExpAssignment = 15, 
     RuleAssignment = 16, RuleExpression = 17
@@ -52,7 +52,7 @@ public:
   class ParameterContext;
   class BlockContext;
   class StatementContext;
-  class StatementWithoutAssignmentContext;
+  class StatementWithoutDeclarationContext;
   class EmptyContext;
   class IfBlockContext;
   class ElseBlockContext;
@@ -166,8 +166,8 @@ public:
   public:
     StatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    StatementWithoutAssignmentContext *statementWithoutAssignment();
-    AssignmentContext *assignment();
+    StatementWithoutDeclarationContext *statementWithoutDeclaration();
+    DeclarationContext *declaration();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -178,12 +178,12 @@ public:
 
   StatementContext* statement();
 
-  class  StatementWithoutAssignmentContext : public antlr4::ParserRuleContext {
+  class  StatementWithoutDeclarationContext : public antlr4::ParserRuleContext {
   public:
-    StatementWithoutAssignmentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    StatementWithoutDeclarationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     EmptyContext *empty();
-    DeclarationContext *declaration();
+    AssignmentContext *assignment();
     RetContext *ret();
     IfBlockContext *ifBlock();
     WhileBlockContext *whileBlock();
@@ -196,7 +196,7 @@ public:
    
   };
 
-  StatementWithoutAssignmentContext* statementWithoutAssignment();
+  StatementWithoutDeclarationContext* statementWithoutDeclaration();
 
   class  EmptyContext : public antlr4::ParserRuleContext {
   public:
@@ -219,7 +219,7 @@ public:
     IfBlockContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *IF();
-    StatementWithoutAssignmentContext *statementWithoutAssignment();
+    StatementWithoutDeclarationContext *statementWithoutDeclaration();
     ExpressionContext *expression();
     ExpAssignmentContext *expAssignment();
     ElseBlockContext *elseBlock();
@@ -255,7 +255,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *WHILE();
     ExpressionContext *expression();
-    StatementWithoutAssignmentContext *statementWithoutAssignment();
+    StatementWithoutDeclarationContext *statementWithoutDeclaration();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

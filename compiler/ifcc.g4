@@ -9,12 +9,12 @@ parameters : parameter (',' parameter)* ;
 parameter : TYPE VAR ;
 
 block : '{' statement* '}';
-statement : statementWithoutAssignment
-          | assignment;
+statement : statementWithoutDeclaration
+          | declaration;
 
-// Statement without assignment for inline statment (next to if, while...)
-statementWithoutAssignment:  empty
-                          | declaration
+// Statement without declaration for inline statment (next to if, while...)
+statementWithoutDeclaration:  empty
+                          | assignment
                           | ret
                           | ifBlock
                           | whileBlock
@@ -22,10 +22,10 @@ statementWithoutAssignment:  empty
 
 empty: expression? SEMICOLON;
 
-ifBlock: IF '(' (expression | expAssignment) ')' statementWithoutAssignment elseBlock?;
+ifBlock: IF '(' (expression | expAssignment) ')' statementWithoutDeclaration elseBlock?;
 elseBlock: ELSE statement;
 
-whileBlock: WHILE '(' expression ')' statementWithoutAssignment;
+whileBlock: WHILE '(' expression ')' statementWithoutDeclaration;
 
 ret : RETURN (expression | expAssignment) SEMICOLON;
 declaration : TYPE rawDeclaration (',' rawDeclaration)* SEMICOLON;

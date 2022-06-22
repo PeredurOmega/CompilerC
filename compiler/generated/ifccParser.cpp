@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 
 #include "ifccListener.h"
@@ -45,7 +45,7 @@ void ifccParserInitialize() {
   auto staticData = std::make_unique<IfccParserStaticData>(
     std::vector<std::string>{
       "axiom", "prog", "function", "parameters", "parameter", "block", "statement", 
-      "statementWithoutAssignment", "empty", "ifBlock", "elseBlock", "whileBlock", 
+      "statementWithoutDeclaration", "empty", "ifBlock", "elseBlock", "whileBlock", 
       "ret", "declaration", "rawDeclaration", "expAssignment", "assignment", 
       "expression"
     },
@@ -92,8 +92,8 @@ void ifccParserInitialize() {
   	0,0,59,57,1,0,0,0,59,60,1,0,0,0,60,7,1,0,0,0,61,59,1,0,0,0,62,63,5,33,
   	0,0,63,64,5,36,0,0,64,9,1,0,0,0,65,69,5,5,0,0,66,68,3,12,6,0,67,66,1,
   	0,0,0,68,71,1,0,0,0,69,67,1,0,0,0,69,70,1,0,0,0,70,72,1,0,0,0,71,69,1,
-  	0,0,0,72,73,5,6,0,0,73,11,1,0,0,0,74,77,3,14,7,0,75,77,3,32,16,0,76,74,
-  	1,0,0,0,76,75,1,0,0,0,77,13,1,0,0,0,78,85,3,16,8,0,79,85,3,26,13,0,80,
+  	0,0,0,72,73,5,6,0,0,73,11,1,0,0,0,74,77,3,14,7,0,75,77,3,26,13,0,76,74,
+  	1,0,0,0,76,75,1,0,0,0,77,13,1,0,0,0,78,85,3,16,8,0,79,85,3,32,16,0,80,
   	85,3,24,12,0,81,85,3,18,9,0,82,85,3,22,11,0,83,85,3,10,5,0,84,78,1,0,
   	0,0,84,79,1,0,0,0,84,80,1,0,0,0,84,81,1,0,0,0,84,82,1,0,0,0,84,83,1,0,
   	0,0,85,15,1,0,0,0,86,88,3,34,17,0,87,86,1,0,0,0,87,88,1,0,0,0,88,89,1,
@@ -664,12 +664,12 @@ ifccParser::StatementContext::StatementContext(ParserRuleContext *parent, size_t
   : ParserRuleContext(parent, invokingState) {
 }
 
-ifccParser::StatementWithoutAssignmentContext* ifccParser::StatementContext::statementWithoutAssignment() {
-  return getRuleContext<ifccParser::StatementWithoutAssignmentContext>(0);
+ifccParser::StatementWithoutDeclarationContext* ifccParser::StatementContext::statementWithoutDeclaration() {
+  return getRuleContext<ifccParser::StatementWithoutDeclarationContext>(0);
 }
 
-ifccParser::AssignmentContext* ifccParser::StatementContext::assignment() {
-  return getRuleContext<ifccParser::AssignmentContext>(0);
+ifccParser::DeclarationContext* ifccParser::StatementContext::declaration() {
+  return getRuleContext<ifccParser::DeclarationContext>(0);
 }
 
 
@@ -711,23 +711,34 @@ ifccParser::StatementContext* ifccParser::statement() {
   try {
     setState(76);
     _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 4, _ctx)) {
-    case 1: {
-      enterOuterAlt(_localctx, 1);
-      setState(74);
-      statementWithoutAssignment();
-      break;
-    }
+    switch (_input->LA(1)) {
+      case ifccParser::T__1:
+      case ifccParser::T__4:
+      case ifccParser::T__7:
+      case ifccParser::T__8:
+      case ifccParser::T__9:
+      case ifccParser::T__10:
+      case ifccParser::SEMICOLON:
+      case ifccParser::IF:
+      case ifccParser::WHILE:
+      case ifccParser::RETURN:
+      case ifccParser::CONST:
+      case ifccParser::VAR: {
+        enterOuterAlt(_localctx, 1);
+        setState(74);
+        statementWithoutDeclaration();
+        break;
+      }
 
-    case 2: {
-      enterOuterAlt(_localctx, 2);
-      setState(75);
-      assignment();
-      break;
-    }
+      case ifccParser::TYPE: {
+        enterOuterAlt(_localctx, 2);
+        setState(75);
+        declaration();
+        break;
+      }
 
     default:
-      break;
+      throw NoViableAltException(this);
     }
    
   }
@@ -740,64 +751,64 @@ ifccParser::StatementContext* ifccParser::statement() {
   return _localctx;
 }
 
-//----------------- StatementWithoutAssignmentContext ------------------------------------------------------------------
+//----------------- StatementWithoutDeclarationContext ------------------------------------------------------------------
 
-ifccParser::StatementWithoutAssignmentContext::StatementWithoutAssignmentContext(ParserRuleContext *parent, size_t invokingState)
+ifccParser::StatementWithoutDeclarationContext::StatementWithoutDeclarationContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-ifccParser::EmptyContext* ifccParser::StatementWithoutAssignmentContext::empty() {
+ifccParser::EmptyContext* ifccParser::StatementWithoutDeclarationContext::empty() {
   return getRuleContext<ifccParser::EmptyContext>(0);
 }
 
-ifccParser::DeclarationContext* ifccParser::StatementWithoutAssignmentContext::declaration() {
-  return getRuleContext<ifccParser::DeclarationContext>(0);
+ifccParser::AssignmentContext* ifccParser::StatementWithoutDeclarationContext::assignment() {
+  return getRuleContext<ifccParser::AssignmentContext>(0);
 }
 
-ifccParser::RetContext* ifccParser::StatementWithoutAssignmentContext::ret() {
+ifccParser::RetContext* ifccParser::StatementWithoutDeclarationContext::ret() {
   return getRuleContext<ifccParser::RetContext>(0);
 }
 
-ifccParser::IfBlockContext* ifccParser::StatementWithoutAssignmentContext::ifBlock() {
+ifccParser::IfBlockContext* ifccParser::StatementWithoutDeclarationContext::ifBlock() {
   return getRuleContext<ifccParser::IfBlockContext>(0);
 }
 
-ifccParser::WhileBlockContext* ifccParser::StatementWithoutAssignmentContext::whileBlock() {
+ifccParser::WhileBlockContext* ifccParser::StatementWithoutDeclarationContext::whileBlock() {
   return getRuleContext<ifccParser::WhileBlockContext>(0);
 }
 
-ifccParser::BlockContext* ifccParser::StatementWithoutAssignmentContext::block() {
+ifccParser::BlockContext* ifccParser::StatementWithoutDeclarationContext::block() {
   return getRuleContext<ifccParser::BlockContext>(0);
 }
 
 
-size_t ifccParser::StatementWithoutAssignmentContext::getRuleIndex() const {
-  return ifccParser::RuleStatementWithoutAssignment;
+size_t ifccParser::StatementWithoutDeclarationContext::getRuleIndex() const {
+  return ifccParser::RuleStatementWithoutDeclaration;
 }
 
-void ifccParser::StatementWithoutAssignmentContext::enterRule(tree::ParseTreeListener *listener) {
+void ifccParser::StatementWithoutDeclarationContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterStatementWithoutAssignment(this);
+    parserListener->enterStatementWithoutDeclaration(this);
 }
 
-void ifccParser::StatementWithoutAssignmentContext::exitRule(tree::ParseTreeListener *listener) {
+void ifccParser::StatementWithoutDeclarationContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<ifccListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitStatementWithoutAssignment(this);
+    parserListener->exitStatementWithoutDeclaration(this);
 }
 
 
-std::any ifccParser::StatementWithoutAssignmentContext::accept(tree::ParseTreeVisitor *visitor) {
+std::any ifccParser::StatementWithoutDeclarationContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<ifccVisitor*>(visitor))
-    return parserVisitor->visitStatementWithoutAssignment(this);
+    return parserVisitor->visitStatementWithoutDeclaration(this);
   else
     return visitor->visitChildren(this);
 }
 
-ifccParser::StatementWithoutAssignmentContext* ifccParser::statementWithoutAssignment() {
-  StatementWithoutAssignmentContext *_localctx = _tracker.createInstance<StatementWithoutAssignmentContext>(_ctx, getState());
-  enterRule(_localctx, 14, ifccParser::RuleStatementWithoutAssignment);
+ifccParser::StatementWithoutDeclarationContext* ifccParser::statementWithoutDeclaration() {
+  StatementWithoutDeclarationContext *_localctx = _tracker.createInstance<StatementWithoutDeclarationContext>(_ctx, getState());
+  enterRule(_localctx, 14, ifccParser::RuleStatementWithoutDeclaration);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -809,58 +820,51 @@ ifccParser::StatementWithoutAssignmentContext* ifccParser::statementWithoutAssig
   try {
     setState(84);
     _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case ifccParser::T__1:
-      case ifccParser::T__7:
-      case ifccParser::T__8:
-      case ifccParser::T__9:
-      case ifccParser::T__10:
-      case ifccParser::SEMICOLON:
-      case ifccParser::CONST:
-      case ifccParser::VAR: {
-        enterOuterAlt(_localctx, 1);
-        setState(78);
-        empty();
-        break;
-      }
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 5, _ctx)) {
+    case 1: {
+      enterOuterAlt(_localctx, 1);
+      setState(78);
+      empty();
+      break;
+    }
 
-      case ifccParser::TYPE: {
-        enterOuterAlt(_localctx, 2);
-        setState(79);
-        declaration();
-        break;
-      }
+    case 2: {
+      enterOuterAlt(_localctx, 2);
+      setState(79);
+      assignment();
+      break;
+    }
 
-      case ifccParser::RETURN: {
-        enterOuterAlt(_localctx, 3);
-        setState(80);
-        ret();
-        break;
-      }
+    case 3: {
+      enterOuterAlt(_localctx, 3);
+      setState(80);
+      ret();
+      break;
+    }
 
-      case ifccParser::IF: {
-        enterOuterAlt(_localctx, 4);
-        setState(81);
-        ifBlock();
-        break;
-      }
+    case 4: {
+      enterOuterAlt(_localctx, 4);
+      setState(81);
+      ifBlock();
+      break;
+    }
 
-      case ifccParser::WHILE: {
-        enterOuterAlt(_localctx, 5);
-        setState(82);
-        whileBlock();
-        break;
-      }
+    case 5: {
+      enterOuterAlt(_localctx, 5);
+      setState(82);
+      whileBlock();
+      break;
+    }
 
-      case ifccParser::T__4: {
-        enterOuterAlt(_localctx, 6);
-        setState(83);
-        block();
-        break;
-      }
+    case 6: {
+      enterOuterAlt(_localctx, 6);
+      setState(83);
+      block();
+      break;
+    }
 
     default:
-      throw NoViableAltException(this);
+      break;
     }
    
   }
@@ -964,8 +968,8 @@ tree::TerminalNode* ifccParser::IfBlockContext::IF() {
   return getToken(ifccParser::IF, 0);
 }
 
-ifccParser::StatementWithoutAssignmentContext* ifccParser::IfBlockContext::statementWithoutAssignment() {
-  return getRuleContext<ifccParser::StatementWithoutAssignmentContext>(0);
+ifccParser::StatementWithoutDeclarationContext* ifccParser::IfBlockContext::statementWithoutDeclaration() {
+  return getRuleContext<ifccParser::StatementWithoutDeclarationContext>(0);
 }
 
 ifccParser::ExpressionContext* ifccParser::IfBlockContext::expression() {
@@ -1043,7 +1047,7 @@ ifccParser::IfBlockContext* ifccParser::ifBlock() {
     setState(97);
     match(ifccParser::T__2);
     setState(98);
-    statementWithoutAssignment();
+    statementWithoutDeclaration();
     setState(100);
     _errHandler->sync(this);
 
@@ -1149,8 +1153,8 @@ ifccParser::ExpressionContext* ifccParser::WhileBlockContext::expression() {
   return getRuleContext<ifccParser::ExpressionContext>(0);
 }
 
-ifccParser::StatementWithoutAssignmentContext* ifccParser::WhileBlockContext::statementWithoutAssignment() {
-  return getRuleContext<ifccParser::StatementWithoutAssignmentContext>(0);
+ifccParser::StatementWithoutDeclarationContext* ifccParser::WhileBlockContext::statementWithoutDeclaration() {
+  return getRuleContext<ifccParser::StatementWithoutDeclarationContext>(0);
 }
 
 
@@ -1200,7 +1204,7 @@ ifccParser::WhileBlockContext* ifccParser::whileBlock() {
     setState(108);
     match(ifccParser::T__2);
     setState(109);
-    statementWithoutAssignment();
+    statementWithoutDeclaration();
    
   }
   catch (RecognitionException &e) {

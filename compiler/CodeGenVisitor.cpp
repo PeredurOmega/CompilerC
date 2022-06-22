@@ -132,8 +132,8 @@ CodeGenVisitor::visitStatement(ifccParser::StatementContext *ctx) {
 }
 
 antlrcpp::Any
-CodeGenVisitor::visitStatementWithoutAssignment(
-        ifccParser::StatementWithoutAssignmentContext *ctx) {
+CodeGenVisitor::visitStatementWithoutDeclaration(
+        ifccParser::StatementWithoutDeclarationContext *ctx) {
     auto t = visitChildren(ctx);
     auto *instruction = any_cast<IrInstruction *>(t);
     return instruction;

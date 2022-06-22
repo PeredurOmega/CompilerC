@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -35,8 +35,8 @@ public:
   virtual void enterStatement(ifccParser::StatementContext *ctx) = 0;
   virtual void exitStatement(ifccParser::StatementContext *ctx) = 0;
 
-  virtual void enterStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext *ctx) = 0;
-  virtual void exitStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext *ctx) = 0;
+  virtual void enterStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext *ctx) = 0;
+  virtual void exitStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext *ctx) = 0;
 
   virtual void enterEmpty(ifccParser::EmptyContext *ctx) = 0;
   virtual void exitEmpty(ifccParser::EmptyContext *ctx) = 0;

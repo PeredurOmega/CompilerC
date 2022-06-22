@@ -30,8 +30,8 @@ public:
 
     antlrcpp::Any visitStatement(ifccParser::StatementContext *ctx) override;
 
-    antlrcpp::Any visitStatementWithoutAssignment(
-            ifccParser::StatementWithoutAssignmentContext *ctx) override;
+    antlrcpp::Any visitStatementWithoutDeclaration(
+            ifccParser::StatementWithoutDeclarationContext *ctx) override;
 
     antlrcpp::Any
     visitDeclaration(ifccParser::DeclarationContext *ctx) override;

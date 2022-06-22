@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -33,7 +33,7 @@ public:
 
     virtual std::any visitStatement(ifccParser::StatementContext *context) = 0;
 
-    virtual std::any visitStatementWithoutAssignment(ifccParser::StatementWithoutAssignmentContext *context) = 0;
+    virtual std::any visitStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext *context) = 0;
 
     virtual std::any visitEmpty(ifccParser::EmptyContext *context) = 0;
 
