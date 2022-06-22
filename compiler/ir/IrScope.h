@@ -36,6 +36,7 @@ public:
      */
     virtual int conditionalJump() = 0;
 
+    void insertParameter(string &varName, int offset);
 protected:
     int *label;
     unordered_map<string, int> symbolTable;

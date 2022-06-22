@@ -14,6 +14,12 @@ public:
 
     antlrcpp::Any visitFunction(ifccParser::FunctionContext *ctx) override;
 
+    antlrcpp::Any visitFunctionCall(ifccParser::FunctionCallContext *ctx) override;
+
+    antlrcpp::Any visitParameters(ifccParser::ParametersContext *ctx) override;
+
+    antlrcpp::Any visitParameter(ifccParser::ParameterContext *ctx) override;
+
     antlrcpp::Any visitBlock(ifccParser::BlockContext *ctx) override;
 
     antlrcpp::Any visitIfBlock(ifccParser::IfBlockContext *ctx) override;

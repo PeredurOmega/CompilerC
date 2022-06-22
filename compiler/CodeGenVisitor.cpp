@@ -39,10 +39,36 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
         }
     }
 
-    auto *fun = new Function(ctx->VAR()->getText(), returnType);
+    auto parameters = any_cast<vector<Parameter *>>(visitParameters(ctx->parameters()));
+    auto *fun = new Function(ctx->VAR()->getText(), returnType, parameters);
     auto block = visitBlock(ctx->block());
     fun->setBlock((Block *) any_cast<IrInstruction *>(block));
     return fun;
+}
+
+antlrcpp::Any CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext *ctx) {
+
+    return ifccBaseVisitor::visitFunctionCall(ctx);
+}
+
+antlrcpp::Any CodeGenVisitor::visitParameters(ifccParser::ParametersContext *ctx) {
+    auto parameters = new vector<Parameter *>();
+    for(auto parameter: ctx->parameter()) {
+        parameters->push_back(any_cast<Parameter *>(visitParameter(parameter)));
+    }
+    return parameters;
+}
+
+antlrcpp::Any CodeGenVisitor::visitParameter(ifccParser::ParameterContext *ctx) {
+    PrimaryType *type;
+    string rawType = ctx->TYPE()->getText();
+    try {
+        type = PrimaryType::parse(rawType);
+    } catch (const InvalidType &e) {
+        //TODO REPLACE BY COMPILATION EXCEPTION
+        cerr << e.what() << " at line " << ctx->start->getLine() << endl;
+    }
+    return new Parameter(type, ctx->VAR()->getText());
 }
 
 antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {

@@ -11,10 +11,12 @@
 #include "Block.h"
 #include "TypeSymbol.h"
 
+class Parameter;
+
 class Function : public Block {
 public:
     //TODO HANDLE PARAMETERS
-    explicit Function(string name, const IrType *returnType);
+    explicit Function(string name, const IrType *returnType, const vector<Parameter *>& parameters);
 
     void renderX86(ostream &o) const override;
 
@@ -27,10 +29,16 @@ public:
 private:
     const string MAIN = "main";
     const IrType *returnType;
-    const string name;
+    string name;
     int endLabel = -1;
-    //vector<IrInstr> blocks;
+    vector<Parameter *> parameters;
 };
 
+class Parameter {
+public:
+    explicit Parameter(PrimaryType *type, string name);
+    PrimaryType *type;
+    string name;
+};
 
 #endif //LIBANTLR4_FUNCTION_H

@@ -22,3 +22,13 @@ PrimaryType *PrimaryType::parse(const string &type) {
     else if (type == "char") return new PrimaryType(CHAR);
     else throw InvalidType();
 }
+
+string PrimaryType::text(PrimaryType* type) {
+    if(*type == PrimaryType::INT) {
+        return "int";
+    }else if(*type == PrimaryType::CHAR) {
+        return "char";
+    }else{
+        throw exception();
+    }
+};
