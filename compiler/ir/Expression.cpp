@@ -7,18 +7,34 @@
 #include <utility>
 #include <iostream>
 
-FunctionCall::FunctionCall(vector<string *> *parameters) : parameters(parameters){
-
-}
+FunctionCall::FunctionCall(string name, vector<Expression*> *arguments) : name(std::move(name)), arguments(arguments) { }
 
 void FunctionCall::renderX86(ostream &o) const {
-
+    vector<string> registersName = {"%edi" , "%esi", "%edx", "%ecx", "%r8d", "%r9d"};
+    for (int i = (int) arguments->size()-1; i >= 0; --i) {
+        Expression* expression = (*arguments)[i];
+        expression->renderX86(o);
+        if (i < 6) {
+            o << "    movl    " << expression->offset << "(%rbp), " + registersName[i] << endl;
+        }
+        else {
+            o << "    pushq    " << expression->offset << "(%rbp)" << endl;
+        }
+    }
+    o << "    call    " << name << endl;
+    if (arguments->size() > 6) {
+        o << "    addq    $" << 8*(arguments->size()-6) << ", %rsp" << endl;
+    }
+    o << "    movl    %eax, " << offset << "(%rbp)" << endl;
 }
 
 void FunctionCall::affect(IrScope *owner) {
-
+    setOwner(owner);
+    for (auto expression : *arguments) {
+        expression->affect(owner);
+    }
+    offset = owner->insertTempVariable();
 }
-
 
 void Variable::renderX86(ostream &o) const {
     if (assignTo != nullptr) {

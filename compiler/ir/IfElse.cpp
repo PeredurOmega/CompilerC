@@ -31,6 +31,7 @@ void IfStatement::affect(IrScope *owner) {
     compare->affect(owner);
     firstLabel = owner->getNewLabel();
     if (finalLabel == 0) finalLabel = owner->getNewLabel();
+    content->setOwner(owner);
     content->affect(owner);
     if (elseStatement != nullptr) {
         elseStatement->finalLabel = finalLabel;
@@ -50,6 +51,7 @@ void ElseStatement::affect(IrScope *owner) {
     }
     setOwner(owner);
     label = owner->getNewLabel();
+    content->setOwner(owner);
     content->affect(owner);
 }
 

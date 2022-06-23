@@ -10,7 +10,7 @@ parameters : parameter (',' parameter)* ;
 parameter : TYPE VAR ;
 
 arguments : argument (',' argument)* ;
-argument : CONST | VAR ;
+argument : expression ;
 
 block : '{' statement* '}';
 statement : statementWithoutAssignment

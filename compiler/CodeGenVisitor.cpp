@@ -54,7 +54,12 @@ antlrcpp::Any CodeGenVisitor::visitFunctionDeclaration(ifccParser::FunctionDecla
 }
 
 antlrcpp::Any CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext *ctx) {
-    return (IrInstruction *) new Empty();
+    auto* arguments = new vector<Expression *>;
+    if (ctx->arguments() != nullptr){
+        arguments = any_cast<vector<Expression *>*>(visitArguments(ctx->arguments()));
+    }
+
+    return (IrInstruction *) new FunctionCall(ctx->VAR()->getText(), arguments);
 }
 
 antlrcpp::Any CodeGenVisitor::visitParameters(ifccParser::ParametersContext *ctx) {
@@ -78,11 +83,16 @@ antlrcpp::Any CodeGenVisitor::visitParameter(ifccParser::ParameterContext *ctx) 
 }
 
 antlrcpp::Any CodeGenVisitor::visitArguments(ifccParser::ArgumentsContext *ctx) {
-    return (IrInstruction *) new Empty();
+    auto* arguments = new vector<Expression*>();
+    for(auto argument: ctx->argument()) {
+        arguments->push_back(any_cast<Expression*>(visitArgument(argument)));
+    }
+    return arguments;
 }
 
 antlrcpp::Any CodeGenVisitor::visitArgument(ifccParser::ArgumentContext *ctx) {
-    return (IrInstruction *) new Empty();
+    auto *expr = (Expression *) any_cast<IrInstruction *>(visit(ctx->expression()));
+    return expr;
 }
 
 antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {

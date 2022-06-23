@@ -32,6 +32,7 @@ private:
     string name;
     int endLabel = -1;
     vector<Parameter *> parameters;
+    unordered_map<string, int> registers;
 };
 
 class Parameter {
