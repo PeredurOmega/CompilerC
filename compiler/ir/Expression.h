@@ -10,6 +10,7 @@
 #include "IrElement.h"
 #include "IrScope.h"
 #include "IrInstruction.h"
+#include "Function.h"
 
 using namespace std;
 
@@ -27,6 +28,18 @@ public:
      * When not nullptr, we should store the value of the expression in %eax.
      */
     string *assignTo = nullptr;
+};
+
+class FunctionCall : public Expression {
+public:
+    explicit FunctionCall(vector<string *> *parameters);
+
+    void renderX86(ostream &o) const override;
+
+    void affect(IrScope *owner) override;
+
+private:
+    vector<string *> *parameters;
 };
 
 class Return : public Expression {

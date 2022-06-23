@@ -173,6 +173,9 @@ public:
     void renderX86(ostream &o) const override;
 
     void affect(IrScope *owner) override;
+
+    int firstLabel;
+    int secondLabel;
 };
 
 class LogicalOr : public OpExpression {
@@ -182,6 +185,10 @@ public:
     void renderX86(ostream &o) const override;
 
     void affect(IrScope *owner) override;
+
+    int firstLabel;
+    int secondLabel;
+    int thirdLabel;
 };
 
 #endif //LIBANTLR4_OPEXPRESSION_H

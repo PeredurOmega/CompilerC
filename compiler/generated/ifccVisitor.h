@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -74,6 +74,8 @@ public:
     virtual std::any visitTimesDivModulo(ifccParser::TimesDivModuloContext *context) = 0;
 
     virtual std::any visitEqual(ifccParser::EqualContext *context) = 0;
+
+    virtual std::any visitFunctionCall(ifccParser::FunctionCallContext *context) = 0;
 
     virtual std::any visitVariable(ifccParser::VariableContext *context) = 0;
 

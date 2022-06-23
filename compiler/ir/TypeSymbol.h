@@ -42,6 +42,7 @@ public:
     explicit PrimaryType(int k) : IrType(k) {}
 
     static PrimaryType *parse(const string &type);
+    static string text(PrimaryType* type);
 };
 
 class InvalidType : exception {

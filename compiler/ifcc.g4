@@ -17,6 +17,7 @@ statementWithoutAssignment:  empty
                           | declaration
                           | ret
                           | ifBlock
+                          | whileBlock
                           | block;
 
 empty: expression? SEMICOLON;
@@ -35,6 +36,7 @@ assignment : expAssignment SEMICOLON;
 expression : VAR #variable
             |CONST #constant
             |'(' (expression | expAssignment)')' #parenthesis
+            |VAR '(' parameters? ')' #functionCall
             |op=('-'|'!'|'+'|'~') expression #unary
             |expression op=('*' | '/' | '%') expression #timesDivModulo
             |expression op=('+' | '-') expression #addSub

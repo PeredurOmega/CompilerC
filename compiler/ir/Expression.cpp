@@ -7,6 +7,19 @@
 #include <utility>
 #include <iostream>
 
+FunctionCall::FunctionCall(vector<string *> *parameters) : parameters(parameters){
+
+}
+
+void FunctionCall::renderX86(ostream &o) const {
+
+}
+
+void FunctionCall::affect(IrScope *owner) {
+
+}
+
+
 void Variable::renderX86(ostream &o) const {
     if (assignTo != nullptr) {
         o << "    movl    " << offset << "(%rbp), %eax #" << name << endl;

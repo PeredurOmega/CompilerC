@@ -25,6 +25,10 @@ void IrScope::insertInitializedVariable(string &varName) {
     symbolTable[varName] = currentOffset;
 }
 
+void IrScope::insertParameter(string &varName, int offset) {
+    symbolTable[varName] = offset;
+}
+
 void IrScope::insertDeclaration(string &varName) {
     // Offset equals to zero means the value has been declared but not
     // initialized yet - Useful for DCE
