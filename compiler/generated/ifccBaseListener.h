@@ -25,11 +25,20 @@ public:
   virtual void enterFunction(ifccParser::FunctionContext * /*ctx*/) override { }
   virtual void exitFunction(ifccParser::FunctionContext * /*ctx*/) override { }
 
+  virtual void enterFunctionDeclaration(ifccParser::FunctionDeclarationContext * /*ctx*/) override { }
+  virtual void exitFunctionDeclaration(ifccParser::FunctionDeclarationContext * /*ctx*/) override { }
+
   virtual void enterParameters(ifccParser::ParametersContext * /*ctx*/) override { }
   virtual void exitParameters(ifccParser::ParametersContext * /*ctx*/) override { }
 
   virtual void enterParameter(ifccParser::ParameterContext * /*ctx*/) override { }
   virtual void exitParameter(ifccParser::ParameterContext * /*ctx*/) override { }
+
+  virtual void enterArguments(ifccParser::ArgumentsContext * /*ctx*/) override { }
+  virtual void exitArguments(ifccParser::ArgumentsContext * /*ctx*/) override { }
+
+  virtual void enterArgument(ifccParser::ArgumentContext * /*ctx*/) override { }
+  virtual void exitArgument(ifccParser::ArgumentContext * /*ctx*/) override { }
 
   virtual void enterBlock(ifccParser::BlockContext * /*ctx*/) override { }
   virtual void exitBlock(ifccParser::BlockContext * /*ctx*/) override { }

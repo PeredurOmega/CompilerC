@@ -46,9 +46,12 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
     return fun;
 }
 
-antlrcpp::Any CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext *ctx) {
+antlrcpp::Any CodeGenVisitor::visitFunctionDeclaration(ifccParser::FunctionDeclarationContext *ctx) {
+    return (IrInstruction *) new Empty();
+}
 
-    return ifccBaseVisitor::visitFunctionCall(ctx);
+antlrcpp::Any CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext *ctx) {
+    return (IrInstruction *) new Empty();
 }
 
 antlrcpp::Any CodeGenVisitor::visitParameters(ifccParser::ParametersContext *ctx) {
@@ -69,6 +72,14 @@ antlrcpp::Any CodeGenVisitor::visitParameter(ifccParser::ParameterContext *ctx) 
         cerr << e.what() << " at line " << ctx->start->getLine() << endl;
     }
     return new Parameter(type, ctx->VAR()->getText());
+}
+
+antlrcpp::Any CodeGenVisitor::visitArguments(ifccParser::ArgumentsContext *ctx) {
+    return (IrInstruction *) new Empty();
+}
+
+antlrcpp::Any CodeGenVisitor::visitArgument(ifccParser::ArgumentContext *ctx) {
+    return (IrInstruction *) new Empty();
 }
 
 antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
@@ -424,4 +435,3 @@ CodeGenVisitor::visitWhileBlock(ifccParser::WhileBlockContext *ctx) {
     if (content->alwaysReturn) whileStatement->conditionalReturn = true;
     return (IrInstruction *) whileStatement;
 }
-
