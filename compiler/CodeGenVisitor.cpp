@@ -39,8 +39,11 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
         }
     }
 
-    auto parameters = any_cast<vector<Parameter *>>(visitParameters(ctx->parameters()));
-    auto *fun = new Function(ctx->VAR()->getText(), returnType, parameters);
+    auto* parameters = new vector<Parameter *>;
+    if (ctx->parameters() != nullptr){
+        parameters = any_cast<vector<Parameter *>*>(visitParameters(ctx->parameters()));
+    }
+    auto *fun = new Function(ctx->VAR()->getText(), returnType, *parameters);
     auto block = visitBlock(ctx->block());
     fun->setBlock((Block *) any_cast<IrInstruction *>(block));
     return fun;
@@ -55,7 +58,7 @@ antlrcpp::Any CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext 
 }
 
 antlrcpp::Any CodeGenVisitor::visitParameters(ifccParser::ParametersContext *ctx) {
-    auto parameters = new vector<Parameter *>();
+    auto* parameters = new vector<Parameter *>();
     for(auto parameter: ctx->parameter()) {
         parameters->push_back(any_cast<Parameter *>(visitParameter(parameter)));
     }

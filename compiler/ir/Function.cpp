@@ -19,9 +19,12 @@ Function::Function(string name, const IrType *returnType, const vector<Parameter
         offset += 8;
         this->name += PrimaryType::text(parameter->type) + ",";
     }
-    this->name.replace(this->name.find(",)"), 1, ")");
     if(!parameters.empty()) {
         this->name += ")";
+    }
+    int replaceOffset = (int)this->name.find(",)");
+    if(replaceOffset != -1) {
+        this->name.replace(replaceOffset, 2, ")");
     }
 }
 
