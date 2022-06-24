@@ -9,7 +9,7 @@ int nested_factorial(int n){
 
 int non_nested_factorial(int n){
     int facto = 1;
-    while(n!=1){
+    while(n>1){
         facto = facto * n;
         n = n-1;
     }
@@ -17,14 +17,12 @@ int non_nested_factorial(int n){
 }
 
 int main(){
-    int a = 5;
-    int b = 6;
-    int test = 0;
-    if(nested_factorial(5)== non_nested_factorial(5)){
-        test++;
+    int i = 0, nb = 15;
+    while(i<nb){
+        if(non_nested_factorial(i)!=nested_factorial(i)){
+            return 0;
+        }
+        ++i;
     }
-    if(nested_factorial(6)== non_nested_factorial(6)){
-        test++;
-    }
-    return test;
+    return 1;
 }
