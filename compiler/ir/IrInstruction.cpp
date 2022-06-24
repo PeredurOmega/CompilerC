@@ -23,3 +23,11 @@ void Empty::affect(IrScope *owner) {
 void Empty::renderX86(ostream &o) const {
 
 }
+
+set<string *> *Empty::use() {
+    return new set<string *>();
+}
+
+set<string *> *Empty::def() {
+    return new set<string *>();
+}

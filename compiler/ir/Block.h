@@ -24,9 +24,7 @@ public:
 
     int conditionalJump() override;
 
-private:
     vector<IrInstruction *> instructions;
 };
-
 
 #endif //LIBANTLR4_BLOCK_H

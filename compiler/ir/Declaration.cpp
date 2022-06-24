@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <set>
 #include "Declaration.h"
 
 Declaration::Declaration(PrimaryType *type) : IrInstruction(), type(type) {
@@ -35,6 +36,31 @@ void Declaration::affect(IrScope *owner) {
             owner->insertDeclaration(*d->name);
         }
     }
+}
+
+set<string *> *Declaration::def() {
+    auto *def = new set<string *>();
+    for (auto *d: declarations) {
+        def->insert(d->name);
+        if (d->init != nullptr) {
+            for (auto *de: *d->init->def()) {
+                def->insert(de);
+            }
+        }
+    }
+    return def;
+}
+
+set<string *> *Declaration::use() {
+    auto *use = new set<string *>();
+    for (auto *d: declarations) {
+        if (d->init != nullptr) {
+            for (auto *de: *d->init->use()) {
+                use->insert(de);
+            }
+        }
+    }
+    return use;
 }
 
 RawDeclaration::RawDeclaration(string *name, Expression *init) : name(name),

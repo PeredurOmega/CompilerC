@@ -8,8 +8,10 @@
 
 #include "Expression.h"
 
-class WhileStatement : public Expression {
+class WhileStatement : public BlockWrapper {
 public:
+
+    Expression *compare;
 
     explicit WhileStatement(Expression *compare, IrInstruction *content);
 
@@ -17,9 +19,10 @@ public:
 
     void affect(IrScope *owner) override;
 
+    set<string*>* use() override;
+
+    set<string*>* def() override;
 private:
-    Expression *compare;
-    IrInstruction *content;
     int compareLabel;
     int contentLabel;
 };

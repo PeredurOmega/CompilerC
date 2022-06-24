@@ -9,20 +9,20 @@
 
 using namespace std;
 
-Function::Function(string name, const IrType *returnType, const vector<Parameter *>& parameters) : returnType(returnType), name(std::move(name)), parameters(parameters) {
+Function::Function(string name, const IrType *returnType, vector<Parameter *>* parameters) : returnType(returnType), name(std::move(name)), parameters(parameters) {
     int offset = 16;
-    if(!parameters.empty()) {
+    /*if(!parameters->empty()) {
         this->name += "(";
     }
-    for (auto parameter : parameters) {
+    for (auto parameter : *parameters) {
         insertParameter(parameter->name, offset);
         offset += 8;
         this->name += PrimaryType::text(parameter->type) + ",";
     }
     this->name.replace(this->name.find(",)"), 1, ")");
-    if(!parameters.empty()) {
+    if(!parameters->empty()) {
         this->name += ")";
-    }
+    }*/
 }
 
 void Function::renderX86(ostream &o) const {

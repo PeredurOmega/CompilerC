@@ -37,6 +37,10 @@ public:
     virtual int conditionalJump() = 0;
 
     void insertParameter(string &varName, int offset);
+
+    set<string*>* use() override;
+
+    set<string*>* def() override;
 protected:
     int *label;
     unordered_map<string, int> symbolTable;

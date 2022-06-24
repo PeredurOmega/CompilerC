@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <set>
 #include <unordered_map>
 #include "TypeSymbol.h"
 #include "Expression.h"
@@ -29,7 +30,10 @@ public:
 
     void renderX86(ostream &o) const override;
 
-private:
+    set<string*>* use() override;
+
+    set<string*>* def() override;
+
     PrimaryType *type;
     vector<RawDeclaration *> declarations;
 };

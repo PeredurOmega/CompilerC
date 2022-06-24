@@ -16,6 +16,9 @@ public:
 
     void renderX86(ostream &o) const override = 0;
 
+    set<string*>* use() override;
+
+    set<string*>* def() override;
 protected:
     Expression *rExpr;
 };

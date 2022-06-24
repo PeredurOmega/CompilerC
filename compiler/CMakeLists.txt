@@ -14,7 +14,7 @@ set(compiler-GENERATED_SRC
 
 set(compiler-IR_SRC
         ${PROJECT_SOURCE_DIR}/compiler/ir/Prog.cpp
-        ir/IrElement.cpp ir/IrElement.h ir/Function.cpp ir/Function.h ir/IrScope.cpp ir/IrScope.h ir/Block.cpp ir/Block.h ir/TypeSymbol.cpp ir/TypeSymbol.h ir/IrInstruction.cpp ir/IrInstruction.h ir/Declaration.cpp ir/Declaration.h ir/Expression.cpp ir/Expression.h ir/OpExpression.cpp ir/OpExpression.h ir/IfElse.cpp ir/IfElse.h ir/UnaryOp.cpp ir/UnaryOp.h ir/While.cpp ir/While.h)
+        ir/IrElement.cpp ir/IrElement.h ir/Function.cpp ir/Function.h ir/IrScope.cpp ir/IrScope.h ir/Block.cpp ir/Block.h ir/TypeSymbol.cpp ir/TypeSymbol.h ir/IrInstruction.cpp ir/IrInstruction.h ir/Declaration.cpp ir/Declaration.h ir/Expression.cpp ir/Expression.h ir/OpExpression.cpp ir/OpExpression.h ir/IfElse.cpp ir/IfElse.h ir/UnaryOp.cpp ir/UnaryOp.h ir/While.cpp ir/While.h opt/MemoryAllocator.cpp opt/MemoryAllocator.h opt/LiveRangeAnalyzer.cpp opt/LiveRangeAnalyzer.h)
 
 foreach (src_file ${compiler-GENERATED_SRC})
     set_source_files_properties(
@@ -45,7 +45,7 @@ include_directories(
 )
 
 #file(GLOB compiler_SRC "${PROJECT_SOURCE_DIR}/compiler/generated/*")
-set(compiler_SRC ${PROJECT_SOURCE_DIR}/compiler/main.cpp ${PROJECT_SOURCE_DIR}/compiler/CodeGenVisitor.cpp ${compiler-GENERATED_SRC} ${compiler-IR_SRC})
+set(compiler_SRC ${PROJECT_SOURCE_DIR}/compiler/main.cpp ${PROJECT_SOURCE_DIR}/compiler/CodeGenVisitor.cpp ${compiler-GENERATED_SRC} ${compiler-IR_SRC} opt/LiveRangeAnalyzer.cpp opt/LiveRangeAnalyzer.h)
 
 if (NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set(flags_1 "-Wno-overloaded-virtual")

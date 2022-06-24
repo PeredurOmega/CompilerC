@@ -26,6 +26,14 @@ void WhileStatement::affect(IrScope *owner) {
 }
 
 WhileStatement::WhileStatement(Expression *compare, IrInstruction *content)
-        : Expression(), compare(compare), content(content) {
+        : BlockWrapper(content), compare(compare) {
 
+}
+
+set<string *> *WhileStatement::use() {
+    return nullptr;
+}
+
+set<string *> *WhileStatement::def() {
+    return nullptr;
 }

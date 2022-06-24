@@ -40,8 +40,16 @@ void IfStatement::affect(IrScope *owner) {
 
 IfStatement::IfStatement(Expression *compare, IrInstruction *content,
                          ElseStatement *elseStatement) :
-        Expression(), compare(compare), content(content),
+        BlockWrapper(content), compare(compare),
         elseStatement(elseStatement) {
+}
+
+set<string *> *IfStatement::use() {
+    return nullptr;
+}
+
+set<string *> *IfStatement::def() {
+    return nullptr;
 }
 
 void ElseStatement::affect(IrScope *owner) {
@@ -54,11 +62,19 @@ void ElseStatement::affect(IrScope *owner) {
 }
 
 ElseStatement::ElseStatement(IrInstruction *content)
-        : Expression(), content(content) {
+        : BlockWrapper(content) {
 
 }
 
 void ElseStatement::renderX86(ostream &o) const {
     o << ".L" << label << ":" << endl;
     content->renderX86(o);
+}
+
+set<string *> *ElseStatement::use() {
+    return nullptr;
+}
+
+set<string *> *ElseStatement::def() {
+    return nullptr;
 }

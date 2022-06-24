@@ -16,7 +16,7 @@ class Parameter;
 class Function : public Block {
 public:
     //TODO HANDLE PARAMETERS
-    explicit Function(string name, const IrType *returnType, const vector<Parameter *>& parameters);
+    explicit Function(string name, const IrType *returnType, vector<Parameter *>* parameters);
 
     void renderX86(ostream &o) const override;
 
@@ -31,7 +31,7 @@ private:
     const IrType *returnType;
     string name;
     int endLabel = -1;
-    vector<Parameter *> parameters;
+    vector<Parameter *>* parameters;
 };
 
 class Parameter {

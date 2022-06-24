@@ -55,3 +55,11 @@ IrScope::IrScope() : IrInstruction() {
 
 }
 
+set<string *> *IrScope::use() {
+    return nullptr;
+}
+
+set<string *> *IrScope::def() {
+    return nullptr;
+}
+

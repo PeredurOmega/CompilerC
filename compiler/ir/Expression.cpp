@@ -7,7 +7,8 @@
 #include <utility>
 #include <iostream>
 
-FunctionCall::FunctionCall(vector<string *> *parameters) : parameters(parameters){
+FunctionCall::FunctionCall(vector<string *> *parameters) : parameters(
+        parameters) {
 
 }
 
@@ -39,6 +40,16 @@ void Variable::affect(IrScope *owner) {
     offset = owner->getOffset(name);
 }
 
+set<string *> *Variable::use() {
+    auto *use = new set<string *>();
+    use->insert(&name);
+    return use;
+}
+
+set<string *> *Variable::def() {
+    return Expression::def();
+}
+
 void Constant::renderX86(ostream &o) const {
     if (assignTo != nullptr) {
         o << "    movl    $" << value << ", " << offset << "(%rbp) #"
@@ -62,6 +73,14 @@ void Constant::affect(IrScope *owner) {
     }
 }
 
+set<string *> *Constant::use() {
+    return new set<string *>();
+}
+
+set<string *> *Constant::def() {
+    return new set<string *>();
+}
+
 Return::Return(Expression *expression) : Expression(), expression(expression) {
     alwaysReturn = true;
 }
@@ -80,8 +99,24 @@ void Return::affect(IrScope *owner) {
     expression->affect(owner);
 }
 
+set<string *> *Return::use() {
+    return expression->use();
+}
+
+set<string *> *Return::def() {
+    return expression->def();
+}
+
 Expression::Expression() : IrInstruction() {
 
+}
+
+set<string *> *Expression::def() {
+    auto *def = new set<string *>();
+    if (assignTo != nullptr) {
+        def->insert(assignTo);
+    }
+    return def;
 }
 
 VarExpr::VarExpr(vector<string *> *varNames, Expression *expression) :
@@ -106,4 +141,20 @@ void VarExpr::renderX86(ostream &o) const {
         o << "    movl    %eax, " << offsets[i - 1] << "(%rbp) #"
           << *varNames[i - 1] << endl;
     }
+}
+
+set<string *> *VarExpr::def() {
+    auto *def = new set<string *>();
+    for (auto *d: varNames) {
+        def->insert(d);
+    }
+    return def;
+}
+
+set<string *> *VarExpr::use() {
+    return expression->use();
+}
+
+BlockWrapper::BlockWrapper(IrInstruction *content) : content(content) {
+
 }

@@ -6,6 +6,7 @@
 #define LIBANTLR4_IRINSTRUCTION_H
 
 
+#include <set>
 #include "IrElement.h"
 
 class IrScope;
@@ -22,6 +23,16 @@ public:
 
     explicit IrInstruction();
 
+    /**
+     * Set of the variables used.
+     */
+    virtual set<string*>* use() = 0;
+
+    /**
+     * Set of the variables defined.
+     */
+    virtual set<string*>* def() = 0;
+
     virtual void affect(IrScope *owner) = 0;
 
     virtual void setOwner(IrScope *owner);
@@ -36,6 +47,10 @@ public:
     void affect(IrScope *owner) override;
 
     void renderX86(ostream &o) const override;
+
+    set<string*>* use() override;
+
+    set<string*>* def() override;
 };
 
 

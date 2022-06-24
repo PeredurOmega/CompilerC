@@ -28,6 +28,10 @@ public:
      * When not nullptr, we should store the value of the expression in %eax.
      */
     string *assignTo = nullptr;
+
+    set<string*>* use() override = 0;
+
+    set<string*>* def() override = 0;
 };
 
 class FunctionCall : public Expression {
@@ -50,6 +54,10 @@ public:
 
     void affect(IrScope *owner) override;
 
+    set<string*>* use() override;
+
+    set<string*>* def() override;
+
 private:
     Expression *expression;
 };
@@ -63,6 +71,10 @@ public:
     void renderX86(ostream &o) const override;
 
     void affect(IrScope *owner) override;
+
+    set<string*>* use() override;
+
+    set<string*>* def() override;
 };
 
 class Variable : public Expression {
@@ -74,6 +86,10 @@ public:
     void renderX86(ostream &o) const override;
 
     void affect(IrScope *owner) override;
+
+    set<string*>* use() override;
+
+    set<string*>* def() override;
 };
 
 class VarExpr : public Expression {
@@ -84,10 +100,20 @@ public:
 
     void affect(IrScope *owner) override;
 
-private:
+    set<string*>* use() override;
+
+    set<string*>* def() override;
+
     vector<string *> varNames;
     Expression *expression;
     vector<int> offsets;
+};
+
+class BlockWrapper : public Expression {
+public:
+    explicit BlockWrapper(IrInstruction *content);
+
+    IrInstruction *content;
 };
 
 

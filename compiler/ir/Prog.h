@@ -15,6 +15,8 @@ using namespace std;
 
 class Prog : IrScope {
 public:
+    vector<Function *> functions;
+
     explicit Prog(string entry);
 
     void renderX86(ostream &o) const override;
@@ -31,7 +33,6 @@ public:
 
 private:
     string entry;
-    vector<Function *> functions;
     int jumpOffset = 0;
     int finalJump = 0;
 };

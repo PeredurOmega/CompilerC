@@ -20,6 +20,21 @@ void OpExpression::renderX86(ostream &o) const {
     rExpr->renderX86(o);
 }
 
+set<string *> *OpExpression::def() {
+    return Expression::def();
+}
+
+set<string *> *OpExpression::use() {
+    auto *use = new set<string *>();
+    for (auto *u: *lExpr->use()) {
+        use->insert(u);
+    }
+    for (auto *u: *rExpr->use()) {
+        use->insert(u);
+    }
+    return use;
+}
+
 AddOperation::AddOperation(Expression *lExpr, Expression *rExpr) : OpExpression(
         lExpr, rExpr) {}
 

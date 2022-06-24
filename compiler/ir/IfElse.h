@@ -11,10 +11,12 @@
 
 class ElseStatement;
 
-class IfStatement : public Expression {
+class IfStatement : public BlockWrapper {
 public:
 
     int finalLabel = 0;
+    Expression *compare;
+    ElseStatement *elseStatement = nullptr;
 
     explicit IfStatement(Expression *compare, IrInstruction *content,
                          ElseStatement *elseStatement);
@@ -23,15 +25,16 @@ public:
 
     void affect(IrScope *owner) override;
 
+    set<string *> *use() override;
+
+    set<string *> *def() override;
+
 private:
     int firstLabel;
-    Expression *compare;
-    IrInstruction *content;
-    ElseStatement *elseStatement = nullptr;
 };
 
 
-class ElseStatement : public Expression {
+class ElseStatement : public BlockWrapper {
 public:
 
     int label;
@@ -44,8 +47,9 @@ public:
 
     void affect(IrScope *owner) override;
 
-private:
-    IrInstruction *content;
+    set<string *> *use() override;
+
+    set<string *> *def() override;
 };
 
 

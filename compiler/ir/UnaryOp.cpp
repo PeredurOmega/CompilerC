@@ -16,6 +16,18 @@ void UnaryOp::renderX86(ostream &o) const {
     rExpr->renderX86(o);
 }
 
+set<string *> *UnaryOp::def() {
+    return Expression::def();
+}
+
+set<string *> *UnaryOp::use() {
+    auto *use = new set<string *>();
+    for (auto *u: *rExpr->use()) {
+        use->insert(u);
+    }
+    return use;
+}
+
 MinusUnary::MinusUnary(Expression *rExpr) : UnaryOp(rExpr) {}
 
 void MinusUnary::renderX86(ostream &o) const {
