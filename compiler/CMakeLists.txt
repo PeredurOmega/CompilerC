@@ -14,7 +14,7 @@ set(compiler-GENERATED_SRC
 
 set(compiler-IR_SRC
         ${PROJECT_SOURCE_DIR}/compiler/ast/Prog.cpp
-        ast/IrElement.cpp ast/IrElement.h ast/Function.cpp ast/Function.h ast/IrScope.cpp ast/IrScope.h ast/Block.cpp ast/Block.h ast/TypeSymbol.cpp ast/TypeSymbol.h ast/Instruction.cpp ast/Instruction.h ast/Declaration.cpp ast/Declaration.h ast/Expression.cpp ast/Expression.h ast/OpExpression.cpp ast/OpExpression.h ast/IfElse.cpp ast/IfElse.h ast/UnaryOp.cpp ast/UnaryOp.h ast/While.cpp ast/While.h ir/IrInstruction.cpp ir/IrInstruction.h ir/BasicBlock.cpp ir/BasicBlock.h ir/IrConstant.cpp ir/IrConstant.h)
+        ast/IrElement.cpp ast/IrElement.h ast/Function.cpp ast/Function.h ast/IrScope.cpp ast/IrScope.h ast/Block.cpp ast/Block.h ast/TypeSymbol.cpp ast/TypeSymbol.h ast/Instruction.cpp ast/Instruction.h ast/Declaration.cpp ast/Declaration.h ast/Expression.cpp ast/Expression.h ast/OpExpression.cpp ast/OpExpression.h ast/IfElse.cpp ast/IfElse.h ast/UnaryOp.cpp ast/UnaryOp.h ast/While.cpp ast/While.h ir/IrInstruction.cpp ir/IrInstruction.h ir/BasicBlock.cpp ir/BasicBlock.h ir/IrConstant.cpp ir/IrConstant.h ir/OpIrInstruction.cpp ir/OpIrInstruction.h ir/UnaryOpIrInstruction.cpp ir/UnaryOpIrInstruction.h)
 
 foreach (src_file ${compiler-GENERATED_SRC})
     set_source_files_properties(
