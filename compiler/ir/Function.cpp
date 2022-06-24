@@ -15,12 +15,15 @@ Function::Function(string name, const IrType *returnType, const vector<Parameter
 }
 
 void Function::renderX86(ostream &o) const {
+    int stackShift = (int)((symbolTable.size()/4)+1)*32;
+
     o << " " << name << ":" << endl
       << "    pushq   %rbp" << endl
-      << "    movq    %rsp, %rbp" << endl;
+      << "    movq    %rsp, %rbp" << endl
+      << "    subq    $" << stackShift << ", %rsp" << endl;
 
-    for (const auto& registerObj : registers) {
-        o << "    movl    " << registerObj.first << ", " << registerObj.second << "(%rbp)" << endl;
+    for (const auto& r : registers) {
+        o << "    movl    " << get<0>(r) << ", " << get<2>(r) << "(%rbp)" << " #" << get<1>(r) << endl;
     }
 
     Block::renderX86(o);
@@ -36,7 +39,8 @@ void Function::renderX86(ostream &o) const {
         o << ".L" << endLabel << ":" << endl;
     }
 
-    o << "    popq %rbp" << endl
+    o << "    addq    $" << stackShift << ", %rsp" << endl
+      << "    popq    %rbp" << endl
       << "    ret" << endl;
 }
 
@@ -56,7 +60,7 @@ void Function::affect(IrScope *owner) {
     for (unsigned int i = 0; i < parameters.size(); ++i) {
         Parameter* parameter = parameters[i];
         if (i < 6) {
-            registers[registersName[i]] = insertInitializedVariable(parameter->name);
+            registers.emplace_back(registersName[i], parameter->name, insertInitializedVariable(parameter->name));
         } else {
             insertParameter(parameter->name, offset);
             offset += 8;

@@ -25,7 +25,13 @@ void FunctionCall::renderX86(ostream &o) const {
     if (arguments->size() > 6) {
         o << "    addq    $" << 8*(arguments->size()-6) << ", %rsp" << endl;
     }
-    o << "    movl    %eax, " << offset << "(%rbp)" << endl;
+    o << "    movl    %eax, " << offset << "(%rbp) #";
+    if (assignTo != nullptr) {
+        o << *assignTo;
+    } else {
+        o << "Temp operation result '>>'";
+    }
+    o << endl;
 }
 
 void FunctionCall::affect(IrScope *owner) {
@@ -33,7 +39,11 @@ void FunctionCall::affect(IrScope *owner) {
     for (auto expression : *arguments) {
         expression->affect(owner);
     }
-    offset = owner->insertTempVariable();
+    if (assignTo == nullptr) {
+        offset = owner->insertTempVariable();
+    } else {
+        offset = owner->getOffset(*assignTo);
+    }
 }
 
 void Variable::renderX86(ostream &o) const {
