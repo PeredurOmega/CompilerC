@@ -20,9 +20,10 @@ int IrScope::getOffset(string &varName) {
     }
 }
 
-void IrScope::insertInitializedVariable(string &varName) {
+int IrScope::insertInitializedVariable(string &varName) {
     currentOffset -= 4;
     symbolTable[varName] = currentOffset;
+    return currentOffset;
 }
 
 void IrScope::insertParameter(string &varName, int offset) {

@@ -5,7 +5,9 @@
 #include "Block.h"
 
 void Block::addInstruction(IrInstruction *instruction) {
-    if (instruction->alwaysReturn) alwaysReturn = true;
+    if (instruction->alwaysReturn) {
+        alwaysReturn = true;
+    }
     if (instruction->conditionalReturn) conditionalReturn = true;
     instructions.push_back(instruction);
 }
@@ -25,9 +27,8 @@ void Block::attachTo(Block *block) {
 }
 
 void Block::affect(IrScope *owner) {
-    setOwner(owner);
-    owner->alwaysReturn = alwaysReturn;
-    owner->conditionalReturn = conditionalReturn;
+    if(alwaysReturn) owner->alwaysReturn= alwaysReturn;
+    if(conditionalReturn) owner->conditionalReturn= conditionalReturn;
     for (auto i: instructions) {
         i->affect(this);
     }

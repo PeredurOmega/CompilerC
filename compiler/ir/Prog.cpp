@@ -27,6 +27,7 @@ void Prog::addFunction(Function *function) {
 
 void Prog::affect() {
     for (Function *function: functions) {
+        function->setOwner(this);
         function->affect(this);
     }
 }

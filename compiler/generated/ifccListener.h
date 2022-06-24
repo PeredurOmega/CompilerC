@@ -23,11 +23,20 @@ public:
   virtual void enterFunction(ifccParser::FunctionContext *ctx) = 0;
   virtual void exitFunction(ifccParser::FunctionContext *ctx) = 0;
 
+  virtual void enterFunctionDeclaration(ifccParser::FunctionDeclarationContext *ctx) = 0;
+  virtual void exitFunctionDeclaration(ifccParser::FunctionDeclarationContext *ctx) = 0;
+
   virtual void enterParameters(ifccParser::ParametersContext *ctx) = 0;
   virtual void exitParameters(ifccParser::ParametersContext *ctx) = 0;
 
   virtual void enterParameter(ifccParser::ParameterContext *ctx) = 0;
   virtual void exitParameter(ifccParser::ParameterContext *ctx) = 0;
+
+  virtual void enterArguments(ifccParser::ArgumentsContext *ctx) = 0;
+  virtual void exitArguments(ifccParser::ArgumentsContext *ctx) = 0;
+
+  virtual void enterArgument(ifccParser::ArgumentContext *ctx) = 0;
+  virtual void exitArgument(ifccParser::ArgumentContext *ctx) = 0;
 
   virtual void enterBlock(ifccParser::BlockContext *ctx) = 0;
   virtual void exitBlock(ifccParser::BlockContext *ctx) = 0;

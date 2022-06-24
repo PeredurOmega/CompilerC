@@ -32,14 +32,15 @@ public:
 
 class FunctionCall : public Expression {
 public:
-    explicit FunctionCall(vector<string *> *parameters);
+    explicit FunctionCall(string name, vector<Expression *> *arguments);
 
     void renderX86(ostream &o) const override;
 
     void affect(IrScope *owner) override;
 
 private:
-    vector<string *> *parameters;
+    string name;
+    vector<Expression*> *arguments;
 };
 
 class Return : public Expression {

@@ -17,7 +17,7 @@ public:
 
     int currentOffset = 0;
 
-    void insertInitializedVariable(string &varName);
+    int insertInitializedVariable(string &varName);
 
     void insertDeclaration(string &varName);
 
@@ -37,6 +37,7 @@ public:
     virtual int conditionalJump() = 0;
 
     void insertParameter(string &varName, int offset);
+
 protected:
     int *label;
     unordered_map<string, int> symbolTable;

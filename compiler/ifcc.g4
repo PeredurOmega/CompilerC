@@ -2,11 +2,15 @@ grammar ifcc;
 
 axiom : prog EOF;
 
-prog : function*;
+prog : ( function | functionDeclaration )*;
 function: (TYPE|'void') VAR '(' parameters? ')' block;
+functionDeclaration: (TYPE|'void') VAR '(' parameters? ')' SEMICOLON ;
 
 parameters : parameter (',' parameter)* ;
 parameter : TYPE VAR ;
+
+arguments : argument (',' argument)* ;
+argument : expression ;
 
 block : '{' statement* '}';
 statement : statementWithoutDeclaration
@@ -36,7 +40,7 @@ assignment : expAssignment SEMICOLON;
 expression : VAR #variable
             |CONST #constant
             |'(' (expression | expAssignment)')' #parenthesis
-            |VAR '(' parameters? ')' #functionCall
+            |VAR '(' arguments? ')' #functionCall
             |op=('-'|'!'|'+'|'~') expression #unary
             |expression op=('*' | '/' | '%') expression #timesDivModulo
             |expression op=('+' | '-') expression #addSub

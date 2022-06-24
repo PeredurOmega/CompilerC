@@ -32,6 +32,7 @@ private:
     string name;
     int endLabel = -1;
     vector<Parameter *> parameters;
+    vector<tuple<string, string, int>> registers;
 };
 
 class Parameter {

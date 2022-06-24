@@ -6,29 +6,25 @@
 
 #include <utility>
 #include <sstream>
+#include <iostream>
 
 using namespace std;
 
 Function::Function(string name, const IrType *returnType, const vector<Parameter *>& parameters) : returnType(returnType), name(std::move(name)), parameters(parameters) {
-    int offset = 16;
-    if(!parameters.empty()) {
-        this->name += "(";
-    }
-    for (auto parameter : parameters) {
-        insertParameter(parameter->name, offset);
-        offset += 8;
-        this->name += PrimaryType::text(parameter->type) + ",";
-    }
-    this->name.replace(this->name.find(",)"), 1, ")");
-    if(!parameters.empty()) {
-        this->name += ")";
-    }
+
 }
 
 void Function::renderX86(ostream &o) const {
+    int stackShift = (int)((symbolTable.size()/4)+1)*32;
+
     o << " " << name << ":" << endl
       << "    pushq   %rbp" << endl
-      << "    movq    %rsp, %rbp" << endl;
+      << "    movq    %rsp, %rbp" << endl
+      << "    subq    $" << stackShift << ", %rsp" << endl;
+
+    for (const auto& r : registers) {
+        o << "    movl    " << get<0>(r) << ", " << get<2>(r) << "(%rbp)" << " #" << get<1>(r) << endl;
+    }
 
     Block::renderX86(o);
 
@@ -43,7 +39,8 @@ void Function::renderX86(ostream &o) const {
         o << ".L" << endLabel << ":" << endl;
     }
 
-    o << "    popq %rbp" << endl
+    o << "    addq    $" << stackShift << ", %rsp" << endl
+      << "    popq    %rbp" << endl
       << "    ret" << endl;
 }
 
@@ -57,6 +54,18 @@ int Function::conditionalJump() {
 }
 
 void Function::affect(IrScope *owner) {
+    setOwner(owner);
+    vector<string> registersName = {"%edi" , "%esi", "%edx", "%ecx", "%r8d", "%r9d"};
+    int offset = 16;
+    for (unsigned int i = 0; i < parameters.size(); ++i) {
+        Parameter* parameter = parameters[i];
+        if (i < 6) {
+            registers.emplace_back(registersName[i], parameter->name, insertInitializedVariable(parameter->name));
+        } else {
+            insertParameter(parameter->name, offset);
+            offset += 8;
+        }
+    }
     Block::affect(owner);
     if (conditionalReturn) {
         endLabel = owner->getNewLabel();

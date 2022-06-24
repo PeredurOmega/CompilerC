@@ -27,11 +27,23 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitFunctionDeclaration(ifccParser::FunctionDeclarationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitParameters(ifccParser::ParametersContext *ctx) override {
     return visitChildren(ctx);
   }
 
   virtual std::any visitParameter(ifccParser::ParameterContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitArguments(ifccParser::ArgumentsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitArgument(ifccParser::ArgumentContext *ctx) override {
     return visitChildren(ctx);
   }
 

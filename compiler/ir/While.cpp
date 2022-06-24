@@ -14,12 +14,13 @@ void WhileStatement::renderX86(ostream &o) const {
     o << ".L" << compareLabel << ":" << endl;
     compare->renderX86(o);
     o << "    cmpl    $0, " << compare->offset << "(%rbp)" << endl;
-    o << "    je      .L" << contentLabel << endl;
+    o << "    jne      .L" << contentLabel << endl;
 }
 
 void WhileStatement::affect(IrScope *owner) {
     setOwner(owner);
     compare->affect(owner);
+    content->setOwner(owner);
     content->affect(owner);
     compareLabel = owner->getNewLabel();
     contentLabel = owner->getNewLabel();
