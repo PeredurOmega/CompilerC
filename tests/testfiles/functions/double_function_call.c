@@ -1,0 +1,7 @@
+int basic_return(int n) {
+    return n;
+}
+
+int main() {
+    return basic_return(5) + basic_return(10);
+}

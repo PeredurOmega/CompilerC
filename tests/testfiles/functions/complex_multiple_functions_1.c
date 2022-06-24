@@ -20,10 +20,5 @@ int main(){
     int b = 42;
     int c = 3;
     int d = 12;
-    if (a <= c){
-        return compare(multiplication(a, b), multiplication(c, d));
-    }
-    else {
-        return compare(multiplication(c, b), multiplication(a, d));
-    }
+    return compare(multiplication(c, b), multiplication(a, d));
 }
