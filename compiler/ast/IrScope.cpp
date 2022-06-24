@@ -5,18 +5,20 @@
 #include <iostream>
 #include "IrScope.h"
 
-int IrScope::getOffset(string &varName) {
-    if (symbolTable.find(varName) == symbolTable.end()) {
+int IrScope::getOffset(string *varName) {
+    if (varName == nullptr) {
+        return insertTempVariable();
+    } else if (symbolTable.find(*varName) == symbolTable.end()) {
         if (owner != nullptr) return owner->getOffset(varName);
         else {
             UndefinedVariable e = UndefinedVariable();
-            cerr << e.what() << " '" << varName << "'";//TODO
+            cerr << e.what() << " '" << *varName << "'";//TODO
             throw e;
         }
     } else {
-        int offset = symbolTable.at(varName);
-        if (offset == 0) insertInitializedVariable(varName);
-        return symbolTable.at(varName);
+        int offset = symbolTable.at(*varName);
+        if (offset == 0) insertInitializedVariable(*varName);
+        return symbolTable.at(*varName);
     }
 }
 
@@ -54,5 +56,9 @@ int IrScope::getNewLabel() {
 
 IrScope::IrScope() : Instruction() {
 
+}
+
+BasicBlock *IrScope::basicBlock() {
+    return new BasicBlock(getNewLabel());
 }
 

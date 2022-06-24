@@ -11,14 +11,15 @@
 
 using namespace std;
 
-
 class BasicBlock {
 public:
+    explicit BasicBlock(string *label, vector<ItInstruction *> *instructions)
+            : label(label), instructions(instructions) {};
+
     string *label;
     vector<IrInstruction *> *instructions;
     BasicBlock *nextTrue;
     BasicBlock *nextFalse;
 };
-
 
 #endif //LIBANTLR4_BASICBLOCK_H

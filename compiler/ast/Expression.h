@@ -59,7 +59,7 @@ class Constant : public Expression {
 public:
     int value;
 
-    explicit Constant(int value);
+    explicit Constant(int value) : Expression(), value(value) {}
 
     vector<IrInstruction *> *linearize() override;
 };
@@ -70,9 +70,7 @@ public:
 
     explicit Variable(string name);
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class VarExpr : public Expression {

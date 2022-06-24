@@ -63,29 +63,15 @@ Variable::Variable(string name) : Expression(), name(std::move(name)) {
 
 }
 
-void Variable::affect(IrScope *owner) {
-    setOwner(owner);
-    offset = owner->getOffset(name);
-}
-
-void Constant::renderX86(ostream &o) const {
-    if (assignTo != nullptr) {
-        o << "    movl    $" << value << ", " << offset << "(%rbp) #"
-          << *assignTo << endl;
-    } else {
-        o << "    movl    $" << value << ", " << offset
-          << "(%rbp) #Temp constant" << endl;
-    }
-}
-
-Constant::Constant(int value) : Expression(), value(value) {
-
+vector<IrInstruction *> *Variable::linearize() {
+    var = new IrVariable(&name, owner->getOffset(&name));
+    return new vector<IrInstruction *>();
 }
 
 vector<IrInstruction *> *Constant::linearize() {
     auto *inst = new vector<IrInstruction *>();
     var = new IrVariable(nullptr, owner->insertTempVariable());
-    auto *c = new IrConstant(var, value);
+    auto *c = new IrConstant(owner->getBasicBlock(), var, value);
     inst->push_back(c);
     return inst;
 }

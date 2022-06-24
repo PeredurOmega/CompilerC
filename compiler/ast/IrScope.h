@@ -23,13 +23,13 @@ public:
 
     int insertTempVariable();
 
-    int getOffset(string &varName);
+    int getOffset(string *varName);
 
     int getNewLabel();
 
-    void setOwner(IrScope *owner) override;
+    BasicBlock* basicBlock();
 
-    void affect(IrScope *owner) override = 0;
+    void setOwner(IrScope *owner) override;
 
     /**
      * If there is a need for conditional jump, jump label is returned, otherwise -1 is return.

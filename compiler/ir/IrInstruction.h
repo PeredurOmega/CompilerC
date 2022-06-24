@@ -12,8 +12,6 @@ using namespace std;
 class IrInstruction {
 public:
 
-    IrInstruction(BasicBlock *owner) : owner(owner) {};
-
     BasicBlock *owner;
 
     virtual void renderX86(ostream &o) const = 0;

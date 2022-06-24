@@ -4,82 +4,31 @@
 
 #include "OpExpression.h"
 
-OpExpression::OpExpression(Expression *lExpr, Expression *rExpr) :
-        Expression(), lExpr(lExpr), rExpr(rExpr) {
-
-}
-
-
-void OpExpression::affect(IrScope *owner) {
-    setOwner(owner);
-    lExpr->affect(owner);
-    rExpr->affect(owner);
-}
-
-void OpExpression::renderX86(ostream &o) const {
-    lExpr->renderX86(o);
-    rExpr->renderX86(o);
-}
-
-AddOperation::AddOperation(Expression *lExpr, Expression *rExpr) : OpExpression(
-        lExpr, rExpr) {}
-
-vector<IrInstruction *> *AddOperation::linearize() {
+vector<IrInstruction *> *OpExpression::linearize() {
     auto *lInstr = lExpr->linearize();
     auto *rInstr = rExpr->linearize();
     lInstr->insert(lInstr->end(), rInstr->begin(), rInstr->end());
-    var = new IrVariable(assignTo, owner->getOffset(*assignTo));
-    auto *instr = new AddIrInstruction(owner->basicBlock(), lExpr->var, rExpr->var, var);
-    lInstr->push_back(instr);
+    var = new IrVariable(assignTo, owner->getOffset(assignTo));
     return lInstr;
 }
 
-SubOperation::SubOperation(Expression *lExpr, Expression *rExpr) : OpExpression(
-        lExpr, rExpr) {}
+
+vector<IrInstruction *> *AddOperation::linearize() {
+    auto *lInstr = OpExpression::linearize();
+    lInstr->push_back(new AddIrInstruction(lExpr->var, rExpr->var, var));
+    return lInstr;
+}
 
 vector<IrInstruction *> *SubOperation::linearize() {
-    return nullptr;
+    auto *lInstr = OpExpression::linearize();
+    lInstr->push_back(new SubIrInstruction(lExpr->var, rExpr->var, var));
+    return lInstr;
 }
 
-void SubOperation::renderX86(ostream &o) const {
-    OpExpression::renderX86(o);
-    o << "    movl    " << lExpr->offset << "(%rbp), %eax" << endl;
-    o << "    subl    " << rExpr->offset << "(%rbp), %eax" << endl;
-
-    o << "    movl    %eax, " << offset << "(%rbp) #";
-    if (assignTo != nullptr) {
-        o << *assignTo;
-    } else {
-        o << "Temp operation result '-'";
-    }
-    o << endl;
-}
-
-void SubOperation::affect(IrScope *owner) {
-    OpExpression::affect(owner);
-    if (assignTo != nullptr) {
-        offset = owner->getOffset(*assignTo);
-    } else {
-        offset = owner->insertTempVariable();
-    }
-}
-
-TimesOperation::TimesOperation(Expression *lExpr, Expression *rExpr)
-        : OpExpression(lExpr, rExpr) {}
-
-void TimesOperation::renderX86(ostream &o) const {
-    OpExpression::renderX86(o);
-    o << "    movl    " << lExpr->offset << "(%rbp), %edx" << endl;
-    o << "    movl    " << rExpr->offset << "(%rbp), %eax" << endl;
-    o << "    imull    %edx, %eax" << endl;
-
-    o << "    movl    %eax, " << offset << "(%rbp) #";
-    if (assignTo != nullptr) {
-        o << *assignTo;
-    } else {
-        o << "Temp operation result '*'";
-    }
-    o << endl;
+vector<IrInstruction *> *TimesOperation::linearize() {
+    auto *lInstr = OpExpression::linearize();
+    lInstr->push_back(new TimesIrInstruction(lExpr->var, rExpr->var, var));
+    return lInstr;
 }
 
 void TimesOperation::affect(IrScope *owner) {

@@ -11,7 +11,10 @@
 
 class OpExpression : public Expression {
 public:
-    explicit OpExpression(Expression *lExpr, Expression *rExpr);
+    explicit OpExpression(Expression *lExpr, Expression *rExpr)
+            : Expression(), lExpr(lExpr), rExpr(rExpr) {};
+
+    vector<IrInstruction *> *linearize() override = 0;
 
 protected:
     Expression *lExpr;
@@ -20,151 +23,121 @@ protected:
 
 class AddOperation : public OpExpression {
 public:
-    explicit AddOperation(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
     vector<IrInstruction *> *linearize() override;
 };
 
 class SubOperation : public OpExpression {
 public:
-    explicit SubOperation(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
     vector<IrInstruction *> *linearize() override;
 };
 
 class TimesOperation : public OpExpression {
 public:
-    explicit TimesOperation(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class DivOperation : public OpExpression {
 public:
-    explicit DivOperation(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class ModuloOperation : public OpExpression {
 public:
-    explicit ModuloOperation(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class ShiftRightOperation : public OpExpression {
 public:
-    explicit ShiftRightOperation(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class ShiftLeftOperation : public OpExpression {
 public:
-    explicit ShiftLeftOperation(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class LessCompare : public OpExpression {
 public:
-    explicit LessCompare(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class LessEqualCompare : public OpExpression {
 public:
-    explicit LessEqualCompare(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class GreatCompare : public OpExpression {
 public:
-    explicit GreatCompare(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class GreatEqualCompare : public OpExpression {
 public:
-    explicit GreatEqualCompare(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class EqualCompare : public OpExpression {
 public:
-    explicit EqualCompare(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class NotEqualCompare : public OpExpression {
 public:
-    explicit NotEqualCompare(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class BitwiseAnd : public OpExpression {
 public:
-    explicit BitwiseAnd(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class BitwiseXor : public OpExpression {
 public:
-    explicit BitwiseXor(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class BitwiseOr : public OpExpression {
 public:
-    explicit BitwiseOr(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class LogicalAnd : public OpExpression {
 public:
-    explicit LogicalAnd(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 
     int firstLabel;
     int secondLabel;
@@ -172,11 +145,9 @@ public:
 
 class LogicalOr : public OpExpression {
 public:
-    explicit LogicalOr(Expression *lExpr, Expression *rExpr);
+    using OpExpression::OpExpression;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 
     int firstLabel;
     int secondLabel;
