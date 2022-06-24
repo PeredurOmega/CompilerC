@@ -12,7 +12,7 @@ int main(){
             n = 3;
             break;
         default:
-            n++;
+            n = n + 1;
             break;
     }
     return n;

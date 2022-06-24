@@ -11,7 +11,7 @@ int check(int a, int b, int c, int d){
 
 int update(int a, int b, int c, int d){
     while (check(a, b, c, d) != a){
-        a--;
+        a = a - 1;
     }
     return a;
 }
