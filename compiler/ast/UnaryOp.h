@@ -10,11 +10,9 @@
 
 class UnaryOp : public Expression {
 public:
-    explicit UnaryOp(Expression *rExpr);
+    explicit UnaryOp(Expression *rExpr) : Expression(), rExpr(rExpr) { };
 
-    void affect(IrScope *owner) override;
-
-    void renderX86(ostream &o) const override = 0;
+    vector<IrInstruction *> *linearize() override = 0;
 
 protected:
     Expression *rExpr;
@@ -22,38 +20,30 @@ protected:
 
 class MinusUnary : public UnaryOp {
 public:
-    explicit MinusUnary(Expression *rExpr);
+    using UnaryOp::UnaryOp;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class PlusUnary : public UnaryOp {
 public:
-    explicit PlusUnary(Expression *rExpr);
+    using UnaryOp::UnaryOp;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class NotUnary : public UnaryOp {
 public:
-    explicit NotUnary(Expression *rExpr);
+    using UnaryOp::UnaryOp;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class BitwiseNotUnary : public UnaryOp {
 public:
-    explicit BitwiseNotUnary(Expression *rExpr);
+    using UnaryOp::UnaryOp;
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 

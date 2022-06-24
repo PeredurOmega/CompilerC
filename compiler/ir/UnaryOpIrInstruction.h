@@ -5,9 +5,7 @@
 
 class UnaryOpIrInstruction : public IrInstruction {
 public:
-    UnaryOpIrInstruction(BasicBlock *owner, IrVariable *to, IrVariable *left,
-                    IrVariable *right) :
-            IrInstruction(owner), to(to), right(right) {};
+    UnaryOpIrInstruction(IrVariable *to, IrVariable *right) : to(to), right(right) { };
 
 protected:
     IrVariable *to;
@@ -16,16 +14,22 @@ protected:
 
 class MinusUnaryIrInstruction : public UnaryOpIrInstruction {
 public:
+    using UnaryOpIrInstruction::UnaryOpIrInstruction;
+
     void renderX86(ostream &o) const override;
 };
 
 class NotUnaryIrInstruction : public UnaryOpIrInstruction {
 public:
+    using UnaryOpIrInstruction::UnaryOpIrInstruction;
+
     void renderX86(ostream &o) const override;
 };
 
 class BitwiseNotUnaryIrInstruction : public UnaryOpIrInstruction {
 public:
+    using UnaryOpIrInstruction::UnaryOpIrInstruction;
+
     void renderX86(ostream &o) const override;
 };
 
