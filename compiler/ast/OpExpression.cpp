@@ -3,6 +3,7 @@
 //
 
 #include "OpExpression.h"
+#include "../ir/OpIrInstruction.h"
 
 vector<IrInstruction *> *OpExpression::linearize() {
     auto *lInstr = lExpr->linearize();
@@ -12,22 +13,21 @@ vector<IrInstruction *> *OpExpression::linearize() {
     return lInstr;
 }
 
-
 vector<IrInstruction *> *AddOperation::linearize() {
     auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new AddIrInstruction(lExpr->var, rExpr->var, var));
+    lInstr->push_back(new AddIrInstruction(var, lExpr->var, rExpr->var));
     return lInstr;
 }
 
 vector<IrInstruction *> *SubOperation::linearize() {
     auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new SubIrInstruction(lExpr->var, rExpr->var, var));
+    lInstr->push_back(new AddIrInstruction(var, lExpr->var, rExpr->var));
     return lInstr;
 }
 
 vector<IrInstruction *> *TimesOperation::linearize() {
     auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new TimesIrInstruction(lExpr->var, rExpr->var, var));
+    lInstr->push_back(new AddIrInstruction(var, lExpr->var, rExpr->var));
     return lInstr;
 }
 
