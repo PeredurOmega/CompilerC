@@ -3,6 +3,19 @@
 //
 
 #include "UnaryOp.h"
+#include "../ir/UnaryOpIrInstruction.h"
+
+vector<IrInstruction *> *UnaryOp::linearize() {
+    auto *rInstr = rExpr->linearize();
+    var = new IrVariable(assignTo, owner->getOffset(assignTo));
+    return rInstr;
+}
+
+vector<IrInstruction *> *MinusUnary::linearize() {
+    auto *rInstr = UnaryOp::linearize();
+    rInstr->push_back(new MinusIrInstruction(var, rExpr->var));
+    return rInstr;
+}
 
 UnaryOp::UnaryOp(Expression *rExpr) : Expression(), rExpr(rExpr) {
 }

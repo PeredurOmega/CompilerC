@@ -10,8 +10,7 @@
 
 class IrConstant : public IrInstruction {
 public:
-    explicit IrConstant(BasicBlock *owner, int value, IrVariable *to) :
-            IrInstruction(owner), value(value), to(to) {};
+    explicit IrConstant(int value, IrVariable *to) : IrInstruction(), value(value), to(to) {};
 
     void renderX86(ostream &o) const override;
 

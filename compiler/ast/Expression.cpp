@@ -4,6 +4,8 @@
 
 #include "Expression.h"
 #include "../ir/IrConstant.h"
+#include "../ir/IrReturn.h"
+#include "../ir/IrJump.h"
 #include <sstream>
 #include <utility>
 #include <iostream>
@@ -76,31 +78,14 @@ vector<IrInstruction *> *Constant::linearize() {
     return inst;
 }
 
-void Constant::affect(IrScope *owner) {
-    setOwner(owner);
-    if (assignTo == nullptr) {
-        offset = owner->insertTempVariable();
-    } else {
-        offset = owner->getOffset(*assignTo);
-    }
-}
-
-Return::Return(Expression *expression) : Expression(), expression(expression) {
-    alwaysReturn = true;
-}
-
-void Return::renderX86(ostream &o) const {
-    expression->renderX86(o);
-    o << "    movl    " << expression->offset << "(%rbp), %eax" << endl;
+vector<IrInstruction *> *Return::linearize() {
+    auto *inst = expression->linearize();
+    inst->push_back(new IrReturn(expression->var));
     int conditionalJump = owner->conditionalJump();
     if (conditionalJump != -1) {
-        o << "    jmp      .L" << conditionalJump << endl;
+        inst->push_back(new IrJump(conditionalJump));
     }
-}
-
-void Return::affect(IrScope *owner) {
-    setOwner(owner);
-    expression->affect(owner);
+    return inst;
 }
 
 Expression::Expression() : Instruction() {

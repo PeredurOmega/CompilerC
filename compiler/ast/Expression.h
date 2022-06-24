@@ -45,11 +45,11 @@ private:
 
 class Return : public Expression {
 public:
-    explicit Return(Expression *expression);
+    explicit Return(Expression *expression) : Expression(), expression(expression) {
+        alwaysReturn = true;
+    };
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 
 private:
     Expression *expression;
