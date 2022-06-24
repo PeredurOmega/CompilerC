@@ -19,9 +19,9 @@ public:
     explicit Expression();
 
     /**
-     * Initialized when added to a Block through affect.
+     * Initialized after linearization.
      */
-    int offset;
+    IrVariable *var;
 
     /**
      * Optional in case the expression is followed by an assignment.
@@ -40,7 +40,7 @@ public:
 
 private:
     string name;
-    vector<Expression*> *arguments;
+    vector<Expression *> *arguments;
 };
 
 class Return : public Expression {
@@ -61,9 +61,7 @@ public:
 
     explicit Constant(int value);
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class Variable : public Expression {

@@ -26,7 +26,7 @@ public:
 
     virtual void setOwner(IrScope *owner);
 
-    vector<IrInstruction *> linearize() const override = 0;
+    virtual vector<IrInstruction *> *linearize() = 0;
 };
 
 class Empty : Instruction {

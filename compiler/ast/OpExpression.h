@@ -13,10 +13,6 @@ class OpExpression : public Expression {
 public:
     explicit OpExpression(Expression *lExpr, Expression *rExpr);
 
-    void affect(IrScope *owner) override;
-
-    void renderX86(ostream &o) const override = 0;
-
 protected:
     Expression *lExpr;
     Expression *rExpr;
@@ -26,18 +22,14 @@ class AddOperation : public OpExpression {
 public:
     explicit AddOperation(Expression *lExpr, Expression *rExpr);
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class SubOperation : public OpExpression {
 public:
     explicit SubOperation(Expression *lExpr, Expression *rExpr);
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 class TimesOperation : public OpExpression {

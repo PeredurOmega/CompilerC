@@ -7,12 +7,12 @@
 
 using namespace std;
 
-ostream &Variable::operator<<(ostream &o) const {
+ostream &IrVariable::operator<<(ostream &o) const {
     o << offset << "(%rbp)";
     return o;
 }
 
-string Variable::comment(const string &opType) const {
+string IrVariable::comment(const string &opType) const {
     if (name == nullptr) {
         return " # Temp " + opType;
     } else {

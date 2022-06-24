@@ -2,14 +2,12 @@
 // Created by pauls on 24/06/2022.
 //
 
-#include "BasicBlock.h"
-
-#ifndef LIBANTLR4_INSTRUCTION_H
+#ifndef LIBANTLR4_IRINSTRUCTION_H
 #define LIBANTLR4_IRINSTRUCTION_H
 
-using namespace std;
+#include "BasicBlock.h"
 
-class BasicBlock;
+using namespace std;
 
 class IrInstruction {
 public:
@@ -21,9 +19,9 @@ public:
     virtual void renderX86(ostream &o) const = 0;
 };
 
-class Variable {
+class IrVariable {
 public:
-    Variable(string *name, int offset) : name(name), offset(offset) {};
+    IrVariable(string *name, int offset) : name(name), offset(offset) {};
 
     ostream &operator<<(ostream &o) const;
 
@@ -36,7 +34,8 @@ protected:
 
 class OpIrInstruction : public IrInstruction {
 public:
-    OpIrInstruction(BasicBlock *owner, Variable *to, Variable *left, Variable *right) :
+    OpIrInstruction(BasicBlock *owner, Variable *to, Variable *left,
+                    Variable *right) :
             IrInstruction(owner), to(to), left(left), right(right) {};
 
 protected:

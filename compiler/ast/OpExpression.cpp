@@ -9,6 +9,7 @@ OpExpression::OpExpression(Expression *lExpr, Expression *rExpr) :
 
 }
 
+
 void OpExpression::affect(IrScope *owner) {
     setOwner(owner);
     lExpr->affect(owner);
@@ -23,32 +24,22 @@ void OpExpression::renderX86(ostream &o) const {
 AddOperation::AddOperation(Expression *lExpr, Expression *rExpr) : OpExpression(
         lExpr, rExpr) {}
 
-void AddOperation::renderX86(ostream &o) const {
-    OpExpression::renderX86(o);
-    o << "    movl    " << lExpr->offset << "(%rbp), %edx" << endl;
-    o << "    movl    " << rExpr->offset << "(%rbp), %eax" << endl;
-    o << "    addl    %edx, %eax" << endl;
-
-    o << "    movl    %eax, " << offset << "(%rbp) #";
-    if (assignTo != nullptr) {
-        o << *assignTo;
-    } else {
-        o << "Temp operation result '+'";
-    }
-    o << endl;
-}
-
-void AddOperation::affect(IrScope *owner) {
-    OpExpression::affect(owner);
-    if (assignTo != nullptr) {
-        offset = owner->getOffset(*assignTo);
-    } else {
-        offset = owner->insertTempVariable();
-    }
+vector<IrInstruction *> *AddOperation::linearize() {
+    auto *lInstr = lExpr->linearize();
+    auto *rInstr = rExpr->linearize();
+    lInstr->insert(lInstr->end(), rInstr->begin(), rInstr->end());
+    var = new IrVariable(assignTo, owner->getOffset(*assignTo));
+    auto *instr = new AddIrInstruction(owner->basicBlock(), lExpr->var, rExpr->var, var);
+    lInstr->push_back(instr);
+    return lInstr;
 }
 
 SubOperation::SubOperation(Expression *lExpr, Expression *rExpr) : OpExpression(
         lExpr, rExpr) {}
+
+vector<IrInstruction *> *SubOperation::linearize() {
+    return nullptr;
+}
 
 void SubOperation::renderX86(ostream &o) const {
     OpExpression::renderX86(o);

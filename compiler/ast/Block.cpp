@@ -9,6 +9,7 @@ void Block::addInstruction(Instruction *instruction) {
         alwaysReturn = true;
     }
     if (instruction->conditionalReturn) conditionalReturn = true;
+    instruction->setOwner(owner);
     instructions.push_back(instruction);
 }
 

@@ -20,8 +20,6 @@ public:
 
     void attachTo(Block *block);
 
-    void affect(IrScope *owner) override;
-
     int conditionalJump() override;
 
 private:

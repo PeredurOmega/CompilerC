@@ -3,27 +3,30 @@
 //
 
 #include "Expression.h"
+#include "../ir/IrConstant.h"
 #include <sstream>
 #include <utility>
 #include <iostream>
 
-FunctionCall::FunctionCall(string name, vector<Expression*> *arguments) : name(std::move(name)), arguments(arguments) { }
+FunctionCall::FunctionCall(string name, vector<Expression *> *arguments) : name(
+        std::move(name)), arguments(arguments) {}
 
 void FunctionCall::renderX86(ostream &o) const {
-    vector<string> registersName = {"%edi" , "%esi", "%edx", "%ecx", "%r8d", "%r9d"};
-    for (int i = (int) arguments->size()-1; i >= 0; --i) {
-        Expression* expression = (*arguments)[i];
+    vector<string> registersName = {"%edi", "%esi", "%edx", "%ecx", "%r8d",
+                                    "%r9d"};
+    for (int i = (int) arguments->size() - 1; i >= 0; --i) {
+        Expression *expression = (*arguments)[i];
         expression->renderX86(o);
         if (i < 6) {
-            o << "    movl    " << expression->offset << "(%rbp), " + registersName[i] << endl;
-        }
-        else {
+            o << "    movl    " << expression->offset
+              << "(%rbp), " + registersName[i] << endl;
+        } else {
             o << "    pushq    " << expression->offset << "(%rbp)" << endl;
         }
     }
     o << "    call    " << name << endl;
     if (arguments->size() > 6) {
-        o << "    addq    $" << 8*(arguments->size()-6) << ", %rsp" << endl;
+        o << "    addq    $" << 8 * (arguments->size() - 6) << ", %rsp" << endl;
     }
     o << "    movl    %eax, " << offset << "(%rbp) #";
     if (assignTo != nullptr) {
@@ -36,7 +39,7 @@ void FunctionCall::renderX86(ostream &o) const {
 
 void FunctionCall::affect(IrScope *owner) {
     setOwner(owner);
-    for (auto expression : *arguments) {
+    for (auto expression: *arguments) {
         expression->affect(owner);
     }
     if (assignTo == nullptr) {
@@ -77,6 +80,14 @@ void Constant::renderX86(ostream &o) const {
 
 Constant::Constant(int value) : Expression(), value(value) {
 
+}
+
+vector<IrInstruction *> *Constant::linearize() {
+    auto *inst = new vector<IrInstruction *>();
+    var = new IrVariable(nullptr, owner->insertTempVariable());
+    auto *c = new IrConstant(var, value);
+    inst->push_back(c);
+    return inst;
 }
 
 void Constant::affect(IrScope *owner) {
