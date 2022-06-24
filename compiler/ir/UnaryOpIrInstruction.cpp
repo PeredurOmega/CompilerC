@@ -10,7 +10,6 @@ void MinusUnaryIrInstruction::renderX86(ostream &o) const {
     o << "    movl    %eax, " << to << to->comment("MinusUnary") << endl;
 }
 
-
 void NotUnaryIrInstruction::renderX86(ostream &o) const {
     o << "    cmpl    $0, " << right << right->comment("NotUnary") << endl;
     o << "    sete    %al" << endl;
