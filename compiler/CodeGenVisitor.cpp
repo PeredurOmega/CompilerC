@@ -127,7 +127,7 @@ antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
                              (alwaysReturn || elseStatement->alwaysReturn))
                             || conditionalReturn ||
                             elseStatement->conditionalReturn;
-        alwaysReturn = alwaysReturn || elseStatement->alwaysReturn;
+        alwaysReturn = alwaysReturn && elseStatement->alwaysReturn;
     } else if (alwaysReturn || conditionalReturn) conditionalReturn = true;
 
     auto *ifBlock = new IfStatement((Expression *) compare, content,
