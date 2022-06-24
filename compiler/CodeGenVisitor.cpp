@@ -39,9 +39,10 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
         }
     }
 
-    auto* parameters = new vector<Parameter *>;
-    if (ctx->parameters() != nullptr){
-        parameters = any_cast<vector<Parameter *>*>(visitParameters(ctx->parameters()));
+    auto *parameters = new vector<Parameter *>;
+    if (ctx->parameters() != nullptr) {
+        parameters = any_cast<vector<Parameter *> *>(
+                visitParameters(ctx->parameters()));
     }
     auto *fun = new Function(ctx->VAR()->getText(), returnType, *parameters);
     auto block = visitBlock(ctx->block());
@@ -49,28 +50,33 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
     return fun;
 }
 
-antlrcpp::Any CodeGenVisitor::visitFunctionDeclaration(ifccParser::FunctionDeclarationContext *ctx) {
+antlrcpp::Any CodeGenVisitor::visitFunctionDeclaration(
+        ifccParser::FunctionDeclarationContext *ctx) {
     return (IrInstruction *) new Empty();
 }
 
-antlrcpp::Any CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext *ctx) {
-    auto* arguments = new vector<Expression *>;
-    if (ctx->arguments() != nullptr){
-        arguments = any_cast<vector<Expression *>*>(visitArguments(ctx->arguments()));
+antlrcpp::Any
+CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext *ctx) {
+    auto *arguments = new vector<Expression *>;
+    if (ctx->arguments() != nullptr) {
+        arguments = any_cast<vector<Expression *> *>(
+                visitArguments(ctx->arguments()));
     }
 
     return (IrInstruction *) new FunctionCall(ctx->VAR()->getText(), arguments);
 }
 
-antlrcpp::Any CodeGenVisitor::visitParameters(ifccParser::ParametersContext *ctx) {
-    auto* parameters = new vector<Parameter *>();
-    for(auto parameter: ctx->parameter()) {
+antlrcpp::Any
+CodeGenVisitor::visitParameters(ifccParser::ParametersContext *ctx) {
+    auto *parameters = new vector<Parameter *>();
+    for (auto parameter: ctx->parameter()) {
         parameters->push_back(any_cast<Parameter *>(visitParameter(parameter)));
     }
     return parameters;
 }
 
-antlrcpp::Any CodeGenVisitor::visitParameter(ifccParser::ParameterContext *ctx) {
+antlrcpp::Any
+CodeGenVisitor::visitParameter(ifccParser::ParameterContext *ctx) {
     PrimaryType *type;
     string rawType = ctx->TYPE()->getText();
     try {
@@ -82,16 +88,18 @@ antlrcpp::Any CodeGenVisitor::visitParameter(ifccParser::ParameterContext *ctx) 
     return new Parameter(type, ctx->VAR()->getText());
 }
 
-antlrcpp::Any CodeGenVisitor::visitArguments(ifccParser::ArgumentsContext *ctx) {
-    auto* arguments = new vector<Expression*>();
-    for(auto argument: ctx->argument()) {
-        arguments->push_back(any_cast<Expression*>(visitArgument(argument)));
+antlrcpp::Any
+CodeGenVisitor::visitArguments(ifccParser::ArgumentsContext *ctx) {
+    auto *arguments = new vector<Expression *>();
+    for (auto argument: ctx->argument()) {
+        arguments->push_back(any_cast<Expression *>(visitArgument(argument)));
     }
     return arguments;
 }
 
 antlrcpp::Any CodeGenVisitor::visitArgument(ifccParser::ArgumentContext *ctx) {
-    auto *expr = (Expression *) any_cast<IrInstruction *>(visit(ctx->expression()));
+    auto *expr = (Expression *) any_cast<IrInstruction *>(
+            visit(ctx->expression()));
     return expr;
 }
 
@@ -108,14 +116,14 @@ antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
 
 antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
     IrInstruction *compare;
-    if (ctx->statementWithoutAssignment() != nullptr) {
+    if (ctx->statementWithoutDeclaration() != nullptr) {
         compare = any_cast<IrInstruction *>(visit(ctx->expression()));
     } else {
         compare = any_cast<IrInstruction *>(visit(ctx->expAssignment()));
     }
 
     auto *content = any_cast<IrInstruction *>(
-            visit(ctx->statementWithoutAssignment()));
+            visit(ctx->statementWithoutDeclaration()));
 
     bool alwaysReturn = content->alwaysReturn;
     bool conditionalReturn = content->conditionalReturn;
@@ -443,7 +451,7 @@ CodeGenVisitor::visitWhileBlock(ifccParser::WhileBlockContext *ctx) {
     auto *compare = (Expression *) any_cast<IrInstruction *>(
             visit(ctx->expression()));
     auto *content = any_cast<IrInstruction *>(
-            visitStatementWithoutAssignment(ctx->statementWithoutAssignment()));
+            visit(ctx->statementWithoutDeclaration()));
     auto *whileStatement = new WhileStatement(compare, content);
     if (content->alwaysReturn) whileStatement->conditionalReturn = true;
     return (IrInstruction *) whileStatement;
