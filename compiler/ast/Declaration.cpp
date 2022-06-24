@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Declaration.h"
 
-Declaration::Declaration(PrimaryType *type) : IrInstruction(), type(type) {
+Declaration::Declaration(PrimaryType *type) : Instruction(), type(type) {
 
 }
 

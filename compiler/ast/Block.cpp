@@ -4,7 +4,7 @@
 
 #include "Block.h"
 
-void Block::addInstruction(IrInstruction *instruction) {
+void Block::addInstruction(Instruction *instruction) {
     if (instruction->alwaysReturn) {
         alwaysReturn = true;
     }

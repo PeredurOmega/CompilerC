@@ -7,11 +7,11 @@
 
 #include <unordered_map>
 #include "IrElement.h"
-#include "IrInstruction.h"
+#include "Instruction.h"
 
 using namespace std;
 
-class IrScope : public IrInstruction {
+class IrScope : public Instruction {
 public:
     explicit IrScope();
 

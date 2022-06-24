@@ -1,25 +1,28 @@
 //
-// Created by pauls on 16/06/2022.
+// Created by pauls on 24/06/2022.
 //
 
 #include "IrInstruction.h"
+#include <sstream>
 
-void IrInstruction::setOwner(IrScope *_owner) {
-    this->owner = _owner;
+using namespace std;
+
+ostream &Variable::operator<<(ostream &o) const {
+    o << offset << "(%rbp)";
+    return o;
 }
 
-IrInstruction::IrInstruction() {
-
+string Variable::comment(const string &opType) const {
+    if (name == nullptr) {
+        return " # Temp " + opType;
+    } else {
+        return " # " + *name + opType;
+    }
 }
 
-Empty::Empty() {
-
-}
-
-void Empty::affect(IrScope *owner) {
-
-}
-
-void Empty::renderX86(ostream &o) const {
-
+void AddIrInstruction::renderX86(ostream &o) const {
+    o << "    movl    " << left << ", %edx" << left->comment("Add") << endl;
+    o << "    movl    " << right << ", %eax" << right->comment("Add") << endl;
+    o << "    addl    %edx, %eax" << endl;
+    o << "    movl    %eax, " << to << to->comment("Add") << endl;
 }

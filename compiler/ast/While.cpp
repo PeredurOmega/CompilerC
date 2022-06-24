@@ -26,7 +26,7 @@ void WhileStatement::affect(IrScope *owner) {
     contentLabel = owner->getNewLabel();
 }
 
-WhileStatement::WhileStatement(Expression *compare, IrInstruction *content)
+WhileStatement::WhileStatement(Expression *compare, Instruction *content)
         : Expression(), compare(compare), content(content) {
 
 }

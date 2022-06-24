@@ -1,42 +1,54 @@
 //
-// Created by pauls on 16/06/2022.
+// Created by pauls on 24/06/2022.
 //
 
-#ifndef LIBANTLR4_IRINSTRUCTION_H
+#include "BasicBlock.h"
+
+#ifndef LIBANTLR4_INSTRUCTION_H
 #define LIBANTLR4_IRINSTRUCTION_H
 
+using namespace std;
 
-#include "IrElement.h"
+class BasicBlock;
 
-class IrScope;
-
-class IrInstruction : IrElement {
+class IrInstruction {
 public:
-    /**
-     * Initialized when added to a Block.
-     */
-    IrScope *owner = nullptr;
 
-    bool alwaysReturn = false;
-    bool conditionalReturn = false;
+    IrInstruction(BasicBlock *owner) : owner(owner) {};
 
-    explicit IrInstruction();
+    BasicBlock *owner;
 
-    virtual void affect(IrScope *owner) = 0;
-
-    virtual void setOwner(IrScope *owner);
-
-    void renderX86(ostream &o) const override = 0;
+    virtual void renderX86(ostream &o) const = 0;
 };
 
-class Empty : IrInstruction {
+class Variable {
 public:
-    explicit Empty();
+    Variable(string *name, int offset) : name(name), offset(offset) {};
 
-    void affect(IrScope *owner) override;
+    ostream &operator<<(ostream &o) const;
 
+    string comment(const string &opType) const;
+
+    string *name;
+protected:
+    int offset;
+};
+
+class OpIrInstruction : public IrInstruction {
+public:
+    OpIrInstruction(BasicBlock *owner, Variable *to, Variable *left, Variable *right) :
+            IrInstruction(owner), to(to), left(left), right(right) {};
+
+protected:
+    Variable *to;
+    Variable *left;
+    Variable *right;
+};
+
+class AddIrInstruction : public OpIrInstruction {
+public:
     void renderX86(ostream &o) const override;
 };
 
 
-#endif //LIBANTLR4_IRINSTRUCTION_H
+#endif //LIBANTLR4_INSTRUCTION_H

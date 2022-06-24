@@ -16,7 +16,7 @@ public:
 
     int finalLabel = 0;
 
-    explicit IfStatement(Expression *compare, IrInstruction *content,
+    explicit IfStatement(Expression *compare, Instruction *content,
                          ElseStatement *elseStatement);
 
     void renderX86(ostream &o) const override;
@@ -26,7 +26,7 @@ public:
 private:
     int firstLabel;
     Expression *compare;
-    IrInstruction *content;
+    Instruction *content;
     ElseStatement *elseStatement = nullptr;
 };
 
@@ -38,14 +38,14 @@ public:
 
     int finalLabel;
 
-    explicit ElseStatement(IrInstruction *content);
+    explicit ElseStatement(Instruction *content);
 
     void renderX86(ostream &o) const override;
 
     void affect(IrScope *owner) override;
 
 private:
-    IrInstruction *content;
+    Instruction *content;
 };
 
 

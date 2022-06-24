@@ -11,7 +11,7 @@
 class WhileStatement : public Expression {
 public:
 
-    explicit WhileStatement(Expression *compare, IrInstruction *content);
+    explicit WhileStatement(Expression *compare, Instruction *content);
 
     void renderX86(ostream &o) const override;
 
@@ -19,7 +19,7 @@ public:
 
 private:
     Expression *compare;
-    IrInstruction *content;
+    Instruction *content;
     int compareLabel;
     int contentLabel;
 };

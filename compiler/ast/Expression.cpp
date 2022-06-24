@@ -106,7 +106,7 @@ void Return::affect(IrScope *owner) {
     expression->affect(owner);
 }
 
-Expression::Expression() : IrInstruction() {
+Expression::Expression() : Instruction() {
 
 }
 

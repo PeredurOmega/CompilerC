@@ -8,13 +8,13 @@
 
 #include <vector>
 #include "IrScope.h"
-#include "IrInstruction.h"
+#include "Instruction.h"
 
 class Block : public IrScope {
 public:
     explicit Block();
 
-    void addInstruction(IrInstruction *instruction);
+    void addInstruction(Instruction *instruction);
 
     void renderX86(ostream &o) const override;
 
@@ -25,7 +25,7 @@ public:
     int conditionalJump() override;
 
 private:
-    vector<IrInstruction *> instructions;
+    vector<Instruction *> instructions;
 };
 
 

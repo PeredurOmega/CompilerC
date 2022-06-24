@@ -9,12 +9,12 @@
 #include <vector>
 #include "IrElement.h"
 #include "IrScope.h"
-#include "IrInstruction.h"
+#include "Instruction.h"
 #include "Function.h"
 
 using namespace std;
 
-class Expression : public IrInstruction {
+class Expression : public Instruction {
 public:
     explicit Expression();
 

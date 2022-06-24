@@ -19,7 +19,7 @@ public:
     Expression *init;
 };
 
-class Declaration : IrInstruction {
+class Declaration : Instruction {
 public:
     explicit Declaration(PrimaryType *type);
 
