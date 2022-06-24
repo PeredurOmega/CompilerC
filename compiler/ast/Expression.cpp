@@ -6,6 +6,7 @@
 #include "../ir/IrConstant.h"
 #include "../ir/IrReturn.h"
 #include "../ir/IrJump.h"
+#include "../ir/IrCopy.h"
 #include <sstream>
 #include <utility>
 #include <iostream>
@@ -51,20 +52,6 @@ void FunctionCall::affect(IrScope *owner) {
     }
 }
 
-void Variable::renderX86(ostream &o) const {
-    if (assignTo != nullptr) {
-        o << "    movl    " << offset << "(%rbp), %eax #" << name << endl;
-        o << "    movl    %eax, " << owner->getOffset(*assignTo) << "(%rbp) #"
-          << *assignTo << endl;
-    } else {
-        // Nothing to do in a variable
-    }
-}
-
-Variable::Variable(string name) : Expression(), name(std::move(name)) {
-
-}
-
 vector<IrInstruction *> *Variable::linearize() {
     var = new IrVariable(&name, owner->getOffset(&name));
     return new vector<IrInstruction *>();
@@ -73,7 +60,7 @@ vector<IrInstruction *> *Variable::linearize() {
 vector<IrInstruction *> *Constant::linearize() {
     auto *inst = new vector<IrInstruction *>();
     var = new IrVariable(nullptr, owner->insertTempVariable());
-    auto *c = new IrConstant(owner->getBasicBlock(), var, value);
+    auto *c = new IrConstant(owner->basicBlock(), var, value);
     inst->push_back(c);
     return inst;
 }
@@ -88,30 +75,16 @@ vector<IrInstruction *> *Return::linearize() {
     return inst;
 }
 
-Expression::Expression() : Instruction() {
-
-}
-
-VarExpr::VarExpr(vector<string *> *varNames, Expression *expression) :
-        Expression(), varNames(*varNames), expression(expression) {
-
-}
-
-void VarExpr::affect(IrScope *owner) {
-    setOwner(owner);
-    expression->affect(owner);
-    for (auto v: varNames) {
-        offsets.push_back(owner->getOffset(*v));
+vector<IrInstruction *> *VarExpr::linearize() {
+    auto *inst = expression->linearize();
+    auto lastVar = varNames.front();
+    auto *prevVar = expression->var;
+    for (int i = (int) varNames.size() - 1; i >= 0; i--) {
+        auto *to = new IrVariable(varNames[i], owner->getOffset(varNames[i]));
+        auto *copy = new IrCopy(prevVar, to);
+        prevVar = to;
+        inst->push_back(copy);
     }
-    offset = offsets.front();
-}
-
-void VarExpr::renderX86(ostream &o) const {
-    expression->renderX86(o);
-    for (int i = (int) offsets.size() - 1; i > 0; i--) {
-        o << "    movl    " << offsets[i] << "(%rbp), %eax #" << *varNames[i]
-          << endl;
-        o << "    movl    %eax, " << offsets[i - 1] << "(%rbp) #"
-          << *varNames[i - 1] << endl;
-    }
+    var = new IrVariable(lastVar, owner->getOffset(lastVar));
+    return inst;
 }

@@ -16,7 +16,7 @@ using namespace std;
 
 class Expression : public Instruction {
 public:
-    explicit Expression();
+    explicit Expression() : Instruction() {};
 
     /**
      * Initialized after linearization.
@@ -45,7 +45,8 @@ private:
 
 class Return : public Expression {
 public:
-    explicit Return(Expression *expression) : Expression(), expression(expression) {
+    explicit Return(Expression *expression)
+            : Expression(), expression(expression) {
         alwaysReturn = true;
     };
 
@@ -68,23 +69,21 @@ class Variable : public Expression {
 public:
     string name;
 
-    explicit Variable(string name);
+    explicit Variable(string name) : Expression(), name(std::move(name)) {};
 
     vector<IrInstruction *> *linearize() override;
 };
 
 class VarExpr : public Expression {
 public:
-    explicit VarExpr(vector<string *> *varNames, Expression *expr);
+    explicit VarExpr(vector<string *> *varNames, Expression *expr)
+            : Expression(), varNames(*varNames), expression(expr) {};
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 
 private:
     vector<string *> varNames;
     Expression *expression;
-    vector<int> offsets;
 };
 
 
