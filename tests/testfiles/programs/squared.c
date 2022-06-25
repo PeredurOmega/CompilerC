@@ -13,6 +13,7 @@ int main(){
         if(times2(squared(i))!=(i*i*2)){
             return 0;
         }
+        i++;
     }
 
     return 1;
