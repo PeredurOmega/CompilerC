@@ -12,7 +12,7 @@ using namespace std;
 
 class BasicBlock;
 
-class IrInstruction: public IrElement {
+class IrInstruction : public IrElement {
 public:
 
     using IrElement::IrElement;
@@ -26,7 +26,7 @@ class IrVariable {
 public:
     explicit IrVariable(string *name, int offset) : name(name), offset(offset) {};
 
-    virtual ostream &operator<<(ostream &o) const;
+    friend ostream &operator<<(ostream &o, IrVariable *var);
 
     virtual string comment(const string &opType) const;
 
@@ -39,7 +39,7 @@ class IrRegister : public IrVariable {
 public:
     explicit IrRegister(string *name, string *registerName) : IrVariable(name, -1), registerName(registerName) {};
 
-    ostream &operator<<(ostream &o) const override;
+    friend ostream &operator<<(ostream &o, IrRegister *var);
 
     string comment(const string &opType) const override;
 

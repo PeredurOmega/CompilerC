@@ -21,6 +21,8 @@ public:
 
     vector<IrInstruction *> *linearize() override;
 
+    void setOwner(IrScope *owner) override;
+
 private:
     int firstLabel;
     Expression *compare;
@@ -36,9 +38,11 @@ public:
 
     int finalLabel;
 
-    explicit ElseStatement(Instruction *content): Expression(), content(content) {};
+    explicit ElseStatement(Instruction *content) : Expression(), content(content) {};
 
     vector<IrInstruction *> *linearize() override;
+
+    void setOwner(IrScope *owner) override;
 
 private:
     Instruction *content;

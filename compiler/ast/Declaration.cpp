@@ -25,3 +25,12 @@ vector<IrInstruction *> *Declaration::linearize() {
     }
     return instr;
 }
+
+void Declaration::setOwner(IrScope *owner) {
+    Instruction::setOwner(owner);
+    for (auto d: declarations) {
+        if (d->init != nullptr) {
+            d->init->setOwner(owner);
+        }
+    }
+}

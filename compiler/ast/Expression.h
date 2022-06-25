@@ -39,6 +39,8 @@ public:
 
     vector<IrInstruction *> *linearize() override;
 
+    void setOwner(IrScope *owner) override;
+
 private:
     string name;
     vector<Expression *> *arguments;
@@ -46,12 +48,13 @@ private:
 
 class Return : public Expression {
 public:
-    explicit Return(Expression *expression)
-            : Expression(), expression(expression) {
+    explicit Return(Expression *expression) : Expression(), expression(expression) {
         alwaysReturn = true;
     };
 
     vector<IrInstruction *> *linearize() override;
+
+    void setOwner(IrScope *owner) override;
 
 private:
     Expression *expression;
@@ -81,6 +84,8 @@ public:
             : Expression(), varNames(*varNames), expression(expr) {};
 
     vector<IrInstruction *> *linearize() override;
+
+    void setOwner(IrScope *owner) override;
 
 private:
     vector<string *> varNames;

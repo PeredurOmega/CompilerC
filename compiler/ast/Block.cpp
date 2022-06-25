@@ -11,7 +11,7 @@ void Block::addInstruction(Instruction *instruction) {
     if (instruction->conditionalReturn) {
         conditionalReturn = true;
     }
-    instruction->setOwner(owner);
+    instruction->setOwner(this);
     instructions.push_back(instruction);
 }
 

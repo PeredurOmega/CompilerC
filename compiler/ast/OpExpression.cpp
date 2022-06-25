@@ -19,6 +19,12 @@ vector<IrInstruction *> *OpExpression::linearize() {
     return lInstr;
 }
 
+void OpExpression::setOwner(IrScope *owner) {
+    Instruction::setOwner(owner);
+    lExpr->setOwner(owner);
+    rExpr->setOwner(owner);
+}
+
 vector<IrInstruction *> *AddOperation::linearize() {
     auto *lInstr = OpExpression::linearize();
     lInstr->push_back(new AddIrInstruction(var, lExpr->var, rExpr->var));

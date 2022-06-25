@@ -16,6 +16,8 @@ public:
 
     vector<IrInstruction *> *linearize() override;
 
+    void setOwner(IrScope *owner) override;
+
 private:
     Expression *compare;
     Instruction *content;

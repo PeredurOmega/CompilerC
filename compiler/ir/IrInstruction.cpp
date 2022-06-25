@@ -7,11 +7,6 @@
 
 using namespace std;
 
-ostream &IrVariable::operator<<(ostream &o) const {
-    o << offset << "(%rbp)";
-    return o;
-}
-
 string IrVariable::comment(const string &opType) const {
     if (name == nullptr) {
         return " # Temp " + opType;
@@ -20,8 +15,17 @@ string IrVariable::comment(const string &opType) const {
     }
 }
 
-ostream &IrRegister::operator<<(ostream &o) const {
-    o << "%" << *registerName;
+ostream &operator<<(ostream &o, IrVariable *var) {
+    if (dynamic_cast<IrRegister *>(var) != nullptr) {
+        o << (IrRegister *) var;
+    } else {
+        o << var->offset << "(%rbp)";
+    }
+    return o;
+}
+
+ostream &operator<<(ostream &o, IrRegister *var) {
+    o << "%" << *(var->registerName);
     return o;
 }
 

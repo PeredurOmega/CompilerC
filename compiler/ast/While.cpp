@@ -23,3 +23,9 @@ vector<IrInstruction *> *WhileStatement::linearize() {
     instr->push_back(new IrJumpIfNotEqual(contentLabel));
     return instr;
 }
+
+void WhileStatement::setOwner(IrScope *owner) {
+    Instruction::setOwner(owner);
+    compare->setOwner(owner);
+    content->setOwner(owner);
+}

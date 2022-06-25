@@ -11,6 +11,11 @@ vector<IrInstruction *> *UnaryOp::linearize() {
     return rInstr;
 }
 
+void UnaryOp::setOwner(IrScope *owner) {
+    Instruction::setOwner(owner);
+    rExpr->setOwner(owner);
+}
+
 vector<IrInstruction *> *MinusUnary::linearize() {
     auto *rInstr = UnaryOp::linearize();
     rInstr->push_back(new MinusUnaryIrInstruction(var, rExpr->var));

@@ -38,6 +38,13 @@ vector<IrInstruction *> *IfStatement::linearize() {
     return nullptr;
 }
 
+void IfStatement::setOwner(IrScope *owner) {
+    Instruction::setOwner(owner);
+    compare->setOwner(owner);
+    content->setOwner(owner);
+    if (elseStatement != nullptr) elseStatement->setOwner(owner);
+}
+
 vector<IrInstruction *> *ElseStatement::linearize() {
     auto *instr = new vector<IrInstruction *>();
     label = owner->getNewLabel();
@@ -48,4 +55,9 @@ vector<IrInstruction *> *ElseStatement::linearize() {
     auto *body = content->linearize();
     instr->insert(instr->end(), body->begin(), body->end());
     return instr;
+}
+
+void ElseStatement::setOwner(IrScope *owner) {
+    Instruction::setOwner(owner);
+    content->setOwner(owner);
 }
