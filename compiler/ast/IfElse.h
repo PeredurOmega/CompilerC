@@ -16,12 +16,10 @@ public:
 
     int finalLabel = 0;
 
-    explicit IfStatement(Expression *compare, Instruction *content,
-                         ElseStatement *elseStatement);
+    explicit IfStatement(Expression *compare, Instruction *content, ElseStatement *elseStatement)
+            : Expression(), compare(compare), content(content), elseStatement(elseStatement) {};
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 
 private:
     int firstLabel;
@@ -38,11 +36,9 @@ public:
 
     int finalLabel;
 
-    explicit ElseStatement(Instruction *content);
+    explicit ElseStatement(Instruction *content): Expression(), content(content) {};
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 
 private:
     Instruction *content;

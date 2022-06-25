@@ -3,64 +3,49 @@
 //
 
 #include "IfElse.h"
+#include "../ir/IrCompare.h"
+#include "../ir/IrJump.h"
+#include "../ir/IrLabel.h"
 #include <sstream>
 
-void IfStatement::renderX86(ostream &o) const {
-    compare->renderX86(o);
-    o << "    cmpl    $0, " << compare->offset << "(%rbp)" << endl;
+
+vector<IrInstruction *> *IfStatement::linearize() {
+    auto *instr = compare->linearize();
+    instr->push_back(new IrCompare(compare->var));
+
+    firstLabel = owner->getNewLabel();
+    if (finalLabel == 0) finalLabel = owner->getNewLabel();
+
     int nextLabel;
     if (elseStatement != nullptr) nextLabel = elseStatement->label;
     else nextLabel = finalLabel;
-    o << "    je      .L" << nextLabel << endl;
+    instr->push_back(new IrJumpIfEqual(nextLabel));
 
-    content->renderX86(o);
+    auto *body = content->linearize();
+    instr->insert(instr->end(), body->begin(), body->end());
 
     if (elseStatement != nullptr) {
-        o << "    jmp      .L" << finalLabel << endl;
-        elseStatement->renderX86(o);
+        elseStatement->finalLabel = finalLabel;
+        instr->push_back(new IrJump(finalLabel));
+        auto *elseBlock = content->linearize();
+        instr->insert(instr->end(), elseBlock->begin(), elseBlock->end());
     }
 
     // Closing the branch
     if (finalLabel == firstLabel + 1) {
-        o << ".L" << finalLabel << ":" << endl;
+        instr->push_back(new IrLabel(".L" + to_string(finalLabel)));
     }
+    return nullptr;
 }
 
-void IfStatement::affect(IrScope *owner) {
-    setOwner(owner);
-    compare->affect(owner);
-    firstLabel = owner->getNewLabel();
-    if (finalLabel == 0) finalLabel = owner->getNewLabel();
-    content->setOwner(owner);
-    content->affect(owner);
-    if (elseStatement != nullptr) {
-        elseStatement->finalLabel = finalLabel;
-        elseStatement->affect(owner);
-    }
-}
-
-IfStatement::IfStatement(Expression *compare, Instruction *content,
-                         ElseStatement *elseStatement) :
-        Expression(), compare(compare), content(content),
-        elseStatement(elseStatement) {
-}
-
-void ElseStatement::affect(IrScope *owner) {
+vector<IrInstruction *> *ElseStatement::linearize() {
+    auto *instr = new vector<IrInstruction *>();
+    label = owner->getNewLabel();
+    instr->push_back(new IrLabel(".L" + to_string(label)));
     if (dynamic_cast<IfStatement *>(content) != nullptr) {
         ((IfStatement *) content)->finalLabel = finalLabel;
     }
-    setOwner(owner);
-    label = owner->getNewLabel();
-    content->setOwner(owner);
-    content->affect(owner);
-}
-
-ElseStatement::ElseStatement(Instruction *content)
-        : Expression(), content(content) {
-
-}
-
-void ElseStatement::renderX86(ostream &o) const {
-    o << ".L" << label << ":" << endl;
-    content->renderX86(o);
+    auto *body = content->linearize();
+    instr->insert(instr->end(), body->begin(), body->end());
+    return instr;
 }

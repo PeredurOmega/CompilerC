@@ -17,5 +17,14 @@ public:
     int toLabel;
 };
 
+class IrJumpIfEqual : public IrInstruction {
+public:
+    explicit IrJumpIfEqual(int toLabel) : IrInstruction(), toLabel(toLabel) {};
+
+    void renderX86(ostream &o) const override;
+
+    int toLabel;
+};
+
 
 #endif //LIBANTLR4_IRJUMP_H

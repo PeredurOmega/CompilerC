@@ -8,3 +8,7 @@
 void IrJump::renderX86(ostream &o) const {
     o << "    jmp      .L" << toLabel << endl;
 }
+
+void IrJumpIfEqual::renderX86(ostream &o) const {
+    o << "    je      .L" << toLabel << endl;
+}
