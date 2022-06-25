@@ -16,6 +16,19 @@ string IrVariable::comment(const string &opType) const {
     if (name == nullptr) {
         return " # Temp " + opType;
     } else {
-        return " # " + *name + opType;
+        return " # " + *name + " " + opType;
+    }
+}
+
+ostream &IrRegister::operator<<(ostream &o) const {
+    o << "%" << *registerName;
+    return o;
+}
+
+string IrRegister::comment(const string &opType) const {
+    if (name == nullptr) {
+        return " # Temp " + opType;
+    } else {
+        return " # " + *name + " " + opType;
     }
 }

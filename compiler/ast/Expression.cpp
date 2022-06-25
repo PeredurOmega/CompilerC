@@ -7,49 +7,38 @@
 #include "../ir/IrReturn.h"
 #include "../ir/IrJump.h"
 #include "../ir/IrCopy.h"
-#include <sstream>
-#include <utility>
+#include "../ir/IrPushq.h"
+#include "../ir/IrCall.h"
+#include "../ir/IrAddQ.h"
 #include <iostream>
 
-FunctionCall::FunctionCall(string name, vector<Expression *> *arguments) : name(
-        std::move(name)), arguments(arguments) {}
 
-void FunctionCall::renderX86(ostream &o) const {
-    vector<string> registersName = {"%edi", "%esi", "%edx", "%ecx", "%r8d",
-                                    "%r9d"};
+const vector<IrRegister *> FunctionCall::registers = { // NOLINT(cert-err58-cpp)
+        new IrRegister(nullptr, new string("edi")),
+        new IrRegister(nullptr, new string("esi")),
+        new IrRegister(nullptr, new string("edx")),
+        new IrRegister(nullptr, new string("ecx")),
+        new IrRegister(nullptr, new string("r8d")),
+        new IrRegister(nullptr, new string("r9d"))
+};
+
+vector<IrInstruction *> *FunctionCall::linearize() {
+    auto *instructions = new vector<IrInstruction *>();
     for (int i = (int) arguments->size() - 1; i >= 0; --i) {
-        Expression *expression = (*arguments)[i];
-        expression->renderX86(o);
+        auto *expr = (*arguments)[i];
+        auto *instr = expr->linearize();
+        instructions->insert(instructions->end(), instr->begin(), instr->end());
         if (i < 6) {
-            o << "    movl    " << expression->offset
-              << "(%rbp), " + registersName[i] << endl;
+            instructions->push_back(new IrCopy(expr->var, registers[i]));
         } else {
-            o << "    pushq    " << expression->offset << "(%rbp)" << endl;
+            instructions->push_back(new IrPushq(expr->var));
         }
     }
-    o << "    call    " << name << endl;
-    if (arguments->size() > 6) {
-        o << "    addq    $" << 8 * (arguments->size() - 6) << ", %rsp" << endl;
-    }
-    o << "    movl    %eax, " << offset << "(%rbp) #";
-    if (assignTo != nullptr) {
-        o << *assignTo;
-    } else {
-        o << "Temp operation result '>>'";
-    }
-    o << endl;
-}
-
-void FunctionCall::affect(IrScope *owner) {
-    setOwner(owner);
-    for (auto expression: *arguments) {
-        expression->affect(owner);
-    }
-    if (assignTo == nullptr) {
-        offset = owner->insertTempVariable();
-    } else {
-        offset = owner->getOffset(*assignTo);
-    }
+    instructions->push_back(new IrCall(name));
+    instructions->push_back(new IrAddQ(8 * ((int) arguments->size() - 6)));
+    instructions->push_back(new IrCopy(new IrRegister(nullptr, new string("eax")),
+                                       new IrVariable(assignTo, owner->getOffset(assignTo))));
+    return instructions;
 }
 
 vector<IrInstruction *> *Variable::linearize() {
@@ -59,8 +48,8 @@ vector<IrInstruction *> *Variable::linearize() {
 
 vector<IrInstruction *> *Constant::linearize() {
     auto *inst = new vector<IrInstruction *>();
-    var = new IrVariable(nullptr, owner->insertTempVariable());
-    auto *c = new IrConstant(owner->basicBlock(), var, value);
+    var = new IrVariable(assignTo, owner->getOffset(assignTo));
+    auto *c = new IrConstant(value, var);
     inst->push_back(c);
     return inst;
 }

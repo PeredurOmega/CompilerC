@@ -32,11 +32,12 @@ public:
 
 class FunctionCall : public Expression {
 public:
-    explicit FunctionCall(string name, vector<Expression *> *arguments);
+    static const vector<IrRegister *> registers;
 
-    void renderX86(ostream &o) const override;
+    explicit FunctionCall(string name, vector<Expression *> *arguments)
+            : name(std::move(name)), arguments(arguments) {};
 
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 
 private:
     string name;

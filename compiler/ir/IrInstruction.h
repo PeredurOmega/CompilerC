@@ -19,15 +19,28 @@ public:
 
 class IrVariable {
 public:
-    IrVariable(string *name, int offset) : name(name), offset(offset) {};
+    explicit IrVariable(string *name, int offset) : name(name), offset(offset) {};
 
-    ostream &operator<<(ostream &o) const;
+    virtual ostream &operator<<(ostream &o) const;
 
-    string comment(const string &opType) const;
+    virtual string comment(const string &opType) const;
 
     string *name;
-protected:
+private:
     int offset;
 };
 
-#endif //LIBANTLR4_INSTRUCTION_H
+class IrRegister : public IrVariable {
+public:
+    explicit IrRegister(string *name, string *registerName) : name(name), registerName(registerName) {};
+
+    ostream &operator<<(ostream &o) const override;
+
+    string comment(const string &opType) const override;
+
+    string *name;
+
+    string *registerName;
+};
+
+#endif //LIBANTLR4_IRINSTRUCTION_H

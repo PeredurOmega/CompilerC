@@ -6,6 +6,12 @@
 #include <sstream>
 
 void IrCopy::renderX86(ostream &o) const {
-    o << "    movl    " << from << ", %eax" << from->comment("Copy") << endl;
-    o << "    movl    %eax, " << to << "(%rbp)" << to->comment("Copy") << endl;
+    if (dynamic_cast<IrRegister *>(from) != nullptr) {
+        o << "    movl    " << from << ", " << to << to->comment("CopyFromRegister") << endl;
+    } else if (dynamic_cast<IrRegister *>(to) != nullptr) {
+        o << "    movl    " << from << ", " << to << from->comment("CopyToRegister") << endl;
+    } else {
+        o << "    movl    " << from << ",  %eax" << from->comment("Copy") << endl;
+        o << "    movl    %eax, " << to << to->comment("Copy") << endl;
+    }
 }
