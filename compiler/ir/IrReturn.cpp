@@ -6,5 +6,5 @@
 #include <sstream>
 
 void IrReturn::renderX86(ostream &o) const {
-    o << "    movl    " << from << "(%rbp), %eax" << from->comment("Return") << endl;
+    o << "    movl    " << from << ", %eax" << from->comment("Return") << endl;
 }

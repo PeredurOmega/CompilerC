@@ -16,6 +16,7 @@
 using namespace std;
 
 vector<IrInstruction *> *Function::linearize() {
+    endLabel = owner->getNewLabel();
     auto *instr = new vector<IrInstruction *>();
     int stackShift = (int) ((symbolTable.size() / 4) + 1) * 32;
     instr->push_back(new IrLabel(name));

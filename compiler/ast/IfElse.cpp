@@ -17,7 +17,7 @@ vector<IrInstruction *> *IfStatement::linearize() {
     if (finalLabel == 0) finalLabel = owner->getNewLabel();
 
     int nextLabel;
-    if (elseStatement != nullptr) nextLabel = elseStatement->label;
+    if (elseStatement != nullptr) nextLabel = elseStatement->label = owner->getNewLabel();
     else nextLabel = finalLabel;
     instr->push_back(new IrJumpIfEqual(nextLabel));
 
@@ -27,7 +27,7 @@ vector<IrInstruction *> *IfStatement::linearize() {
     if (elseStatement != nullptr) {
         elseStatement->finalLabel = finalLabel;
         instr->push_back(new IrJump(finalLabel));
-        auto *elseBlock = content->linearize();
+        auto *elseBlock = elseStatement->linearize();
         instr->insert(instr->end(), elseBlock->begin(), elseBlock->end());
     }
 
@@ -35,7 +35,7 @@ vector<IrInstruction *> *IfStatement::linearize() {
     if (finalLabel == firstLabel + 1) {
         instr->push_back(new IrLabel(".L" + to_string(finalLabel)));
     }
-    return nullptr;
+    return instr;
 }
 
 void IfStatement::setOwner(IrScope *owner) {
@@ -47,7 +47,6 @@ void IfStatement::setOwner(IrScope *owner) {
 
 vector<IrInstruction *> *ElseStatement::linearize() {
     auto *instr = new vector<IrInstruction *>();
-    label = owner->getNewLabel();
     instr->push_back(new IrLabel(".L" + to_string(label)));
     if (dynamic_cast<IfStatement *>(content) != nullptr) {
         ((IfStatement *) content)->finalLabel = finalLabel;
