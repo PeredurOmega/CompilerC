@@ -15,16 +15,14 @@ class Parameter;
 
 class Function : public Block {
 public:
-    //TODO HANDLE PARAMETERS
-    explicit Function(string name, const IrType *returnType, const vector<Parameter *>& parameters);
+    explicit Function(string name, const IrType *returnType, const vector<Parameter *> &parameters)
+            : returnType(returnType), name(std::move(name)), parameters(parameters) {};
 
-    void renderX86(ostream &o) const override;
+    vector<IrInstruction *> *linearize() override;
 
     void setBlock(Block *block);
 
     int conditionalJump() override;
-
-    void affect(IrScope *owner) override;
 
 private:
     const string MAIN = "main";
@@ -38,6 +36,7 @@ private:
 class Parameter {
 public:
     explicit Parameter(PrimaryType *type, string name);
+
     PrimaryType *type;
     string name;
 };
