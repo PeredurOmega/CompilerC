@@ -3,3 +3,8 @@
 //
 
 #include "IrCall.h"
+#include <sstream>
+
+void IrCall::renderX86(ostream &o) const {
+    o << "call " << label << endl;
+}

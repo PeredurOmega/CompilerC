@@ -6,11 +6,16 @@
 #define LIBANTLR4_IRINSTRUCTION_H
 
 #include "BasicBlock.h"
+#include "IrElement.h"
 
 using namespace std;
 
-class IrInstruction {
+class BasicBlock;
+
+class IrInstruction: public IrElement {
 public:
+
+    using IrElement::IrElement;
 
     BasicBlock *owner;
 
@@ -32,13 +37,11 @@ private:
 
 class IrRegister : public IrVariable {
 public:
-    explicit IrRegister(string *name, string *registerName) : name(name), registerName(registerName) {};
+    explicit IrRegister(string *name, string *registerName) : IrVariable(name, -1), registerName(registerName) {};
 
     ostream &operator<<(ostream &o) const override;
 
     string comment(const string &opType) const override;
-
-    string *name;
 
     string *registerName;
 };

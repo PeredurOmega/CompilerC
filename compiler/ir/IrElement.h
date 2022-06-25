@@ -11,6 +11,8 @@ using namespace std;
 
 class IrElement {
 public:
+    explicit IrElement() = default;
+
     virtual void renderX86(ostream &o) const = 0;
 };
 

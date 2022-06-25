@@ -6,11 +6,13 @@
 #define LIBANTLR4_IRCALL_H
 
 
+#include <utility>
+
 #include "IrInstruction.h"
 
 class IrCall : public IrInstruction {
 public:
-    explicit IrCall(string label) : IrInstruction(), label(label) {};
+    explicit IrCall(string label) : IrInstruction(), label(std::move(label)) {};
 
     void renderX86(ostream &o) const override;
 

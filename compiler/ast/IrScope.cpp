@@ -53,12 +53,3 @@ int IrScope::getNewLabel() {
     *label = *label + 1;
     return *label;
 }
-
-IrScope::IrScope() : Instruction() {
-
-}
-
-BasicBlock *IrScope::basicBlock() {
-    return new BasicBlock(getNewLabel());
-}
-

@@ -17,15 +17,11 @@ class Prog : IrScope {
 public:
     explicit Prog(string entry);
 
-    void renderX86(ostream &o) const override;
+    vector<IrInstruction *> *linearize() override;
 
     void addFunction(Function *function);
 
-    void affect();
-
     void setOwner(IrScope *owner) override;
-
-    void affect(IrScope *owner) override;
 
     int conditionalJump() override;
 

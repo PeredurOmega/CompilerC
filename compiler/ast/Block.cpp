@@ -8,15 +8,11 @@ void Block::addInstruction(Instruction *instruction) {
     if (instruction->alwaysReturn) {
         alwaysReturn = true;
     }
-    if (instruction->conditionalReturn) conditionalReturn = true;
+    if (instruction->conditionalReturn) {
+        conditionalReturn = true;
+    }
     instruction->setOwner(owner);
     instructions.push_back(instruction);
-}
-
-void Block::renderX86(ostream &o) const {
-    for (auto instruction: instructions) {
-        instruction->renderX86(o);
-    }
 }
 
 void Block::attachTo(Block *block) {
@@ -27,17 +23,25 @@ void Block::attachTo(Block *block) {
     }
 }
 
-void Block::affect(IrScope *owner) {
-    if(alwaysReturn) owner->alwaysReturn= alwaysReturn;
-    if(conditionalReturn) owner->conditionalReturn= conditionalReturn;
-    for (auto i: instructions) {
-        i->affect(this);
-    }
-}
-
 int Block::conditionalJump() {
     if (alwaysReturn) return -1;
     else return owner->conditionalJump();
 }
 
-Block::Block() = default;
+vector<IrInstruction *> *Block::linearize() {
+    auto *instr = new vector<IrInstruction *>();
+    for (auto *inst: instructions) {
+        auto *l = inst->linearize();
+        instr->insert(instr->end(), l->begin(), l->end());
+    }
+    return instr;
+}
+
+void Block::setOwner(IrScope *owner) {
+    IrScope::setOwner(owner);
+    if (alwaysReturn) owner->alwaysReturn = alwaysReturn;
+    if (conditionalReturn) owner->conditionalReturn = conditionalReturn;
+    for (auto i: instructions) {
+        i->setOwner(this);
+    }
+}

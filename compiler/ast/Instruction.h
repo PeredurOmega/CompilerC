@@ -7,12 +7,12 @@
 
 
 #include <vector>
-#include "IrElement.h"
+#include "../ir/IrElement.h"
 #include "../ir/IrInstruction.h"
 
 class IrScope;
 
-class Instruction : IrElement {
+class Instruction {
 public:
     /**
      * Initialized when added to a Block.
@@ -22,7 +22,7 @@ public:
     bool alwaysReturn = false;
     bool conditionalReturn = false;
 
-    explicit Instruction();
+    explicit Instruction() {};
 
     virtual void setOwner(IrScope *owner);
 
@@ -31,11 +31,9 @@ public:
 
 class Empty : Instruction {
 public:
-    explicit Empty();
+    using Instruction::Instruction;
 
-    void affect(IrScope *owner) override;
-
-    void renderX86(ostream &o) const override;
+    vector<IrInstruction *> *linearize() override;
 };
 
 

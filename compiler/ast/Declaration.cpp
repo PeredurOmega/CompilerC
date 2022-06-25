@@ -5,38 +5,23 @@
 #include <iostream>
 #include "Declaration.h"
 
-Declaration::Declaration(PrimaryType *type) : Instruction(), type(type) {
-
-}
-
 void Declaration::addRawDeclaration(RawDeclaration *rawDec) {
     declarations.push_back(rawDec);
 }
 
-void Declaration::renderX86(ostream &o) const {
-    for (auto d: declarations) {
-        if (d->init != nullptr) {
-            d->init->renderX86(o);
-        } else {
-            // Nothing to do when declaring new variables without initializing them
-        }
-    }
-}
-
-void Declaration::affect(IrScope *owner) {
-    setOwner(owner);
+vector<IrInstruction *> *Declaration::linearize() {
+    auto *instr = new vector<IrInstruction *>();
     for (auto d: declarations) {
         if (d->init != nullptr) {
             d->init->assignTo = d->name;
             // Init is the first thing to happen in C
             owner->insertInitializedVariable(*d->name);
-            d->init->affect(owner);
+            auto *l = d->init->linearize();
+            instr->insert(instr->end(), l->begin(), l->end());
         } else {
             owner->insertDeclaration(*d->name);
+            // Nothing to do when declaring new variables without initializing them
         }
     }
-}
-
-RawDeclaration::RawDeclaration(string *name, Expression *init) : name(name),
-                                                                 init(init) {
+    return instr;
 }

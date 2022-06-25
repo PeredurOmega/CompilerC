@@ -6,14 +6,14 @@
 #define LIBANTLR4_IRSCOPE_H
 
 #include <unordered_map>
-#include "IrElement.h"
+#include "../ir/IrElement.h"
 #include "Instruction.h"
 
 using namespace std;
 
 class IrScope : public Instruction {
 public:
-    explicit IrScope();
+    using Instruction::Instruction;
 
     int currentOffset = 0;
 
@@ -26,8 +26,6 @@ public:
     int getOffset(string *varName);
 
     int getNewLabel();
-
-    BasicBlock* basicBlock();
 
     void setOwner(IrScope *owner) override;
 

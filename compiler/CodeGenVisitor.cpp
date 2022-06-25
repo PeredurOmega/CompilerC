@@ -1,11 +1,11 @@
 #include "CodeGenVisitor.h"
-#include "ir/Prog.h"
-#include "ir/Declaration.h"
-#include "ir/Expression.h"
-#include "ir/OpExpression.h"
-#include "ir/IfElse.h"
-#include "ir/UnaryOp.h"
-#include "ir/While.h"
+#include "ast/Prog.h"
+#include "ast/Declaration.h"
+#include "ast/Expression.h"
+#include "ast/OpExpression.h"
+#include "ast/IfElse.h"
+#include "ast/UnaryOp.h"
+#include "ast/While.h"
 
 using namespace std;
 
@@ -14,13 +14,12 @@ antlrcpp::Any CodeGenVisitor::visitAxiom(ifccParser::AxiomContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
-    Prog *prog = new Prog("main");
+    auto *prog = new Prog("main");
 
     for (auto f: ctx->function()) {
         prog->addFunction(any_cast<Function *>(visit(f)));
     }
 
-    prog->affect();
     return prog;
 }
 
@@ -46,13 +45,13 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
     }
     auto *fun = new Function(ctx->VAR()->getText(), returnType, *parameters);
     auto block = visitBlock(ctx->block());
-    fun->setBlock((Block *) any_cast<IrInstruction *>(block));
+    fun->setBlock((Block *) any_cast<Instruction *>(block));
     return fun;
 }
 
 antlrcpp::Any CodeGenVisitor::visitFunctionDeclaration(
         ifccParser::FunctionDeclarationContext *ctx) {
-    return (IrInstruction *) new Empty();
+    return (Instruction *) new Empty();
 }
 
 antlrcpp::Any
@@ -63,7 +62,7 @@ CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext *ctx) {
                 visitArguments(ctx->arguments()));
     }
 
-    return (IrInstruction *) new FunctionCall(ctx->VAR()->getText(), arguments);
+    return (Instruction *) new FunctionCall(ctx->VAR()->getText(), arguments);
 }
 
 antlrcpp::Any
@@ -98,7 +97,7 @@ CodeGenVisitor::visitArguments(ifccParser::ArgumentsContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitArgument(ifccParser::ArgumentContext *ctx) {
-    auto *expr = (Expression *) any_cast<IrInstruction *>(
+    auto *expr = (Expression *) any_cast<Instruction *>(
             visit(ctx->expression()));
     return expr;
 }
@@ -106,30 +105,29 @@ antlrcpp::Any CodeGenVisitor::visitArgument(ifccParser::ArgumentContext *ctx) {
 antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
     auto *block = new Block();
     for (auto statement: ctx->statement()) {
-        auto *instruction = any_cast<IrInstruction *>(
-                visitStatement(statement));
+        auto *instruction = any_cast<Instruction *>(visitStatement(statement));
         block->addInstruction(instruction);
         if (instruction->alwaysReturn) break;
     }
-    return (IrInstruction *) block;
+    return (Instruction *) block;
 }
 
 antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
-    IrInstruction *compare;
+    Instruction *compare;
     if (ctx->statementWithoutDeclaration() != nullptr) {
-        compare = any_cast<IrInstruction *>(visit(ctx->expression()));
+        compare = any_cast<Instruction *>(visit(ctx->expression()));
     } else {
-        compare = any_cast<IrInstruction *>(visit(ctx->expAssignment()));
+        compare = any_cast<Instruction *>(visit(ctx->expAssignment()));
     }
 
-    auto *content = any_cast<IrInstruction *>(
+    auto *content = any_cast<Instruction *>(
             visit(ctx->statementWithoutDeclaration()));
 
     bool alwaysReturn = content->alwaysReturn;
     bool conditionalReturn = content->conditionalReturn;
     ElseStatement *elseStatement = nullptr;
     if (ctx->elseBlock() != nullptr) {
-        elseStatement = (ElseStatement *) any_cast<IrInstruction *>(
+        elseStatement = (ElseStatement *) any_cast<Instruction *>(
                 visitElseBlock(ctx->elseBlock()));
         conditionalReturn = (alwaysReturn != elseStatement->alwaysReturn &&
                              (alwaysReturn || elseStatement->alwaysReturn))
@@ -142,24 +140,24 @@ antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
                                     elseStatement);
     ifBlock->alwaysReturn = alwaysReturn;
     ifBlock->conditionalReturn = conditionalReturn;
-    return (IrInstruction *) ifBlock;
+    return (Instruction *) ifBlock;
 }
 
 antlrcpp::Any
 CodeGenVisitor::visitElseBlock(ifccParser::ElseBlockContext *ctx) {
-    auto *statement = any_cast<IrInstruction *>(
+    auto *statement = any_cast<Instruction *>(
             visitStatement(ctx->statement()));
     auto *elseStatement = new ElseStatement(statement);
     elseStatement->alwaysReturn = statement->alwaysReturn;
     elseStatement->alwaysReturn = statement->alwaysReturn;
     elseStatement->conditionalReturn = statement->conditionalReturn;
-    return (IrInstruction *) elseStatement;
+    return (Instruction *) elseStatement;
 }
 
 antlrcpp::Any
 CodeGenVisitor::visitStatement(ifccParser::StatementContext *ctx) {
     auto t = visitChildren(ctx);
-    auto *instruction = any_cast<IrInstruction *>(t);
+    auto *instruction = any_cast<Instruction *>(t);
     return instruction;
 }
 
@@ -167,7 +165,7 @@ antlrcpp::Any
 CodeGenVisitor::visitStatementWithoutDeclaration(
         ifccParser::StatementWithoutDeclarationContext *ctx) {
     auto t = visitChildren(ctx);
-    auto *instruction = any_cast<IrInstruction *>(t);
+    auto *instruction = any_cast<Instruction *>(t);
     return instruction;
 }
 
@@ -177,11 +175,11 @@ CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *ctx) {
     try {
         auto *declaration = new Declaration(PrimaryType::parse(type));
         for (auto &rawDeclaration: ctx->rawDeclaration()) {
-            auto *rd = any_cast<IrInstruction *>(
+            auto *rd = any_cast<Instruction *>(
                     visitRawDeclaration(rawDeclaration));
             declaration->addRawDeclaration((RawDeclaration *) rd);
         }
-        return (IrInstruction *) declaration;
+        return (Instruction *) declaration;
     } catch (InvalidType &e) {
         //TODO
         throw e;
@@ -197,18 +195,18 @@ CodeGenVisitor::visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) {
         varNames->push_back(name);
     }
     if (ctx->expression() != nullptr) { // Init is optional
-        auto *expr = (Expression *) any_cast<IrInstruction *>(
+        auto *expr = (Expression *) any_cast<Instruction *>(
                 visit(ctx->expression()));
         expr->assignTo = varNames->back();
         if (varNames->size() > 1) {
             auto *rawDec = new RawDeclaration(varNames->front(),
                                               new VarExpr(varNames, expr));
-            return (IrInstruction *) rawDec;
+            return (Instruction *) rawDec;
         } else {
-            return (IrInstruction *) new RawDeclaration(varNames->back(), expr);
+            return (Instruction *) new RawDeclaration(varNames->back(), expr);
         }
     } else
-        return (IrInstruction *) new RawDeclaration(varNames->back(),
+        return (Instruction *) new RawDeclaration(varNames->back(),
                                                     (Expression *) nullptr);
 }
 
@@ -220,14 +218,14 @@ CodeGenVisitor::visitAssignment(ifccParser::AssignmentContext *ctx) {
 antlrcpp::Any CodeGenVisitor::visitConstant(ifccParser::ConstantContext *ctx) {
     try {
         auto constant = new Constant(stoi(ctx->CONST()->getText()));
-        return (IrInstruction *) constant;
+        return (Instruction *) constant;
     } catch (exception &e) {
         throw e;//TODO
     }
 }
 
 antlrcpp::Any CodeGenVisitor::visitVariable(ifccParser::VariableContext *ctx) {
-    return (IrInstruction *)
+    return (Instruction *)
             new Variable(ctx->VAR()->getText());
 }
 
@@ -238,18 +236,18 @@ antlrcpp::Any CodeGenVisitor::visitRet(ifccParser::RetContext *ctx) {
     } else {
         result = visit(ctx->expAssignment());
     }
-    auto *expression = (Expression *) any_cast<IrInstruction *>(result);
-    return (IrInstruction *) new Return(expression);
+    auto *expression = (Expression *) any_cast<Instruction *>(result);
+    return (Instruction *) new Return(expression);
 }
 
 antlrcpp::Any CodeGenVisitor::visitAddSub(ifccParser::AddSubContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == "-") {
-        return (IrInstruction *) new SubOperation(lExpr, rExpr);
+        return (Instruction *) new SubOperation(lExpr, rExpr);
     } else if (ctx->op->getText() == "+") {
-        return (IrInstruction *) new AddOperation(lExpr, rExpr);
+        return (Instruction *) new AddOperation(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -260,14 +258,14 @@ antlrcpp::Any CodeGenVisitor::visitAddSub(ifccParser::AddSubContext *ctx) {
 antlrcpp::Any
 CodeGenVisitor::visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == "*") {
-        return (IrInstruction *) new TimesOperation(lExpr, rExpr);
+        return (Instruction *) new TimesOperation(lExpr, rExpr);
     } else if (ctx->op->getText() == "/") {
-        return (IrInstruction *) new DivOperation(lExpr, rExpr);
+        return (Instruction *) new DivOperation(lExpr, rExpr);
     } else if (ctx->op->getText() == "%") {
-        return (IrInstruction *) new ModuloOperation(lExpr, rExpr);
+        return (Instruction *) new ModuloOperation(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -277,12 +275,12 @@ CodeGenVisitor::visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) {
 
 antlrcpp::Any CodeGenVisitor::visitShift(ifccParser::ShiftContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == ">>") {
-        return (IrInstruction *) new ShiftRightOperation(lExpr, rExpr);
+        return (Instruction *) new ShiftRightOperation(lExpr, rExpr);
     } else if (ctx->op->getText() == "<<") {
-        return (IrInstruction *) new ShiftLeftOperation(lExpr, rExpr);
+        return (Instruction *) new ShiftLeftOperation(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -292,16 +290,16 @@ antlrcpp::Any CodeGenVisitor::visitShift(ifccParser::ShiftContext *ctx) {
 
 antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == ">") {
-        return (IrInstruction *) new GreatCompare(lExpr, rExpr);
+        return (Instruction *) new GreatCompare(lExpr, rExpr);
     } else if (ctx->op->getText() == ">=") {
-        return (IrInstruction *) new GreatEqualCompare(lExpr, rExpr);
+        return (Instruction *) new GreatEqualCompare(lExpr, rExpr);
     } else if (ctx->op->getText() == "<") {
-        return (IrInstruction *) new LessCompare(lExpr, rExpr);
+        return (Instruction *) new LessCompare(lExpr, rExpr);
     } else if (ctx->op->getText() == "<=") {
-        return (IrInstruction *) new LessEqualCompare(lExpr, rExpr);
+        return (Instruction *) new LessEqualCompare(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -311,12 +309,12 @@ antlrcpp::Any CodeGenVisitor::visitCompare(ifccParser::CompareContext *ctx) {
 
 antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == "==") {
-        return (IrInstruction *) new EqualCompare(lExpr, rExpr);
+        return (Instruction *) new EqualCompare(lExpr, rExpr);
     } else if (ctx->op->getText() == "!=") {
-        return (IrInstruction *) new NotEqualCompare(lExpr, rExpr);
+        return (Instruction *) new NotEqualCompare(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -327,9 +325,9 @@ antlrcpp::Any CodeGenVisitor::visitEqual(ifccParser::EqualContext *ctx) {
 antlrcpp::Any
 CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
     if (ctx->expression() != nullptr) {
-        auto *expr = (Expression *) any_cast<IrInstruction *>(
+        auto *expr = (Expression *) any_cast<Instruction *>(
                 visit(ctx->expression()));
-        return (IrInstruction *) expr;
+        return (Instruction *) expr;
     } else {
         return visitExpAssignment(ctx->expAssignment());
     }
@@ -338,10 +336,10 @@ CodeGenVisitor::visitParenthesis(ifccParser::ParenthesisContext *ctx) {
 antlrcpp::Any
 CodeGenVisitor::visitBitwiseAnd(ifccParser::BitwiseAndContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == "&") {
-        return (IrInstruction *) new BitwiseAnd(lExpr, rExpr);
+        return (Instruction *) new BitwiseAnd(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -352,10 +350,10 @@ CodeGenVisitor::visitBitwiseAnd(ifccParser::BitwiseAndContext *ctx) {
 antlrcpp::Any
 CodeGenVisitor::visitBitwiseXor(ifccParser::BitwiseXorContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == "^") {
-        return (IrInstruction *) new BitwiseXor(lExpr, rExpr);
+        return (Instruction *) new BitwiseXor(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -366,10 +364,10 @@ CodeGenVisitor::visitBitwiseXor(ifccParser::BitwiseXorContext *ctx) {
 antlrcpp::Any
 CodeGenVisitor::visitBitwiseOr(ifccParser::BitwiseOrContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == "|") {
-        return (IrInstruction *) new BitwiseOr(lExpr, rExpr);
+        return (Instruction *) new BitwiseOr(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -378,16 +376,16 @@ CodeGenVisitor::visitBitwiseOr(ifccParser::BitwiseOrContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(
+    auto *rExpr = (Expression *) any_cast<Instruction *>(
             visit(ctx->expression()));
     if (ctx->op->getText() == "-") {
-        return (IrInstruction *) new MinusUnary(rExpr);
+        return (Instruction *) new MinusUnary(rExpr);
     } else if (ctx->op->getText() == "~") {
-        return (IrInstruction *) new BitwiseNotUnary(rExpr);
+        return (Instruction *) new BitwiseNotUnary(rExpr);
     } else if (ctx->op->getText() == "!") {
-        return (IrInstruction *) new NotUnary(rExpr);
+        return (Instruction *) new NotUnary(rExpr);
     } else if (ctx->op->getText() == "+") {
-        return (IrInstruction *) new PlusUnary(rExpr);
+        return (Instruction *) new PlusUnary(rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -398,10 +396,10 @@ antlrcpp::Any CodeGenVisitor::visitUnary(ifccParser::UnaryContext *ctx) {
 antlrcpp::Any
 CodeGenVisitor::visitLogicalAnd(ifccParser::LogicalAndContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == "&&") {
-        return (IrInstruction *) new LogicalAnd(lExpr, rExpr);
+        return (Instruction *) new LogicalAnd(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -412,10 +410,10 @@ CodeGenVisitor::visitLogicalAnd(ifccParser::LogicalAndContext *ctx) {
 antlrcpp::Any
 CodeGenVisitor::visitLogicalOr(ifccParser::LogicalOrContext *ctx) {
     vector<ifccParser::ExpressionContext *> expr = ctx->expression();
-    auto *lExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[0]));
-    auto *rExpr = (Expression *) any_cast<IrInstruction *>(visit(expr[1]));
+    auto *lExpr = (Expression *) any_cast<Instruction *>(visit(expr[0]));
+    auto *rExpr = (Expression *) any_cast<Instruction *>(visit(expr[1]));
     if (ctx->op->getText() == "||") {
-        return (IrInstruction *) new LogicalOr(lExpr, rExpr);
+        return (Instruction *) new LogicalOr(lExpr, rExpr);
     } else {
         BadOperation e = BadOperation();
         cerr << e.what() << " '" << ctx->op->getText() << "'";//TODO
@@ -432,27 +430,27 @@ CodeGenVisitor::visitExpAssignment(ifccParser::ExpAssignmentContext *ctx) {
         auto *name = new string(v->getText());
         varNames->push_back(name);
     }
-    auto *expr = (Expression *) any_cast<IrInstruction *>(
+    auto *expr = (Expression *) any_cast<Instruction *>(
             visit(ctx->expression()));
     expr->assignTo = varNames->back();
     if (varNames->size() > 1) {
-        return (IrInstruction *) new VarExpr(varNames, expr);
+        return (Instruction *) new VarExpr(varNames, expr);
     } else {
-        return (IrInstruction *) expr;
+        return (Instruction *) expr;
     }
 }
 
 antlrcpp::Any CodeGenVisitor::visitEmpty(ifccParser::EmptyContext *ctx) {
-    return (IrInstruction *) new Empty();
+    return (Instruction *) new Empty();
 }
 
 antlrcpp::Any
 CodeGenVisitor::visitWhileBlock(ifccParser::WhileBlockContext *ctx) {
-    auto *compare = (Expression *) any_cast<IrInstruction *>(
+    auto *compare = (Expression *) any_cast<Instruction *>(
             visit(ctx->expression()));
-    auto *content = any_cast<IrInstruction *>(
+    auto *content = any_cast<Instruction *>(
             visit(ctx->statementWithoutDeclaration()));
     auto *whileStatement = new WhileStatement(compare, content);
     if (content->alwaysReturn) whileStatement->conditionalReturn = true;
-    return (IrInstruction *) whileStatement;
+    return (Instruction *) whileStatement;
 }

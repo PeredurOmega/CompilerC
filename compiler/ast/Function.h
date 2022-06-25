@@ -7,7 +7,7 @@
 
 
 #include <vector>
-#include "IrElement.h"
+#include "../ir/IrElement.h"
 #include "Block.h"
 #include "TypeSymbol.h"
 

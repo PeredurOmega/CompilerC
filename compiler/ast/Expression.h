@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-#include "IrElement.h"
+#include "../ir/IrElement.h"
 #include "IrScope.h"
 #include "Instruction.h"
 #include "Function.h"

@@ -12,11 +12,13 @@
 
 class Block : public IrScope {
 public:
-    explicit Block();
+    using IrScope::IrScope;
 
     void addInstruction(Instruction *instruction);
 
-    void renderX86(ostream &o) const override;
+    void setOwner(IrScope *owner) override;
+
+    vector<IrInstruction *> *linearize() override;
 
     void attachTo(Block *block);
 

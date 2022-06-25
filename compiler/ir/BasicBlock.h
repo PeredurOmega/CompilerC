@@ -11,9 +11,11 @@
 
 using namespace std;
 
+class IrInstruction;
+
 class BasicBlock {
 public:
-    explicit BasicBlock(string *label, vector<ItInstruction *> *instructions)
+    explicit BasicBlock(string *label, vector<IrInstruction *> *instructions)
             : label(label), instructions(instructions) {};
 
     string *label;

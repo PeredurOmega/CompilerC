@@ -8,18 +8,6 @@ void Instruction::setOwner(IrScope *_owner) {
     this->owner = _owner;
 }
 
-Instruction::Instruction() {
-
-}
-
-Empty::Empty() {
-
-}
-
-void Empty::affect(IrScope *owner) {
-
-}
-
-void Empty::renderX86(ostream &o) const {
-
+vector<IrInstruction *> *Empty::linearize() {
+    return new vector<IrInstruction *>();
 }

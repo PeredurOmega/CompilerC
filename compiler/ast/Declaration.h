@@ -13,7 +13,7 @@
 
 class RawDeclaration {
 public:
-    explicit RawDeclaration(string *name, Expression *init);
+    explicit RawDeclaration(string *name, Expression *init) : name(name), init(init) {};
 
     string *name;
     Expression *init;
@@ -21,13 +21,11 @@ public:
 
 class Declaration : Instruction {
 public:
-    explicit Declaration(PrimaryType *type);
-
-    void affect(IrScope *owner) override;
+    explicit Declaration(PrimaryType *type): Instruction(), type(type) {};
 
     void addRawDeclaration(RawDeclaration *rawDec);
 
-    void renderX86(ostream &o) const override;
+    vector<IrInstruction *> *linearize() override;
 
 private:
     PrimaryType *type;
