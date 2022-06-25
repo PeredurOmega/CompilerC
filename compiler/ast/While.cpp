@@ -3,30 +3,23 @@
 //
 
 #include "While.h"
+#include "../ir/IrJump.h"
+#include "../ir/IrLabel.h"
+#include "../ir/IrCompare.h"
 #include <sstream>
 
-void WhileStatement::renderX86(ostream &o) const {
-    o << "    jmp      .L" << compareLabel << endl;
-
-    o << ".L" << contentLabel << ":" << endl;
-    content->renderX86(o);
-
-    o << ".L" << compareLabel << ":" << endl;
-    compare->renderX86(o);
-    o << "    cmpl    $0, " << compare->offset << "(%rbp)" << endl;
-    o << "    jne      .L" << contentLabel << endl;
-}
-
-void WhileStatement::affect(IrScope *owner) {
-    setOwner(owner);
-    compare->affect(owner);
-    content->setOwner(owner);
-    content->affect(owner);
+vector<IrInstruction *> *WhileStatement::linearize() {
     compareLabel = owner->getNewLabel();
     contentLabel = owner->getNewLabel();
-}
-
-WhileStatement::WhileStatement(Expression *compare, Instruction *content)
-        : Expression(), compare(compare), content(content) {
-
+    auto *instr = new vector<IrInstruction *>();
+    instr->push_back(new IrJump(compareLabel));
+    instr->push_back(new IrLabel(".L" + to_string(contentLabel)));
+    auto *body = content->linearize();
+    instr->insert(instr->end(), body->begin(), body->end());
+    instr->push_back(new IrLabel(".L" + to_string(compareLabel)));
+    auto *linearizedCompare = compare->linearize();
+    instr->insert(instr->end(), linearizedCompare->begin(), linearizedCompare->end());
+    instr->push_back(new IrCompare(compare->var));
+    instr->push_back(new IrJumpIfNotEqual(contentLabel));
+    return instr;
 }

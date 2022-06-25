@@ -12,3 +12,7 @@ void IrJump::renderX86(ostream &o) const {
 void IrJumpIfEqual::renderX86(ostream &o) const {
     o << "    je      .L" << toLabel << endl;
 }
+
+void IrJumpIfNotEqual::renderX86(ostream &o) const {
+    o << "    jne      .L" << toLabel << endl;
+}

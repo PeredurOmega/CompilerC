@@ -8,14 +8,13 @@
 
 #include "Expression.h"
 
-class WhileStatement : public Expression {
+class WhileStatement : public Instruction {
 public:
 
-    explicit WhileStatement(Expression *compare, Instruction *content);
+    explicit WhileStatement(Expression *compare, Instruction *content)
+            : Instruction(), compare(compare), content(content) {};
 
-    void renderX86(ostream &o) const override;
-
-    void affect(IrScope *owner) override;
+    vector<IrInstruction *> *linearize() override;
 
 private:
     Expression *compare;
