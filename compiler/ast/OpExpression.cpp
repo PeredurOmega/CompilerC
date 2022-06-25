@@ -4,6 +4,12 @@
 
 #include "OpExpression.h"
 #include "../ir/OpIrInstruction.h"
+#include "../ir/IrCompare.h"
+#include "../ir/IrJump.h"
+#include "../ir/IrConstant.h"
+#include "../ir/IrLabel.h"
+#include "../ir/IrMovzbl.h"
+#include "../ir/IrCopy.h"
 
 vector<IrInstruction *> *OpExpression::linearize() {
     auto *lInstr = lExpr->linearize();
@@ -105,61 +111,47 @@ vector<IrInstruction *> *BitwiseXor::linearize() {
 
 vector<IrInstruction *> *BitwiseOr::linearize() {
     auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new DivIrInstruction(var, lExpr->var, rExpr->var));
+    lInstr->push_back(new BitwiseOrIrInstruction(var, lExpr->var, rExpr->var));
     return lInstr;
 }
 
 vector<IrInstruction *> *LogicalAnd::linearize() {
     auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new LogicalAndIrInstruction(var, lExpr->var, rExpr->var));
+    firstLabel = owner->getNewLabel();
+    secondLabel = owner->getNewLabel();
+    lInstr->push_back(new IrCompare(lExpr->var));
+    lInstr->push_back(new IrJumpIfEqual(firstLabel));
+    lInstr->push_back(new IrCompare(rExpr->var));
+    lInstr->push_back(new IrJumpIfEqual(firstLabel));
+    lInstr->push_back(new IrConstant(1, new IrRegister(nullptr, new string("eax"))));
+    lInstr->push_back(new IrJump(secondLabel));
+    lInstr->push_back(new IrLabel(".L" + to_string(firstLabel)));
+    lInstr->push_back(new IrConstant(0, new IrRegister(nullptr, new string("eax"))));
+    lInstr->push_back(new IrLabel(".L" + to_string(secondLabel)));
+    lInstr->push_back(new IrConstant(0, new IrRegister(nullptr, new string("eax"))));
+    lInstr->push_back(new IrMobzbl(new IrRegister(nullptr, new string("al")),
+                                   new IrRegister(nullptr, new string("eax"))));
+    lInstr->push_back(new IrCopy(new IrRegister(nullptr, new string("eax")), var));
     return lInstr;
 }
 
 vector<IrInstruction *> *LogicalOr::linearize() {
     auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new LogicalOrIrInstruction(var, lExpr->var, rExpr->var));
+    firstLabel = owner->getNewLabel();
+    secondLabel = owner->getNewLabel();
+    thirdLabel = owner->getNewLabel();
+    lInstr->push_back(new IrCompare(lExpr->var));
+    lInstr->push_back(new IrJumpIfNotEqual(firstLabel));
+    lInstr->push_back(new IrCompare(rExpr->var));
+    lInstr->push_back(new IrJumpIfEqual(secondLabel));
+    lInstr->push_back(new IrLabel(".L" + to_string(firstLabel)));
+    lInstr->push_back(new IrConstant(1, new IrRegister(nullptr, new string("eax"))));
+    lInstr->push_back(new IrJump(thirdLabel));
+    lInstr->push_back(new IrLabel(".L" + to_string(secondLabel)));
+    lInstr->push_back(new IrConstant(0, new IrRegister(nullptr, new string("eax"))));
+    lInstr->push_back(new IrLabel(".L" + to_string(thirdLabel)));
+    lInstr->push_back(new IrMobzbl(new IrRegister(nullptr, new string("al")),
+                                   new IrRegister(nullptr, new string("eax"))));
+    lInstr->push_back(new IrCopy(new IrRegister(nullptr, new string("eax")), var));
     return lInstr;
 }
-
-//void LogicalAnd::renderX86(ostream &o) const {
-//    OpExpression::renderX86(o);
-//    o << "    cmpl    $0, " << lExpr->offset << "(%rbp)" << endl;
-//    o << "    je      .L" << firstLabel << endl;
-//    o << "    cmpl    $0, " << rExpr->offset << "(%rbp)" << endl;
-//    o << "    je      .L" << firstLabel << endl;
-//    o << "    movl    $1, %eax" << endl;
-//    o << "    jmp     .L" << secondLabel << endl;
-//    o << " .L" << firstLabel << ":" << endl;
-//    o << "    movl    $0, %eax" << endl;
-//    o << " .L" << secondLabel << ":" << endl;
-//    o << "    movzbl  %al, %eax" << endl;
-//    o << "    movl    %eax, " << offset << "(%rbp) #";
-//    if (assignTo != nullptr) {
-//        o << *assignTo;
-//    } else {
-//        o << "Temp operation result '&&'";
-//    }
-//    o << endl;
-//}
-
-//void LogicalOr::renderX86(ostream &o) const {
-//    OpExpression::renderX86(o);
-//    o << "    cmpl    $0, " << lExpr->offset << "(%rbp)" << endl;
-//    o << "    jne     .L" << firstLabel << endl;
-//    o << "    cmpl    $0, " << rExpr->offset << "(%rbp)" << endl;
-//    o << "    je      .L" << secondLabel << endl;
-//    o << " .L" << firstLabel << ":" << endl;
-//    o << "    movl    $1, %eax" << endl;
-//    o << "    jmp     .L" << thirdLabel << endl;
-//    o << " .L" << secondLabel << ":" << endl;
-//    o << "    movl    $0, %eax" << endl;
-//    o << " .L" << thirdLabel << ":" << endl;
-//    o << "    movzbl  %al, %eax" << endl;
-//    o << "    movl    %eax, " << offset << "(%rbp) #";
-//    if (assignTo != nullptr) {
-//        o << *assignTo;
-//    } else {
-//        o << "Temp operation result '&&'";
-//    }
-//    o << endl;
-//}

@@ -32,3 +32,7 @@ vector<IrInstruction *> *Prog::linearize() {
     }
     return instr;
 }
+
+void Prog::setOwner(IrScope *owner) {
+    IrScope::setOwner(owner);
+}

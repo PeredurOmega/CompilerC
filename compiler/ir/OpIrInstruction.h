@@ -126,18 +126,4 @@ public:
     void renderX86(ostream &o) const override;
 };
 
-class LogicalAndIrInstruction : public OpIrInstruction {
-public:
-    using OpIrInstruction::OpIrInstruction;
-
-    void renderX86(ostream &o) const override;
-};
-
-class LogicalOrIrInstruction : public OpIrInstruction {
-public:
-    using OpIrInstruction::OpIrInstruction;
-
-    void renderX86(ostream &o) const override;
-};
-
 #endif //LIBANTLR4_OPIREXPRESSION_H
