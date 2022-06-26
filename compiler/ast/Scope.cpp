@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Scope.h"
 
-int currentOffset = 0;
+int Scope::currentOffset = 0;
 
 int Scope::getOffset(string *varName) {
     if (varName == nullptr) {
@@ -42,6 +42,7 @@ void Scope::insertDeclaration(string &varName) {
 
 int Scope::insertTempVariable() {
     currentOffset -= 4;
+    symbolTable["Temp_" + to_string(currentOffset)] = currentOffset; // TODO Fix
     return currentOffset;
 }
 

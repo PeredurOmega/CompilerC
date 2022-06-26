@@ -35,7 +35,7 @@ vector<IrInstruction *> *FunctionCall::linearize() {
         }
     }
     instructions->push_back(new IrCall(name));
-    instructions->push_back(new IrAddQ(8 * ((int) arguments->size() - 6)));
+    if ((int) arguments->size() - 6 > 0) instructions->push_back(new IrAddQ(8 * ((int) arguments->size() - 6)));
     var = new IrVariable(assignTo, owner->getOffset(assignTo));
     instructions->push_back(new IrCopy(new IrRegister(nullptr, new string("eax")), var));
     return instructions;

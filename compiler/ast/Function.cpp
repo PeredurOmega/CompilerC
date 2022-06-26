@@ -18,9 +18,6 @@ using namespace std;
 vector<IrInstruction *> *Function::linearize() {
     endLabel = owner->getNewLabel();
     auto *instr = new vector<IrInstruction *>();
-    int stackShift = (int) ((symbolTable.size() / 4) + 1) * 32;
-    instr->push_back(new IrLabel(name));
-    instr->push_back(new IrPrologue(stackShift));
 
     int offset = 16;
     for (unsigned int i = 0; i < parameters.size(); ++i) {
@@ -35,6 +32,10 @@ vector<IrInstruction *> *Function::linearize() {
     }
     auto *body = Block::linearize();
     instr->insert(instr->end(), body->begin(), body->end());
+
+    int stackShift = (int) ((symbolTable.size() / 4) + 1) * 32;
+    instr->insert(instr->begin(), new IrPrologue(stackShift));
+    instr->insert(instr->begin(), new IrLabel(name));
 
     if (!alwaysReturn) {
         if (name == MAIN && *returnType == PrimaryType::INT) {

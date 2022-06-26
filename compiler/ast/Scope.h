@@ -13,6 +13,9 @@ using namespace std;
 
 class Scope : public Instruction {
 public:
+
+    static int currentOffset;
+
     using Instruction::Instruction;
 
     int insertInitializedVariable(string &varName);
