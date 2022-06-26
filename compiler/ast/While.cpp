@@ -24,7 +24,7 @@ vector<IrInstruction *> *WhileStatement::linearize() {
     return instr;
 }
 
-void WhileStatement::setOwner(IrScope *owner) {
+void WhileStatement::setOwner(Scope *owner) {
     Instruction::setOwner(owner);
     compare->setOwner(owner);
     content->setOwner(owner);

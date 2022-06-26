@@ -2,8 +2,8 @@
 // Created by pauls on 15/06/2022.
 //
 
-#ifndef LIBANTLR4_IRSCOPE_H
-#define LIBANTLR4_IRSCOPE_H
+#ifndef LIBANTLR4_SCOPE_H
+#define LIBANTLR4_SCOPE_H
 
 #include <unordered_map>
 #include "../ir/IrElement.h"
@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class IrScope : public Instruction {
+class Scope : public Instruction {
 public:
     using Instruction::Instruction;
 
@@ -27,7 +27,9 @@ public:
 
     int getNewLabel();
 
-    void setOwner(IrScope *owner) override;
+    void setOwner(Scope *owner) override;
+
+    void syncOffset();
 
     /**
      * If there is a need for conditional jump, jump label is returned, otherwise -1 is return.
@@ -62,4 +64,4 @@ public:
     }
 };
 
-#endif //LIBANTLR4_IRSCOPE_H
+#endif //LIBANTLR4_SCOPE_H

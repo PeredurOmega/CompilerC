@@ -11,7 +11,7 @@ vector<IrInstruction *> *UnaryOp::linearize() {
     return rInstr;
 }
 
-void UnaryOp::setOwner(IrScope *owner) {
+void UnaryOp::setOwner(Scope *owner) {
     Instruction::setOwner(owner);
     rExpr->setOwner(owner);
 }

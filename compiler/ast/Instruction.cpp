@@ -4,7 +4,7 @@
 
 #include "Instruction.h"
 
-void Instruction::setOwner(IrScope *_owner) {
+void Instruction::setOwner(Scope *_owner) {
     this->owner = _owner;
 }
 

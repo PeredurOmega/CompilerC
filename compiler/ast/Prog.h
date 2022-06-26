@@ -7,13 +7,13 @@
 
 #include <vector>
 #include "unordered_map"
-#include "IrScope.h"
+#include "Scope.h"
 #include "Function.h"
 #include "Any.h"
 
 using namespace std;
 
-class Prog : IrScope {
+class Prog : Scope {
 public:
     explicit Prog(string entry);
 
@@ -21,7 +21,7 @@ public:
 
     void addFunction(Function *function);
 
-    void setOwner(IrScope *owner) override;
+    void setOwner(Scope *owner) override;
 
     int conditionalJump() override;
 

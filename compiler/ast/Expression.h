@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include "../ir/IrElement.h"
-#include "IrScope.h"
+#include "Scope.h"
 #include "Instruction.h"
 #include "Function.h"
 
@@ -39,7 +39,7 @@ public:
 
     vector<IrInstruction *> *linearize() override;
 
-    void setOwner(IrScope *owner) override;
+    void setOwner(Scope *owner) override;
 
 private:
     string name;
@@ -54,7 +54,7 @@ public:
 
     vector<IrInstruction *> *linearize() override;
 
-    void setOwner(IrScope *owner) override;
+    void setOwner(Scope *owner) override;
 
 private:
     Expression *expression;
@@ -85,7 +85,7 @@ public:
 
     vector<IrInstruction *> *linearize() override;
 
-    void setOwner(IrScope *owner) override;
+    void setOwner(Scope *owner) override;
 
 private:
     vector<string *> varNames;

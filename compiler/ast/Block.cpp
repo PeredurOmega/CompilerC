@@ -37,8 +37,8 @@ vector<IrInstruction *> *Block::linearize() {
     return instr;
 }
 
-void Block::setOwner(IrScope *owner) {
-    IrScope::setOwner(owner);
+void Block::setOwner(Scope *owner) {
+    Scope::setOwner(owner);
     if (alwaysReturn) owner->alwaysReturn = alwaysReturn;
     if (conditionalReturn) owner->conditionalReturn = conditionalReturn;
     for (auto i: instructions) {

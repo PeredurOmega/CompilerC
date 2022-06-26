@@ -19,7 +19,7 @@ vector<IrInstruction *> *OpExpression::linearize() {
     return lInstr;
 }
 
-void OpExpression::setOwner(IrScope *owner) {
+void OpExpression::setOwner(Scope *owner) {
     Instruction::setOwner(owner);
     lExpr->setOwner(owner);
     rExpr->setOwner(owner);

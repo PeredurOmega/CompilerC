@@ -10,21 +10,21 @@
 #include "../ir/IrElement.h"
 #include "../ir/IrInstruction.h"
 
-class IrScope;
+class Scope;
 
 class Instruction {
 public:
     /**
      * Initialized when added to a Block.
      */
-    IrScope *owner = nullptr;
+    Scope *owner = nullptr;
 
     bool alwaysReturn = false;
     bool conditionalReturn = false;
 
     explicit Instruction() {};
 
-    virtual void setOwner(IrScope *owner);
+    virtual void setOwner(Scope *owner);
 
     virtual vector<IrInstruction *> *linearize() = 0;
 };

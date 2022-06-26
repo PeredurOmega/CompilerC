@@ -41,7 +41,7 @@ vector<IrInstruction *> *FunctionCall::linearize() {
     return instructions;
 }
 
-void FunctionCall::setOwner(IrScope *owner) {
+void FunctionCall::setOwner(Scope *owner) {
     Instruction::setOwner(owner);
     for (auto *argument: *arguments) {
         argument->setOwner(owner);
@@ -71,7 +71,7 @@ vector<IrInstruction *> *Return::linearize() {
     return inst;
 }
 
-void Return::setOwner(IrScope *owner) {
+void Return::setOwner(Scope *owner) {
     Instruction::setOwner(owner);
     expression->setOwner(owner);
 }
@@ -90,7 +90,7 @@ vector<IrInstruction *> *VarExpr::linearize() {
     return inst;
 }
 
-void VarExpr::setOwner(IrScope *owner) {
+void VarExpr::setOwner(Scope *owner) {
     Instruction::setOwner(owner);
     expression->setOwner(owner);
 }

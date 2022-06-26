@@ -3,9 +3,9 @@
 //
 
 #include <iostream>
-#include "IrScope.h"
+#include "Scope.h"
 
-int IrScope::getOffset(string *varName) {
+int Scope::getOffset(string *varName) {
     if (varName == nullptr) {
         return insertTempVariable();
     } else if (symbolTable.find(*varName) == symbolTable.end()) {
@@ -22,34 +22,42 @@ int IrScope::getOffset(string *varName) {
     }
 }
 
-int IrScope::insertInitializedVariable(string &varName) {
+int Scope::insertInitializedVariable(string &varName) {
+    syncOffset();
     currentOffset -= 4;
     symbolTable[varName] = currentOffset;
     return currentOffset;
 }
 
-void IrScope::insertParameter(string &varName, int offset) {
+void Scope::insertParameter(string &varName, int offset) {
     symbolTable[varName] = offset;
 }
 
-void IrScope::insertDeclaration(string &varName) {
+void Scope::insertDeclaration(string &varName) {
     // Offset equals to zero means the value has been declared but not
     // initialized yet - Useful for DCE
     symbolTable[varName] = 0;
 }
 
-int IrScope::insertTempVariable() {
+int Scope::insertTempVariable() {
+    syncOffset();
     currentOffset -= 4;
     return currentOffset;
 }
 
-void IrScope::setOwner(IrScope *_owner) {
+void Scope::setOwner(Scope *_owner) {
     currentOffset = _owner->currentOffset;
     owner = _owner;
     label = owner->label;
 }
 
-int IrScope::getNewLabel() {
+int Scope::getNewLabel() {
     *label = *label + 1;
     return *label;
+}
+
+void Scope::syncOffset() {
+    if (owner != nullptr) {
+        currentOffset = owner->currentOffset;
+    }
 }

@@ -25,7 +25,7 @@ public:
 
     void addRawDeclaration(RawDeclaration *rawDec);
 
-    void setOwner(IrScope *owner) override;
+    void setOwner(Scope *owner) override;
 
     vector<IrInstruction *> *linearize() override;
 

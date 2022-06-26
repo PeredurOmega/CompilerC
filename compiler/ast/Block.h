@@ -7,16 +7,16 @@
 
 
 #include <vector>
-#include "IrScope.h"
+#include "Scope.h"
 #include "Instruction.h"
 
-class Block : public IrScope {
+class Block : public Scope {
 public:
-    using IrScope::IrScope;
+    using Scope::Scope;
 
     void addInstruction(Instruction *instruction);
 
-    void setOwner(IrScope *owner) override;
+    void setOwner(Scope *owner) override;
 
     vector<IrInstruction *> *linearize() override;
 

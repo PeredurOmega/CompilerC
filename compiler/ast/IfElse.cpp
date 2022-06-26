@@ -38,7 +38,7 @@ vector<IrInstruction *> *IfStatement::linearize() {
     return instr;
 }
 
-void IfStatement::setOwner(IrScope *owner) {
+void IfStatement::setOwner(Scope *owner) {
     Instruction::setOwner(owner);
     compare->setOwner(owner);
     content->setOwner(owner);
@@ -56,7 +56,7 @@ vector<IrInstruction *> *ElseStatement::linearize() {
     return instr;
 }
 
-void ElseStatement::setOwner(IrScope *owner) {
+void ElseStatement::setOwner(Scope *owner) {
     Instruction::setOwner(owner);
     content->setOwner(owner);
 }
