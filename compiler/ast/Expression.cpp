@@ -36,7 +36,7 @@ vector<IrInstruction *> *FunctionCall::linearize() {
     }
     instructions->push_back(new IrCall(name));
     if ((int) arguments->size() - 6 > 0) instructions->push_back(new IrAddQ(8 * ((int) arguments->size() - 6)));
-    var = new IrVariable(assignTo, owner->getOffset(assignTo));
+    var = new IrVariable(assignTo);
     instructions->push_back(new IrCopy(new IrRegister(nullptr, new string("eax")), var));
     return instructions;
 }
@@ -49,13 +49,13 @@ void FunctionCall::setOwner(Scope *owner) {
 }
 
 vector<IrInstruction *> *Variable::linearize() {
-    var = new IrVariable(&name, owner->getOffset(&name));
+    var = new IrVariable(&name);
     return new vector<IrInstruction *>();
 }
 
 vector<IrInstruction *> *Constant::linearize() {
     auto *inst = new vector<IrInstruction *>();
-    var = new IrVariable(assignTo, owner->getOffset(assignTo));
+    var = new IrVariable(assignTo);
     auto *c = new IrConstant(value, var);
     inst->push_back(c);
     return inst;
@@ -78,15 +78,15 @@ void Return::setOwner(Scope *owner) {
 
 vector<IrInstruction *> *VarExpr::linearize() {
     auto *inst = expression->linearize();
-    auto lastVar = varNames.front();
+    auto *lastVar = varNames.front();
     auto *prevVar = expression->var;
     for (int i = (int) varNames.size() - 1; i >= 0; i--) {
-        auto *to = new IrVariable(varNames[i], owner->getOffset(varNames[i]));
+        auto *to = new IrVariable(varNames[i], owner->getType(varNames[i]));
         auto *copy = new IrCopy(prevVar, to);
         prevVar = to;
         inst->push_back(copy);
     }
-    var = new IrVariable(lastVar, owner->getOffset(lastVar));
+    var = new IrVariable(lastVar, owner->getType(lastVar));
     return inst;
 }
 

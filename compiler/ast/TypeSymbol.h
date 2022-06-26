@@ -45,6 +45,11 @@ public:
     static string text(PrimaryType* type);
 };
 
+class IntType: public PrimaryType {
+public:
+    explicit IntType(): PrimaryType(PrimaryType::INT) {};
+};
+
 class InvalidType : exception {
 public:
     [[nodiscard]] const char *what() const noexcept override;

@@ -21,25 +21,25 @@ vector<IrInstruction *> *Function::linearize() {
 
     int offset = 16;
     for (unsigned int i = 0; i < parameters.size(); ++i) {
-        Parameter *parameter = parameters[i];
+        auto *parameter = parameters[i];
         if (i < 6) {
-            auto *var = new IrVariable(&parameter->name, insertInitializedVariable(parameter->name));
+            auto *var = new IrVariable(&parameter->name, declareVariable(&parameter->name, parameter->type));
             instr->push_back(new IrCopy(FunctionCall::registers[i], var));
         } else {
-            insertParameter(parameter->name, offset);
+            declareVariable(&parameter->name, parameter->type);
             offset += 8;
         }
     }
     auto *body = Block::linearize();
     instr->insert(instr->end(), body->begin(), body->end());
 
-    int stackShift = (int) ((symbolTable.size() / 4) + 1) * 32;
+    int stackShift = (int) ((varTable.size() / 4) + 1) * 16;
     instr->insert(instr->begin(), new IrPrologue(stackShift));
     instr->insert(instr->begin(), new IrLabel(name));
 
     if (!alwaysReturn) {
         if (name == MAIN && *returnType == PrimaryType::INT) {
-            instr->push_back(new IrConstant(0, new IrRegister(nullptr, new string("eax"))));
+            instr->push_back(new IrConstant(0, new IrRegister(nullptr, new string("eax"), new IntType())));
         } else {
             instr->push_back(new IrNoOp());
         }

@@ -20,9 +20,10 @@ public:
     Scope *owner = nullptr;
 
     bool alwaysReturn = false;
+
     bool conditionalReturn = false;
 
-    explicit Instruction() {};
+    explicit Instruction() = default;
 
     virtual void setOwner(Scope *owner);
 

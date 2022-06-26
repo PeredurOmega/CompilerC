@@ -29,10 +29,7 @@ ostream &operator<<(ostream &o, IrRegister *var) {
     return o;
 }
 
-string IrRegister::comment(const string &opType) const {
-    if (name == nullptr) {
-        return " # Temp " + opType;
-    } else {
-        return " # " + *name + " " + opType;
-    }
+ostream &operator<<(ostream &o, IrArgument *var) {
+    o << var->offset << "(%rbp)";
+    return o;
 }

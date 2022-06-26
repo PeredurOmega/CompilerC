@@ -55,3 +55,26 @@ int Scope::getNewLabel() {
     *label = *label + 1;
     return *label;
 }
+
+PrimaryType* Scope::getType(string *varName) {
+    if (varTable.find(*varName) == varTable.end()) {
+        if (owner != nullptr) return owner->getType(varName);
+        else {
+            UndefinedVariable e = UndefinedVariable();
+            cerr << e.what() << " '" << *varName << "'"; //TODO
+            throw e;
+        }
+    } else {
+        return varTable.at(*varName);
+    }
+}
+
+PrimaryType* Scope::declareVariable(string *varName, PrimaryType * type) {
+    if (varTable.find(*varName) != varTable.end()) {
+        AlreadyDeclaredVariable e = AlreadyDeclaredVariable();
+        cerr << e.what() << " '" << *varName << "'";//TODO
+        throw e;
+    } else {
+        return varTable[*varName] = type;
+    }
+}

@@ -7,6 +7,7 @@
 
 #include "BasicBlock.h"
 #include "IrElement.h"
+#include "../ast/TypeSymbol.h"
 
 using namespace std;
 
@@ -24,24 +25,32 @@ public:
 
 class IrVariable {
 public:
-    explicit IrVariable(string *name, int offset) : name(name), offset(offset) {};
+    explicit IrVariable(string *name, PrimaryType* type) : name(name), type(type) {};
 
     friend ostream &operator<<(ostream &o, IrVariable *var);
 
     virtual string comment(const string &opType) const;
 
     string *name;
-private:
+
+    PrimaryType *type;
+};
+
+class IrArgument: IrVariable {
+public:
+    explicit IrArgument(string *name, PrimaryType* type, int offset) : IrVariable(name, type), offset(offset) {};
+
+    friend ostream &operator<<(ostream &o, IrArgument *var);
+
     int offset;
 };
 
 class IrRegister : public IrVariable {
 public:
-    explicit IrRegister(string *name, string *registerName) : IrVariable(name, -1), registerName(registerName) {};
+    explicit IrRegister(string *name, string *registerName, PrimaryType* type)
+        : IrVariable(name, type), registerName(registerName) {};
 
     friend ostream &operator<<(ostream &o, IrRegister *var);
-
-    string comment(const string &opType) const override;
 
     string *registerName;
 };

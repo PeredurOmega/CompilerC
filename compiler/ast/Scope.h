@@ -8,55 +8,54 @@
 #include <unordered_map>
 #include "../ir/IrElement.h"
 #include "Instruction.h"
+#include "TypeSymbol.h"
 
 using namespace std;
 
 class Scope : public Instruction {
 public:
 
-    static int currentOffset;
-
     using Instruction::Instruction;
-
-    int insertInitializedVariable(string &varName);
-
-    void insertDeclaration(string &varName);
-
-    int insertTempVariable();
-
-    int getOffset(string *varName);
 
     int getNewLabel();
 
     void setOwner(Scope *owner) override;
+
+    PrimaryType* getType(string *varName);
+
+    PrimaryType* declareVariable(string *varName, PrimaryType* type);
 
     /**
      * If there is a need for conditional jump, jump label is returned, otherwise -1 is return.
      */
     virtual int conditionalJump() = 0;
 
-    void insertParameter(string &varName, int offset);
-
 protected:
     int *label;
-    unordered_map<string, int> symbolTable;
+    unordered_map<string, PrimaryType*> varTable;
 };
-
 
 class UndefinedVariable : exception {
 public:
-    explicit UndefinedVariable() {
-    }
+    explicit UndefinedVariable() = default;
 
     [[nodiscard]] const char *what() const noexcept override {
         return "Undefined variable";
     }
 };
 
+class AlreadyDeclaredVariable : exception {
+public:
+    explicit AlreadyDeclaredVariable() = default;
+
+    [[nodiscard]] const char *what() const noexcept override {
+        return "Already declared variable";
+    }
+};
+
 class BadOperation : exception {
 public:
-    explicit BadOperation() {
-    }
+    explicit BadOperation() = default;
 
     [[nodiscard]] const char *what() const noexcept override {
         return "Bad operation";
