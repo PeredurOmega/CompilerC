@@ -15,8 +15,6 @@ class Scope : public Instruction {
 public:
     using Instruction::Instruction;
 
-    int currentOffset = 0;
-
     int insertInitializedVariable(string &varName);
 
     void insertDeclaration(string &varName);
@@ -28,8 +26,6 @@ public:
     int getNewLabel();
 
     void setOwner(Scope *owner) override;
-
-    void syncOffset();
 
     /**
      * If there is a need for conditional jump, jump label is returned, otherwise -1 is return.

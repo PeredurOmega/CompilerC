@@ -134,7 +134,6 @@ vector<IrInstruction *> *LogicalAnd::linearize() {
     lInstr->push_back(new IrLabel(".L" + to_string(firstLabel)));
     lInstr->push_back(new IrConstant(0, new IrRegister(nullptr, new string("eax"))));
     lInstr->push_back(new IrLabel(".L" + to_string(secondLabel)));
-    lInstr->push_back(new IrConstant(0, new IrRegister(nullptr, new string("eax"))));
     lInstr->push_back(new IrMobzbl(new IrRegister(nullptr, new string("al")),
                                    new IrRegister(nullptr, new string("eax"))));
     lInstr->push_back(new IrCopy(new IrRegister(nullptr, new string("eax")), var));

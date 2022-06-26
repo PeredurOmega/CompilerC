@@ -5,6 +5,8 @@
 #include <iostream>
 #include "Scope.h"
 
+int currentOffset = 0;
+
 int Scope::getOffset(string *varName) {
     if (varName == nullptr) {
         return insertTempVariable();
@@ -23,7 +25,6 @@ int Scope::getOffset(string *varName) {
 }
 
 int Scope::insertInitializedVariable(string &varName) {
-    syncOffset();
     currentOffset -= 4;
     symbolTable[varName] = currentOffset;
     return currentOffset;
@@ -40,13 +41,11 @@ void Scope::insertDeclaration(string &varName) {
 }
 
 int Scope::insertTempVariable() {
-    syncOffset();
     currentOffset -= 4;
     return currentOffset;
 }
 
 void Scope::setOwner(Scope *_owner) {
-    currentOffset = _owner->currentOffset;
     owner = _owner;
     label = owner->label;
 }
@@ -54,10 +53,4 @@ void Scope::setOwner(Scope *_owner) {
 int Scope::getNewLabel() {
     *label = *label + 1;
     return *label;
-}
-
-void Scope::syncOffset() {
-    if (owner != nullptr) {
-        currentOffset = owner->currentOffset;
-    }
 }
