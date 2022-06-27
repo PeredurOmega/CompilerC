@@ -25,8 +25,7 @@ void Block::attachTo(Block *block) {
 }
 
 int Block::conditionalJump() {
-    if (alwaysReturn) return -1;
-    else return owner->conditionalJump();
+    return owner->conditionalJump();
 }
 
 void Block::linearize(IrFunction *fun) {

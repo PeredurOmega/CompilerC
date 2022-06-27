@@ -16,7 +16,7 @@ antlrcpp::Any CodeGenVisitor::visitAxiom(ifccParser::AxiomContext *ctx) {
 antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
     auto *prog = new Prog("main");
 
-    for (auto f: ctx->function()) {
+    for (auto *f: ctx->function()) {
         prog->addFunction(any_cast<Function *>(visit(f)));
     }
 
@@ -132,8 +132,11 @@ antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
         conditionalReturn =
                 (alwaysReturn != elseStatement->alwaysReturn && (alwaysReturn || elseStatement->alwaysReturn)) ||
                 conditionalReturn || elseStatement->conditionalReturn;
-        alwaysReturn = alwaysReturn || elseStatement->alwaysReturn;
-    } else if (alwaysReturn || conditionalReturn) conditionalReturn = true;
+        alwaysReturn = alwaysReturn && elseStatement->alwaysReturn;
+    } else if (alwaysReturn || conditionalReturn) {
+        conditionalReturn = true;
+        alwaysReturn = false;
+    }
 
     auto *ifBlock = new IfStatement((Expression *) compare, content, elseStatement);
     ifBlock->alwaysReturn = alwaysReturn;
@@ -177,8 +180,7 @@ antlrcpp::Any CodeGenVisitor::visitDeclaration(ifccParser::DeclarationContext *c
     }
 }
 
-antlrcpp::Any
-CodeGenVisitor::visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) {
+antlrcpp::Any CodeGenVisitor::visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) {
     auto var = ctx->VAR();
     auto varNames = new vector<string *>();
     for (auto v: var) {
