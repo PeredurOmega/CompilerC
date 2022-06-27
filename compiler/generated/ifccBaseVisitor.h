@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -56,6 +56,10 @@ public:
   }
 
   virtual std::any visitStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitProcedureCall(ifccParser::ProcedureCallContext *ctx) override {
     return visitChildren(ctx);
   }
 

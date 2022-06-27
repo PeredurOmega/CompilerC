@@ -31,4 +31,4 @@ string PrimaryType::text(PrimaryType* type) {
     }else{
         throw exception();
     }
-};
+}
