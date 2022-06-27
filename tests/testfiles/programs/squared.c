@@ -11,7 +11,7 @@ int main(){
 
     while(i<nb){
         if(times2(squared(i)) != (i*i*2)){
-            return 0;
+            int a = 5;
         }
         i = i + 1;
     }

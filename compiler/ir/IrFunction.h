@@ -29,7 +29,7 @@ public:
 
     vector<BasicBlock *> *basicBlocks = new vector<BasicBlock *>();
     string name;
-    int stackSize;
+    int stackSize = 0;
     BasicBlock *currentBlock;
     IrScope *currentScope = nullptr;
     IrScope *mainScope = nullptr;

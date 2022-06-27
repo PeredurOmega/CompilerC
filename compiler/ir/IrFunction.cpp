@@ -28,12 +28,12 @@ void IrFunction::assignMemory() {
             instr->assignMemory();
         }
     }
-    stackSize = 256;
 }
 
 void IrFunction::renderX86(ostream &o) const {
     (new IrLabel(name))->renderX86(o);
-    (new IrPrologue(abs(stackSize)))->renderX86(o);
+    int stackShift = abs(stackSize) + (16 - (abs(stackSize) % 16));
+    (new IrPrologue(stackShift))->renderX86(o);
 
     for (int i = 0; i < min((int) parameters.size(), 6); ++i) {
         auto *parameter = parameters[i];
@@ -48,7 +48,7 @@ void IrFunction::renderX86(ostream &o) const {
         }
     }
 
-    (new IrEpilogue(abs(stackSize)))->renderX86(o);
+    (new IrEpilogue(stackShift))->renderX86(o);
 }
 
 void IrFunction::append(IrInstruction *instruction) {
