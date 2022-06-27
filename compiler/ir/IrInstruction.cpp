@@ -19,6 +19,8 @@ string IrVariable::comment(const string &opType) const {
 ostream &operator<<(ostream &o, IrVariable *var) {
     if (dynamic_cast<IrRegister *>(var) != nullptr) {
         o << (IrRegister *) var;
+    } else if (dynamic_cast<IrStaticVariable *>(var) != nullptr) {
+        o << (IrStaticVariable *) var;
     } else {
         o << var->offset << "(%rbp)";
     }
@@ -47,3 +49,11 @@ ostream &operator<<(ostream &o, IrArgument *var) {
     o << var->offset << "(%rbp)";
     return o;
 }*/
+ostream &operator<<(ostream &o, IrStaticVariable *var) {
+    o << *(var->name) << "(%rip)";
+    return o;
+}
+
+void IrStaticVariable::assignMemory(IrScope *scope) {
+
+}

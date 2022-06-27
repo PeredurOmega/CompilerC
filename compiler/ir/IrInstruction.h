@@ -45,7 +45,6 @@ public:
     PrimaryType *type;
 };
 
-
 class IrTempVariable: public IrVariable {
 public:
     explicit IrTempVariable(PrimaryType *type) : IrVariable(new string("Temp"), type) {};
@@ -53,6 +52,15 @@ public:
     friend ostream &operator<<(ostream &o, IrVariable *var);
 
     virtual void assignMemory(IrScope *scope);
+};
+
+class IrStaticVariable : public IrVariable {
+public:
+    explicit IrStaticVariable(string *name, PrimaryType *type): IrVariable(name, type) {};
+
+    friend ostream &operator<<(ostream &o, IrStaticVariable *var);
+
+    void assignMemory(IrScope* scope) override;
 };
 
 /*

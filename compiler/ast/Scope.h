@@ -12,6 +12,8 @@
 
 using namespace std;
 
+class StaticDeclaration;
+
 class Scope : public Instruction {
 public:
 
@@ -21,9 +23,11 @@ public:
 
     void setOwner(Scope *owner) override;
 
-    PrimaryType *getType(string *varName);
+    IrVariable *getIrVariable(string *varName);
 
     PrimaryType *declareVariable(string *varName, PrimaryType *type);
+
+    PrimaryType *declareStaticVariable(StaticDeclaration* sDeclaration);
 
     /**
      * If there is a need for conditional jump, jump label is returned, otherwise -1 is return.
@@ -35,6 +39,7 @@ public:
 protected:
     int *label;
     unordered_map<string, PrimaryType *> varTable;
+    unordered_map<string, StaticDeclaration *> *staticVarTable;
 };
 
 class UndefinedVariable : exception {

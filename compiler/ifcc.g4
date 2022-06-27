@@ -2,9 +2,11 @@ grammar ifcc;
 
 axiom : prog EOF;
 
-prog : ( function | functionDeclaration )*;
+prog : ( function | functionDeclaration | staticVariable )*;
 function: (TYPE|'void') VAR '(' parameters? ')' block;
 functionDeclaration: (TYPE|'void') VAR '(' parameters? ')' SEMICOLON ;
+// TODO ADD SUPPORT FOR PROPAGATED CONSTANT
+staticVariable: STATIC? TYPE VAR '=' CONST SEMICOLON;
 
 parameters : parameter (',' parameter)* ;
 parameter : TYPE VAR ;
@@ -66,6 +68,7 @@ WHILE: 'while';
 
 RETURN : 'return' ;
 TYPE : 'int';
+STATIC : 'static';
 COMMENT : (('/*' .*? '*/') | ('//' .*? ('\n' | '\r\n'))) -> skip ;
 CONST : [0-9]+ ;
 VAR : [a-zA-Z_][a-zA-Z_$0-9]*;

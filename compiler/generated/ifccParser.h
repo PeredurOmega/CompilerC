@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -22,11 +22,11 @@ public:
 
   enum {
     RuleAxiom = 0, RuleProg = 1, RuleFunction = 2, RuleFunctionDeclaration = 3, 
-    RuleParameters = 4, RuleParameter = 5, RuleArguments = 6, RuleArgument = 7, 
-    RuleBlock = 8, RuleStatement = 9, RuleStatementWithoutDeclaration = 10, 
-    RuleProcedureCall = 11, RuleEmpty = 12, RuleIfBlock = 13, RuleElseBlock = 14, 
-    RuleWhileBlock = 15, RuleRet = 16, RuleDeclaration = 17, RuleRawDeclaration = 18, 
-    RuleExpAssignment = 19, RuleAssignment = 20, RuleExpression = 21
+    RuleStaticVariable = 4, RuleParameters = 5, RuleParameter = 6, RuleArguments = 7, 
+    RuleArgument = 8, RuleBlock = 9, RuleStatement = 10, RuleStatementWithoutDeclaration = 11, 
+    RuleProcedureCall = 12, RuleEmpty = 13, RuleIfBlock = 14, RuleElseBlock = 15, 
+    RuleWhileBlock = 16, RuleRet = 17, RuleDeclaration = 18, RuleRawDeclaration = 19, 
+    RuleExpAssignment = 20, RuleAssignment = 21, RuleExpression = 22
   };
 
   explicit ifccParser(antlr4::TokenStream *input);
@@ -50,6 +50,7 @@ public:
   class ProgContext;
   class FunctionContext;
   class FunctionDeclarationContext;
+  class StaticVariableContext;
   class ParametersContext;
   class ParameterContext;
   class ArgumentsContext;
@@ -93,6 +94,8 @@ public:
     FunctionContext* function(size_t i);
     std::vector<FunctionDeclarationContext *> functionDeclaration();
     FunctionDeclarationContext* functionDeclaration(size_t i);
+    std::vector<StaticVariableContext *> staticVariable();
+    StaticVariableContext* staticVariable(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -138,6 +141,24 @@ public:
   };
 
   FunctionDeclarationContext* functionDeclaration();
+
+  class  StaticVariableContext : public antlr4::ParserRuleContext {
+  public:
+    StaticVariableContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *TYPE();
+    antlr4::tree::TerminalNode *VAR();
+    antlr4::tree::TerminalNode *CONST();
+    antlr4::tree::TerminalNode *SEMICOLON();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  StaticVariableContext* staticVariable();
 
   class  ParametersContext : public antlr4::ParserRuleContext {
   public:

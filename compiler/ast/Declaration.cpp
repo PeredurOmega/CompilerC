@@ -32,3 +32,15 @@ void Declaration::setOwner(Scope *owner) {
         }
     }
 }
+
+void StaticDeclaration::linearize(IrFunction *fun) {
+}
+
+void StaticDeclaration::setOwner(Scope *owner) {
+    Instruction::setOwner(owner);
+}
+
+void StaticDeclaration::renderX86(ostream &o) const {
+    o << *name << ": " << endl;
+    o << "    .long   " << init << endl;
+}

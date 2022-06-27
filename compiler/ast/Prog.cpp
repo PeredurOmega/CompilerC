@@ -4,19 +4,14 @@
 
 #include "Prog.h"
 #include "../ir/IrGlobal.h"
-
-#include <utility>
+#include "Declaration.h"
 #include <sstream>
 
-static const unordered_map<string, Function*> stdFunctions =
+static const unordered_map<string, Function *> stdFunctions =
         {
-                {"putchar", new Function("putchar", (IrType*) new IntType(), vector<Parameter*>({new Parameter(new IntType(), "char")}))},
+                {"putchar", new Function("putchar", (IrType *) new IntType(),
+                                         vector<Parameter *>({new Parameter(new IntType(), "char")}))},
         };
-
-Prog::Prog(string entry) {
-    this->entry = std::move(entry);
-    this->label = new int(0);
-}
 
 void Prog::addFunction(Function *function) {
     //TODO CHECK FUNCTION IS NOT ALREADY DECLARED
@@ -37,7 +32,7 @@ const IrType *Prog::getFunctionType(string functionName) {
             return function->returnType;
         }
     }
-    if(stdFunctions.find(functionName) != stdFunctions.end()) {
+    if (stdFunctions.find(functionName) != stdFunctions.end()) {
         return stdFunctions.at(functionName)->returnType;
     }
     throw new UndefinedFunction();
@@ -49,10 +44,17 @@ void Prog::linearize(IrFunction *fun) {
 
 void Prog::renderX86(ostream &o) {
     (new IrGlobal(entry))->renderX86(o);
-    for (Function *function: functions) {
+    for (const auto &sDeclaration: *staticVarTable) {
+        sDeclaration.second->setOwner(this);
+        sDeclaration.second->linearize(nullptr);
+    }
+    for (auto *function: functions) {
         function->setOwner(this);
-        auto* fun = function->linearize();
+        auto *fun = function->linearize();
         fun->assignMemory();
         fun->renderX86(o);
+    }
+    for (const auto &sDeclaration: *staticVarTable) {
+        sDeclaration.second->renderX86(o);
     }
 }

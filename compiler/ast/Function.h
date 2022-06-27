@@ -12,6 +12,7 @@
 #include "Block.h"
 
 class IrFunction;
+class StaticDeclaration;
 
 class Parameter {
 public:

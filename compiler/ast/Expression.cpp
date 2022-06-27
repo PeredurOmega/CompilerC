@@ -23,13 +23,13 @@ const vector<string *> FunctionCall::registers = { // NOLINT(cert-err58-cpp)
 };
 
 void FunctionCall::linearize(IrFunction *fun) {
-    auto argsAsVar = vector<IrVariable*>();
+    auto argsAsVar = vector<IrVariable *>();
     argsAsVar.reserve(6);
     for (int i = (int) arguments->size() - 1; i >= 0; --i) {
         auto *expr = (*arguments)[i];
         expr->linearize(fun);
         if (i < 6) {
-            auto* tempVar = new IrTempVariable(expr->var->type);
+            auto *tempVar = new IrTempVariable(expr->var->type);
             argsAsVar[i] = tempVar;
             fun->append(new IrCopy(expr->var, tempVar));
         } else {
@@ -49,7 +49,7 @@ void FunctionCall::linearize(IrFunction *fun) {
             throw new InvalidReturnType();
         } else {
             auto *rType = (PrimaryType *) returnType;
-            var = new IrVariable(assignTo, rType);
+            var = owner->getIrVariable(assignTo);
             fun->append(new IrCopy(new IrRegister(nullptr, new string("eax"), rType), var));
         }
     } else {
@@ -71,15 +71,15 @@ IrRegister *FunctionCall::getRegisterToUse(int position, PrimaryType *type) {
 }
 
 void Variable::linearize(IrFunction *fun) {
-    var = new IrVariable(&name, owner->getType(&name));
-    if(assignTo != nullptr) {
-        fun->append(new IrCopy(var, new IrVariable(assignTo, owner->getType(assignTo))));
+    var = owner->getIrVariable(&name);
+    if (assignTo != nullptr) {
+        fun->append(new IrCopy(var, owner->getIrVariable(assignTo)));
     }
 }
 
 void Constant::linearize(IrFunction *fun) {
     if (assignTo != nullptr) {
-        var = new IrVariable(assignTo, new IntType());
+        var = owner->getIrVariable(assignTo);
     } else {
         var = new IrTempVariable(new IntType());
     }
@@ -105,12 +105,12 @@ void VarExpr::linearize(IrFunction *fun) {
     auto *lastVar = varNames.front();
     auto *prevVar = expression->var;
     for (int i = (int) varNames.size() - 1; i >= 0; i--) {
-        auto *to = new IrVariable(varNames[i], owner->getType(varNames[i]));
+        auto *to = owner->getIrVariable(varNames[i]);
         auto *copy = new IrCopy(prevVar, to);
         prevVar = to;
         fun->append(copy);
     }
-    var = new IrVariable(lastVar, owner->getType(lastVar));
+    var = owner->getIrVariable(lastVar);
 }
 
 void VarExpr::setOwner(Scope *owner) {

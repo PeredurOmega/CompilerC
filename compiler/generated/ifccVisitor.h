@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -26,6 +26,8 @@ public:
     virtual std::any visitFunction(ifccParser::FunctionContext *context) = 0;
 
     virtual std::any visitFunctionDeclaration(ifccParser::FunctionDeclarationContext *context) = 0;
+
+    virtual std::any visitStaticVariable(ifccParser::StaticVariableContext *context) = 0;
 
     virtual std::any visitParameters(ifccParser::ParametersContext *context) = 0;
 

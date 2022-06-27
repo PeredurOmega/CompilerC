@@ -34,5 +34,21 @@ private:
     vector<RawDeclaration *> declarations;
 };
 
+class StaticDeclaration : Instruction {
+public:
+    explicit StaticDeclaration(PrimaryType *type, string *name, int init)
+            : Instruction(), type(type), name(name), init(init) {};
+
+    void setOwner(Scope *owner) override;
+
+    void linearize(IrFunction *fun) override;
+
+    void renderX86(ostream &o) const;
+
+    PrimaryType *type;
+    string *name;
+    int init;
+};
+
 
 #endif //LIBANTLR4_DECLARATION_H

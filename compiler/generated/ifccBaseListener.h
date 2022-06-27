@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -27,6 +27,9 @@ public:
 
   virtual void enterFunctionDeclaration(ifccParser::FunctionDeclarationContext * /*ctx*/) override { }
   virtual void exitFunctionDeclaration(ifccParser::FunctionDeclarationContext * /*ctx*/) override { }
+
+  virtual void enterStaticVariable(ifccParser::StaticVariableContext * /*ctx*/) override { }
+  virtual void exitStaticVariable(ifccParser::StaticVariableContext * /*ctx*/) override { }
 
   virtual void enterParameters(ifccParser::ParametersContext * /*ctx*/) override { }
   virtual void exitParameters(ifccParser::ParametersContext * /*ctx*/) override { }

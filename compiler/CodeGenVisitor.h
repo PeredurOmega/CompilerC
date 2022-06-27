@@ -16,6 +16,8 @@ public:
 
     antlrcpp::Any visitFunctionDeclaration(ifccParser::FunctionDeclarationContext *ctx) override;
 
+    antlrcpp::Any visitStaticVariable(ifccParser::StaticVariableContext *ctx) override;
+
     antlrcpp::Any visitFunctionCall(ifccParser::FunctionCallContext *ctx) override;
 
     antlrcpp::Any visitProcedureCall(ifccParser::ProcedureCallContext *ctx) override;

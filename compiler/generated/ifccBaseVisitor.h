@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -28,6 +28,10 @@ public:
   }
 
   virtual std::any visitFunctionDeclaration(ifccParser::FunctionDeclarationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitStaticVariable(ifccParser::StaticVariableContext *ctx) override {
     return visitChildren(ctx);
   }
 

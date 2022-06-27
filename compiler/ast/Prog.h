@@ -5,6 +5,7 @@
 #ifndef LIBANTLR4_PROG_H
 #define LIBANTLR4_PROG_H
 
+#include <utility>
 #include <vector>
 #include "unordered_map"
 #include "Scope.h"
@@ -13,11 +14,15 @@
 
 using namespace std;
 
-class Prog : Scope {
+class Prog : public Scope {
 public:
-    explicit Prog(string entry);
+    explicit Prog(string entry)
+            : Scope(), entry(std::move(entry)) {
+        label = new int(0);
+        staticVarTable = new unordered_map<string, StaticDeclaration *>();
+    };
 
-    void linearize(IrFunction* fun) override;
+    void linearize(IrFunction *fun) override;
 
     void renderX86(ostream &o);
 
@@ -27,7 +32,7 @@ public:
 
     int conditionalJump() override;
 
-    const IrType* getFunctionType(string name) override;
+    const IrType *getFunctionType(string name) override;
 
 private:
     string entry;

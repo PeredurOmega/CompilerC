@@ -18,7 +18,7 @@ void OpExpression::linearize(IrFunction *fun) {
     lExpr->linearize(fun);
     rExpr->linearize(fun);
     if (assignTo != nullptr) {
-        var = new IrVariable(assignTo, owner->getType(assignTo));
+        var = owner->getIrVariable(assignTo);
     } else {
         var = new IrTempVariable(lExpr->var->type);
     }

@@ -9,7 +9,7 @@
 void UnaryOp::linearize(IrFunction *fun) {
     rExpr->linearize(fun);
     if (assignTo != nullptr) {
-        var = new IrVariable(assignTo, owner->getType(assignTo));
+        var = owner->getIrVariable(assignTo);
     } else {
         var = new IrTempVariable(rExpr->var->type);
     }

@@ -20,6 +20,10 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
         prog->addFunction(any_cast<Function *>(visit(f)));
     }
 
+    for (auto *var: ctx->staticVariable()) {
+        prog->declareStaticVariable((StaticDeclaration *) any_cast<Instruction *>(visit(var)));
+    }
+
     return prog;
 }
 
@@ -191,13 +195,13 @@ antlrcpp::Any CodeGenVisitor::visitRawDeclaration(ifccParser::RawDeclarationCont
         auto *expr = (Expression *) any_cast<Instruction *>(visit(ctx->expression()));
         expr->assignTo = varNames->back();
         if (varNames->size() > 1) {
-            auto *rawDec = new RawDeclaration(varNames->front(),new VarExpr(varNames, expr));
+            auto *rawDec = new RawDeclaration(varNames->front(), new VarExpr(varNames, expr));
             return (Instruction *) rawDec;
         } else {
             return (Instruction *) new RawDeclaration(varNames->back(), expr);
         }
     } else
-        return (Instruction *) new RawDeclaration(varNames->back(),(Expression *) nullptr);
+        return (Instruction *) new RawDeclaration(varNames->back(), (Expression *) nullptr);
 }
 
 antlrcpp::Any CodeGenVisitor::visitAssignment(ifccParser::AssignmentContext *ctx) {
@@ -429,4 +433,22 @@ antlrcpp::Any CodeGenVisitor::visitWhileBlock(ifccParser::WhileBlockContext *ctx
     auto *whileStatement = new WhileStatement(compare, content);
     if (content->alwaysReturn) whileStatement->conditionalReturn = true;
     return (Instruction *) whileStatement;
+}
+
+antlrcpp::Any CodeGenVisitor::visitStaticVariable(ifccParser::StaticVariableContext *ctx) {
+    string type = ctx->TYPE()->getText();
+    try {
+        auto *var = new string(ctx->VAR()->getText());
+        auto *t = PrimaryType::parse(type);
+        try {
+            auto initValue = stoi(ctx->CONST()->getText());
+            auto *declaration = new StaticDeclaration(t, var, initValue);
+            return (Instruction *) declaration;
+        } catch (exception &e) {
+            throw e;//TODO
+        }
+    } catch (InvalidType &e) {
+        //TODO
+        throw e;
+    }
 }
