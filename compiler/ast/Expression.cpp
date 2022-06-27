@@ -62,8 +62,10 @@ IrRegister *FunctionCall::getRegisterToUse(int position, PrimaryType *type) {
 }
 
 void Variable::linearize(IrFunction *fun) {
-    //TODO CHECK
     var = new IrVariable(&name, owner->getType(&name));
+    if(assignTo != nullptr) {
+        fun->append(new IrCopy(var, new IrVariable(assignTo, owner->getType(assignTo))));
+    }
 }
 
 void Constant::linearize(IrFunction *fun) {

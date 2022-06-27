@@ -41,6 +41,8 @@ public:
 
     virtual std::any visitStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext *context) = 0;
 
+    virtual std::any visitProcedureCall(ifccParser::ProcedureCallContext *context) = 0;
+
     virtual std::any visitEmpty(ifccParser::EmptyContext *context) = 0;
 
     virtual std::any visitIfBlock(ifccParser::IfBlockContext *context) = 0;

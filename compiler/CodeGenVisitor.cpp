@@ -26,16 +26,15 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
 antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
     //TODO HANDLE INVALID FUN TYPE
     IrType *returnType;
-    string rawReturnType = ctx->TYPE()->getText();
-    try {
-        returnType = (IrType *) PrimaryType::parse(rawReturnType);
-    } catch (const InvalidType &e) {
-        if (rawReturnType == "void") {
-            returnType = (IrType *) new Void();
-        } else {
-            //TODO REPLACE BY COMPILATION EXCEPTION
+    if (ctx->TYPE() != nullptr) {
+        string rawReturnType = ctx->TYPE()->getText();
+        try {
+            returnType = (IrType *) PrimaryType::parse(rawReturnType);
+        } catch (const InvalidType &e) {
             cerr << e.what() << " at line " << ctx->start->getLine() << endl;
         }
+    } else {
+        returnType = (IrType *) new Void();
     }
 
     auto *parameters = new vector<Parameter *>;
@@ -50,6 +49,15 @@ antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
 
 antlrcpp::Any CodeGenVisitor::visitFunctionDeclaration(ifccParser::FunctionDeclarationContext *ctx) {
     return (Instruction *) new Empty();
+}
+
+antlrcpp::Any CodeGenVisitor::visitProcedureCall(ifccParser::ProcedureCallContext *ctx) {
+    auto *arguments = new vector<Expression *>;
+    if (ctx->arguments() != nullptr) {
+        arguments = any_cast<vector<Expression *> *>(visitArguments(ctx->arguments()));
+    }
+
+    return (Instruction *) new FunctionCall(ctx->VAR()->getText(), arguments);
 }
 
 antlrcpp::Any CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext *ctx) {

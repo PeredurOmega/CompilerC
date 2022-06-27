@@ -47,6 +47,9 @@ public:
   virtual void enterStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext *ctx) = 0;
   virtual void exitStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext *ctx) = 0;
 
+  virtual void enterProcedureCall(ifccParser::ProcedureCallContext *ctx) = 0;
+  virtual void exitProcedureCall(ifccParser::ProcedureCallContext *ctx) = 0;
+
   virtual void enterEmpty(ifccParser::EmptyContext *ctx) = 0;
   virtual void exitEmpty(ifccParser::EmptyContext *ctx) = 0;
 

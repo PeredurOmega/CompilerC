@@ -59,6 +59,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual std::any visitProcedureCall(ifccParser::ProcedureCallContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual std::any visitEmpty(ifccParser::EmptyContext *ctx) override {
     return visitChildren(ctx);
   }

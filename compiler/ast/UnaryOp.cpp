@@ -4,6 +4,7 @@
 
 #include "UnaryOp.h"
 #include "../ir/UnaryOpIrInstruction.h"
+#include "../ir/IrCopy.h"
 
 void UnaryOp::linearize(IrFunction *fun) {
     rExpr->linearize(fun);
@@ -26,6 +27,7 @@ void MinusUnary::linearize(IrFunction *fun) {
 
 void PlusUnary::linearize(IrFunction *fun) {
     UnaryOp::linearize(fun);
+    fun->append(new IrCopy(rExpr->var, var));
 }
 
 void NotUnary::linearize(IrFunction *fun) {

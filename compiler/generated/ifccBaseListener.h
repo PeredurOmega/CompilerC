@@ -49,6 +49,9 @@ public:
   virtual void enterStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext * /*ctx*/) override { }
   virtual void exitStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext * /*ctx*/) override { }
 
+  virtual void enterProcedureCall(ifccParser::ProcedureCallContext * /*ctx*/) override { }
+  virtual void exitProcedureCall(ifccParser::ProcedureCallContext * /*ctx*/) override { }
+
   virtual void enterEmpty(ifccParser::EmptyContext * /*ctx*/) override { }
   virtual void exitEmpty(ifccParser::EmptyContext * /*ctx*/) override { }
 
