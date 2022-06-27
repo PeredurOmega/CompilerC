@@ -50,7 +50,11 @@ void FunctionCall::setOwner(Scope *owner) {
 
 vector<IrInstruction *> *Variable::linearize() {
     var = new IrVariable(&name, owner->getOffset(&name));
-    return new vector<IrInstruction *>();
+    if(assignTo != nullptr) {
+        return new vector<IrInstruction *>({new IrCopy(var, new IrVariable(assignTo, owner->getOffset(assignTo)))});
+    } else {
+        return new vector<IrInstruction *>();
+    }
 }
 
 vector<IrInstruction *> *Constant::linearize() {
