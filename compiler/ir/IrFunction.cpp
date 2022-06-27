@@ -28,7 +28,6 @@ void IrFunction::assignMemory() {
             instr->assignMemory();
         }
     }
-
     stackSize = 256;
 }
 
@@ -39,6 +38,7 @@ void IrFunction::renderX86(ostream &o) const {
     for (int i = 0; i < min((int) parameters.size(), 6); ++i) {
         auto *parameter = parameters[i];
         auto *var = new IrVariable(&parameter->name, parameter->type);
+        var->assignMemory(mainScope);
         (new IrCopy(FunctionCall::getRegisterToUse(i, parameter->type), var))->renderX86(o);
     }
 

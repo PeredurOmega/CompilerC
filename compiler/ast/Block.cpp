@@ -30,7 +30,11 @@ int Block::conditionalJump() {
 }
 
 void Block::linearize(IrFunction *fun) {
-    fun->currentScope = new IrScope(fun);
+    auto* scope = new IrScope(fun);
+    if(fun->mainScope == nullptr) {
+        fun->mainScope = scope;
+    }
+    fun->currentScope = scope;
     fun->append(new BasicBlock(&fun->name));
     for (auto *inst: instructions) {
         inst->linearize(fun);
