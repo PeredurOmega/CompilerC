@@ -26,16 +26,15 @@ antlrcpp::Any CodeGenVisitor::visitProg(ifccParser::ProgContext *ctx) {
 antlrcpp::Any CodeGenVisitor::visitFunction(ifccParser::FunctionContext *ctx) {
     //TODO HANDLE INVALID FUN TYPE
     IrType *returnType;
-    string rawReturnType = ctx->TYPE()->getText();
-    try {
-        returnType = (IrType *) PrimaryType::parse(rawReturnType);
-    } catch (const InvalidType &e) {
-        if (rawReturnType == "void") {
-            returnType = (IrType *) new Void();
-        } else {
-            //TODO REPLACE BY COMPILATION EXCEPTION
+    if (ctx->TYPE() != nullptr) {
+        string rawReturnType = ctx->TYPE()->getText();
+        try {
+            returnType = (IrType *) PrimaryType::parse(rawReturnType);
+        } catch (const InvalidType &e) {
             cerr << e.what() << " at line " << ctx->start->getLine() << endl;
         }
+    } else {
+        returnType = (IrType *) new Void();
     }
 
     auto *parameters = new vector<Parameter *>;
