@@ -8,6 +8,6 @@ void Instruction::setOwner(Scope *_owner) {
     this->owner = _owner;
 }
 
-vector<IrInstruction *> *Empty::linearize() {
-    return new vector<IrInstruction *>();
+void Empty::linearize(IrFunction *fun) {
+
 }

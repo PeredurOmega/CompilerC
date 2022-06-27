@@ -19,7 +19,7 @@ public:
     explicit IfStatement(Expression *compare, Instruction *content, ElseStatement *elseStatement)
             : Expression(), compare(compare), content(content), elseStatement(elseStatement) {};
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction *fun) override;
 
     void setOwner(Scope *owner) override;
 
@@ -40,7 +40,7 @@ public:
 
     explicit ElseStatement(Instruction *content) : Expression(), content(content) {};
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction* fun) override;
 
     void setOwner(Scope *owner) override;
 

@@ -8,3 +8,7 @@
 void IrGlobal::renderX86(ostream &o) const {
     o << ".globl " << entry << endl;
 }
+
+void IrGlobal::assignMemory() {
+
+}

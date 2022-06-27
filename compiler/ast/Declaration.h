@@ -21,13 +21,13 @@ public:
 
 class Declaration : Instruction {
 public:
-    explicit Declaration(PrimaryType *type): Instruction(), type(type) {};
+    explicit Declaration(PrimaryType *type) : Instruction(), type(type) {};
 
     void addRawDeclaration(RawDeclaration *rawDec);
 
     void setOwner(Scope *owner) override;
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction *fun) override;
 
 private:
     PrimaryType *type;

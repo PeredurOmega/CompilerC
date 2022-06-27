@@ -12,7 +12,7 @@ class UnaryOp : public Expression {
 public:
     explicit UnaryOp(Expression *rExpr) : Expression(), rExpr(rExpr) { };
 
-    vector<IrInstruction *> *linearize() override = 0;
+    void linearize(IrFunction* fun) override = 0;
 
     void setOwner(Scope *owner) override;
 
@@ -24,28 +24,28 @@ class MinusUnary : public UnaryOp {
 public:
     using UnaryOp::UnaryOp;
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction* fun) override;
 };
 
 class PlusUnary : public UnaryOp {
 public:
     using UnaryOp::UnaryOp;
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction* fun) override;
 };
 
 class NotUnary : public UnaryOp {
 public:
     using UnaryOp::UnaryOp;
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction* fun) override;
 };
 
 class BitwiseNotUnary : public UnaryOp {
 public:
     using UnaryOp::UnaryOp;
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction* fun) override;
 };
 
 

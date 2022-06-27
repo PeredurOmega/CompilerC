@@ -9,9 +9,9 @@
 #include <sstream>
 
 
-vector<IrInstruction *> *IfStatement::linearize() {
-    auto *instr = compare->linearize();
-    instr->push_back(new IrCompare(compare->var));
+void IfStatement::linearize(IrFunction *fun) {
+    compare->linearize(fun);
+    fun->append(new IrCompare(compare->var));
 
     firstLabel = owner->getNewLabel();
     if (finalLabel == 0) finalLabel = owner->getNewLabel();
@@ -19,23 +19,29 @@ vector<IrInstruction *> *IfStatement::linearize() {
     int nextLabel;
     if (elseStatement != nullptr) nextLabel = elseStatement->label = owner->getNewLabel();
     else nextLabel = finalLabel;
-    instr->push_back(new IrJumpIfEqual(nextLabel));
+    fun->append(new IrJumpIfEqual(nextLabel));
 
-    auto *body = content->linearize();
-    instr->insert(instr->end(), body->begin(), body->end());
+    auto *ifBlock = new BasicBlock(new string(".L" + to_string(firstLabel)));
+    auto *parent = fun->currentBlock;
+    parent->nextTrue = ifBlock;
+    fun->append(ifBlock);
+    content->linearize(fun);
 
     if (elseStatement != nullptr) {
         elseStatement->finalLabel = finalLabel;
-        instr->push_back(new IrJump(finalLabel));
-        auto *elseBlock = elseStatement->linearize();
-        instr->insert(instr->end(), elseBlock->begin(), elseBlock->end());
+        fun->append(new IrJump(finalLabel));
+        auto *elseBlock = new BasicBlock(new string(".Else" + to_string(firstLabel)));
+        parent->nextFalse = elseBlock;
+        fun->append(elseBlock);
+        elseStatement->linearize(fun);
     }
+
+    fun->append(new BasicBlock(new string(".L" + to_string(finalLabel))));
 
     // Closing the branch
     if (finalLabel == firstLabel + 1) {
-        instr->push_back(new IrLabel(".L" + to_string(finalLabel)));
+        fun->append(new IrLabel(".L" + to_string(finalLabel)));
     }
-    return instr;
 }
 
 void IfStatement::setOwner(Scope *owner) {
@@ -45,15 +51,12 @@ void IfStatement::setOwner(Scope *owner) {
     if (elseStatement != nullptr) elseStatement->setOwner(owner);
 }
 
-vector<IrInstruction *> *ElseStatement::linearize() {
-    auto *instr = new vector<IrInstruction *>();
-    instr->push_back(new IrLabel(".L" + to_string(label)));
+void ElseStatement::linearize(IrFunction *fun) {
+    fun->append(new IrLabel(".L" + to_string(label)));
     if (dynamic_cast<IfStatement *>(content) != nullptr) {
         ((IfStatement *) content)->finalLabel = finalLabel;
     }
-    auto *body = content->linearize();
-    instr->insert(instr->end(), body->begin(), body->end());
-    return instr;
+    content->linearize(fun);
 }
 
 void ElseStatement::setOwner(Scope *owner) {

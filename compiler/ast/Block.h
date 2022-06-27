@@ -5,7 +5,7 @@
 #ifndef LIBANTLR4_BLOCK_H
 #define LIBANTLR4_BLOCK_H
 
-
+#include "../ir/IrFunction.h"
 #include <vector>
 #include "Scope.h"
 #include "Instruction.h"
@@ -18,11 +18,11 @@ public:
 
     void setOwner(Scope *owner) override;
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction *fun) override;
 
     void attachTo(Block *block);
 
-    int conditionalJump() override;
+    virtual int conditionalJump() override;
 
 private:
     vector<Instruction *> instructions;

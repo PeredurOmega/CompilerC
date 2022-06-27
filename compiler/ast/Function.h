@@ -8,30 +8,10 @@
 
 #include <vector>
 #include "../ir/IrElement.h"
-#include "Block.h"
 #include "TypeSymbol.h"
+#include "Block.h"
 
-class Parameter;
-
-class Function : public Block {
-public:
-    explicit Function(string name, const IrType *returnType, const vector<Parameter *> &parameters)
-            : returnType(returnType), name(std::move(name)), parameters(parameters) {};
-
-    vector<IrInstruction *> *linearize() override;
-
-    void setBlock(Block *block);
-
-    int conditionalJump() override;
-
-private:
-    const string MAIN = "main";
-    const IrType *returnType;
-    string name;
-    int endLabel = -1;
-    vector<Parameter *> parameters;
-    vector<tuple<string, string, int>> registers;
-};
+class IrFunction;
 
 class Parameter {
 public:
@@ -39,6 +19,37 @@ public:
 
     PrimaryType *type;
     string name;
+};
+
+class Function : public Block {
+public:
+    string name;
+
+    const IrType *returnType;
+
+    explicit Function(string name, const IrType *returnType, const vector<Parameter *> &parameters)
+            : Block(), name(std::move(name)), returnType(returnType), parameters(parameters) {};
+
+    IrFunction *linearize();
+
+    void setBlock(Block *block);
+
+    int conditionalJump() override;
+
+private:
+    const string MAIN = "main";
+    int endLabel = -1;
+    vector<Parameter *> parameters;
+    vector<tuple<string, string, int>> registers;
+};
+
+class InvalidReturnType : exception {
+public:
+    explicit InvalidReturnType() = default;
+
+    [[nodiscard]] const char *what() const noexcept override {
+        return "Invalid return type";
+    }
 };
 
 #endif //LIBANTLR4_FUNCTION_H

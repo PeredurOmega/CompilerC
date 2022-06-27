@@ -121,3 +121,9 @@ void BitwiseOrIrInstruction::renderX86(ostream &o) const {
     o << "    orl    " << right << ", %eax" << right->comment("BitwiseOr") << endl;
     o << "    movl    %eax, " << to << to->comment("BitwiseOr") << endl;
 }
+
+void OpIrInstruction::assignMemory() {
+    left->assignMemory(scope);
+    right->assignMemory(scope);
+    to->assignMemory(scope);
+}

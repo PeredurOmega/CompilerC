@@ -10,3 +10,7 @@ void IrPrologue::renderX86(ostream &o) const {
       << "    movq    %rsp, %rbp" << endl
       << "    subq    $" << stackSize << ", %rsp" << endl;
 }
+
+void IrPrologue::assignMemory() {
+
+}

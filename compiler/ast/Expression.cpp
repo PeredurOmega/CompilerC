@@ -13,32 +13,39 @@
 #include <iostream>
 
 
-const vector<IrRegister *> FunctionCall::registers = { // NOLINT(cert-err58-cpp)
-        new IrRegister(nullptr, new string("edi")),
-        new IrRegister(nullptr, new string("esi")),
-        new IrRegister(nullptr, new string("edx")),
-        new IrRegister(nullptr, new string("ecx")),
-        new IrRegister(nullptr, new string("r8d")),
-        new IrRegister(nullptr, new string("r9d"))
+const vector<string *> FunctionCall::registers = { // NOLINT(cert-err58-cpp)
+        new string("edi"),
+        new string("esi"),
+        new string("edx"),
+        new string("ecx"),
+        new string("r8d"),
+        new string("r9d")
 };
 
-vector<IrInstruction *> *FunctionCall::linearize() {
-    auto *instructions = new vector<IrInstruction *>();
+void FunctionCall::linearize(IrFunction *fun) {
     for (int i = (int) arguments->size() - 1; i >= 0; --i) {
         auto *expr = (*arguments)[i];
-        auto *instr = expr->linearize();
-        instructions->insert(instructions->end(), instr->begin(), instr->end());
+        expr->linearize(fun);
         if (i < 6) {
-            instructions->push_back(new IrCopy(expr->var, registers[i]));
+            fun->append(new IrCopy(expr->var, getRegisterToUse(i, expr->var->type)));
         } else {
-            instructions->push_back(new IrPushq(expr->var));
+            fun->append(new IrPushq(expr->var));
         }
     }
-    instructions->push_back(new IrCall(name));
-    if ((int) arguments->size() - 6 > 0) instructions->push_back(new IrAddQ(8 * ((int) arguments->size() - 6)));
-    var = new IrVariable(assignTo);
-    instructions->push_back(new IrCopy(new IrRegister(nullptr, new string("eax")), var));
-    return instructions;
+    fun->append(new IrCall(name));
+    if ((int) arguments->size() - 6 > 0) fun->append(new IrAddQ(8 * ((int) arguments->size() - 6)));
+    auto *returnType = owner->getFunctionType(name);
+    if (assignTo != nullptr) {
+        if (*returnType == IrType::VOID) {
+            throw new InvalidReturnType();
+        } else {
+            auto *rType = (PrimaryType *) returnType;
+            var = new IrVariable(assignTo, rType);
+            fun->append(new IrCopy(new IrRegister(nullptr, new string("eax"), rType), var));
+        }
+    } else {
+        var = new IrTempVariable((PrimaryType *) returnType);
+    }
 }
 
 void FunctionCall::setOwner(Scope *owner) {
@@ -48,27 +55,31 @@ void FunctionCall::setOwner(Scope *owner) {
     }
 }
 
-vector<IrInstruction *> *Variable::linearize() {
-    var = new IrVariable(&name);
-    return new vector<IrInstruction *>();
+IrRegister *FunctionCall::getRegisterToUse(int position, PrimaryType *type) {
+    return new IrRegister(nullptr, registers[position], type);
 }
 
-vector<IrInstruction *> *Constant::linearize() {
-    auto *inst = new vector<IrInstruction *>();
-    var = new IrVariable(assignTo);
-    auto *c = new IrConstant(value, var);
-    inst->push_back(c);
-    return inst;
+void Variable::linearize(IrFunction *fun) {
+    //TODO CHECK
+    var = new IrVariable(&name, owner->getType(&name));
 }
 
-vector<IrInstruction *> *Return::linearize() {
-    auto *inst = expression->linearize();
-    inst->push_back(new IrReturn(expression->var));
+void Constant::linearize(IrFunction *fun) {
+    if (assignTo != nullptr) {
+        var = new IrVariable(assignTo, new IntType());
+    } else {
+        var = new IrTempVariable(new IntType());
+    }
+    fun->append(new IrConstant(value, var));
+}
+
+void Return::linearize(IrFunction *fun) {
+    expression->linearize(fun);
+    fun->append(new IrReturn(expression->var));
     int conditionalJump = owner->conditionalJump();
     if (conditionalJump != -1) {
-        inst->push_back(new IrJump(conditionalJump));
+        fun->append(new IrJump(conditionalJump));
     }
-    return inst;
 }
 
 void Return::setOwner(Scope *owner) {
@@ -76,18 +87,17 @@ void Return::setOwner(Scope *owner) {
     expression->setOwner(owner);
 }
 
-vector<IrInstruction *> *VarExpr::linearize() {
-    auto *inst = expression->linearize();
+void VarExpr::linearize(IrFunction *fun) {
+    expression->linearize(fun);
     auto *lastVar = varNames.front();
     auto *prevVar = expression->var;
     for (int i = (int) varNames.size() - 1; i >= 0; i--) {
         auto *to = new IrVariable(varNames[i], owner->getType(varNames[i]));
         auto *copy = new IrCopy(prevVar, to);
         prevVar = to;
-        inst->push_back(copy);
+        fun->append(copy);
     }
     var = new IrVariable(lastVar, owner->getType(lastVar));
-    return inst;
 }
 
 void VarExpr::setOwner(Scope *owner) {

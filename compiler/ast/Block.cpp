@@ -3,6 +3,7 @@
 //
 
 #include "Block.h"
+#include "../ir/IrScope.h"
 
 void Block::addInstruction(Instruction *instruction) {
     if (instruction->alwaysReturn) {
@@ -28,13 +29,15 @@ int Block::conditionalJump() {
     else return owner->conditionalJump();
 }
 
-vector<IrInstruction *> *Block::linearize() {
-    auto *instr = new vector<IrInstruction *>();
+void Block::linearize(IrFunction *fun) {
+    fun->currentScope = new IrScope(fun);
+    fun->append(new BasicBlock(&fun->name));
     for (auto *inst: instructions) {
-        auto *l = inst->linearize();
-        instr->insert(instr->end(), l->begin(), l->end());
+        inst->linearize(fun);
     }
-    return instr;
+    if (fun->currentScope->parent != nullptr) {
+        fun->currentScope = fun->currentScope->parent;
+    }
 }
 
 void Block::setOwner(Scope *owner) {

@@ -15,3 +15,8 @@ void IrCopy::renderX86(ostream &o) const {
         o << "    movl    %eax, " << to << to->comment("Copy") << endl;
     }
 }
+
+void IrCopy::assignMemory() {
+    from->assignMemory(scope);
+    to->assignMemory(scope);
+}

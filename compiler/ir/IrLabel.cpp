@@ -8,3 +8,7 @@
 void IrLabel::renderX86(ostream &o) const {
     o << label << ":" << endl;
 }
+
+void IrLabel::assignMemory() {
+
+}

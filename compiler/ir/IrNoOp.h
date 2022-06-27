@@ -12,6 +12,8 @@ class IrNoOp : public IrInstruction {
 public:
     using IrInstruction::IrInstruction;
 
+    void assignMemory() override;
+
     void renderX86(ostream &o) const override;
 };
 

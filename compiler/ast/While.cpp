@@ -8,20 +8,27 @@
 #include "../ir/IrCompare.h"
 #include <sstream>
 
-vector<IrInstruction *> *WhileStatement::linearize() {
+void WhileStatement::linearize(IrFunction *fun) {
     compareLabel = owner->getNewLabel();
     contentLabel = owner->getNewLabel();
-    auto *instr = new vector<IrInstruction *>();
-    instr->push_back(new IrJump(compareLabel));
-    instr->push_back(new IrLabel(".L" + to_string(contentLabel)));
-    auto *body = content->linearize();
-    instr->insert(instr->end(), body->begin(), body->end());
-    instr->push_back(new IrLabel(".L" + to_string(compareLabel)));
-    auto *linearizedCompare = compare->linearize();
-    instr->insert(instr->end(), linearizedCompare->begin(), linearizedCompare->end());
-    instr->push_back(new IrCompare(compare->var));
-    instr->push_back(new IrJumpIfNotEqual(contentLabel));
-    return instr;
+    fun->append(new IrJump(compareLabel));
+    fun->append(new IrLabel(".L" + to_string(contentLabel)));
+    auto *parent = fun->currentBlock;
+    auto *compareBlock = new BasicBlock(new string(".L" + to_string(compareLabel)));
+    auto *contentBlock = new BasicBlock(new string(".L" + to_string(contentLabel)));
+    auto *endBlock = new BasicBlock(new string(".LEnd" + to_string(compareLabel)));
+    parent->nextTrue = compareBlock;
+    contentBlock->nextTrue = compareBlock;
+    compareBlock->nextTrue = contentBlock;
+    compareBlock->nextFalse = endBlock;
+
+    fun->append(contentBlock);
+    content->linearize(fun);
+    fun->append(compareBlock);
+    fun->append(new IrLabel(".L" + to_string(compareLabel)));
+    compare->linearize(fun);
+    fun->append(new IrCompare(compare->var));
+    fun->append(new IrJumpIfNotEqual(contentLabel));
 }
 
 void WhileStatement::setOwner(Scope *owner) {

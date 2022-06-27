@@ -5,7 +5,9 @@
 
 class UnaryOpIrInstruction : public IrInstruction {
 public:
-    UnaryOpIrInstruction(IrVariable *to, IrVariable *right) : to(to), right(right) { };
+    UnaryOpIrInstruction(IrVariable *to, IrVariable *right) : to(to), right(right) {};
+
+    void assignMemory() override;
 
 protected:
     IrVariable *to;

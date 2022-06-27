@@ -8,3 +8,7 @@
 void IrAddQ::renderX86(ostream &o) const {
     o << "    addq    $" << stackSize << ", %rsp" << endl;
 }
+
+void IrAddQ::assignMemory() {
+
+}

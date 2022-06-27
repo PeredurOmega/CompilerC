@@ -8,6 +8,8 @@ public:
     explicit OpIrInstruction(IrVariable *to, IrVariable *left, IrVariable *right)
             : IrInstruction(), to(to), left(left), right(right) {};
 
+    void assignMemory() override;
+
 protected:
     IrVariable *to;
     IrVariable *left;

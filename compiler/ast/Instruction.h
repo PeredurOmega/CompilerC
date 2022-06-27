@@ -9,6 +9,7 @@
 #include <vector>
 #include "../ir/IrElement.h"
 #include "../ir/IrInstruction.h"
+#include "../ir/IrFunction.h"
 
 class Scope;
 
@@ -23,18 +24,18 @@ public:
 
     bool conditionalReturn = false;
 
-    explicit Instruction() = default;
+    Instruction() = default;
 
     virtual void setOwner(Scope *owner);
 
-    virtual vector<IrInstruction *> *linearize() = 0;
+    virtual void linearize(IrFunction *fun) = 0;
 };
 
 class Empty : Instruction {
 public:
     using Instruction::Instruction;
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction* fun) override;
 };
 
 

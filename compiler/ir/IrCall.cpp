@@ -8,3 +8,7 @@
 void IrCall::renderX86(ostream &o) const {
     o << "    call    " << label << endl;
 }
+
+void IrCall::assignMemory() {
+
+}

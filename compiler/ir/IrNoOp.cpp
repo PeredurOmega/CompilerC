@@ -8,3 +8,7 @@
 void IrNoOp::renderX86(ostream &o) const {
     o << "    nop" << endl;
 }
+
+void IrNoOp::assignMemory() {
+
+}

@@ -22,3 +22,8 @@ void BitwiseNotUnaryIrInstruction::renderX86(ostream &o) const {
     o << "    movl    " << right << ", %eax" << right->comment("BitwiseNotUnary") << endl;
     o << "    movl    %eax, " << to << to->comment("BitwiseNotUnary") << endl;
 }
+
+void UnaryOpIrInstruction::assignMemory() {
+    right->assignMemory(scope);
+    to->assignMemory(scope);
+}

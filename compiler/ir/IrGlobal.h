@@ -15,6 +15,8 @@ public:
 
     void renderX86(ostream &o) const override;
 
+    void assignMemory() override;
+
     string entry;
 };
 

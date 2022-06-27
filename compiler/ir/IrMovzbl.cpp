@@ -8,3 +8,8 @@
 void IrMobzbl::renderX86(ostream &o) const {
     o << "    movzbl  " << from << ", " << to << endl;
 }
+
+void IrMobzbl::assignMemory() {
+    from->assignMemory(scope);
+    to->assignMemory(scope);
+}

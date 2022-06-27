@@ -32,14 +32,16 @@ public:
 
 class FunctionCall : public Expression {
 public:
-    static const vector<IrRegister *> registers;
+    static const vector<string *> registers;
 
     explicit FunctionCall(string name, vector<Expression *> *arguments)
             : name(std::move(name)), arguments(arguments) {};
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction *fun) override;
 
     void setOwner(Scope *owner) override;
+
+    static IrRegister *getRegisterToUse(int position, PrimaryType *type);
 
 private:
     string name;
@@ -52,7 +54,7 @@ public:
         alwaysReturn = true;
     };
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction *fun) override;
 
     void setOwner(Scope *owner) override;
 
@@ -66,7 +68,7 @@ public:
 
     explicit Constant(int value) : Expression(), value(value) {}
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction *fun) override;
 };
 
 class Variable : public Expression {
@@ -75,7 +77,7 @@ public:
 
     explicit Variable(string name) : Expression(), name(std::move(name)) {};
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction *fun) override;
 };
 
 class VarExpr : public Expression {
@@ -83,7 +85,7 @@ public:
     explicit VarExpr(vector<string *> *varNames, Expression *expr)
             : Expression(), varNames(*varNames), expression(expr) {};
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction *fun) override;
 
     void setOwner(Scope *owner) override;
 

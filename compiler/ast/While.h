@@ -14,7 +14,7 @@ public:
     explicit WhileStatement(Expression *compare, Instruction *content)
             : Instruction(), compare(compare), content(content) {};
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction* fun) override;
 
     void setOwner(Scope *owner) override;
 

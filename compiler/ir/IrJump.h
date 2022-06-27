@@ -14,6 +14,8 @@ public:
 
     void renderX86(ostream &o) const override;
 
+    void assignMemory() override;
+
     int toLabel;
 };
 
@@ -22,6 +24,8 @@ public:
     explicit IrJumpIfEqual(int toLabel) : IrInstruction(), toLabel(toLabel) {};
 
     void renderX86(ostream &o) const override;
+
+    void assignMemory() override;
 
     int toLabel;
 };
@@ -32,6 +36,8 @@ public:
     explicit IrJumpIfNotEqual(int toLabel) : IrInstruction(), toLabel(toLabel) {};
 
     void renderX86(ostream &o) const override;
+
+    void assignMemory() override;
 
     int toLabel;
 };

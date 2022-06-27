@@ -8,3 +8,7 @@
 void IrPushq::renderX86(ostream &o) const {
     o << "    pushq    " << var << endl;
 }
+
+void IrPushq::assignMemory() {
+    var->assignMemory(scope);
+}

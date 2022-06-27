@@ -8,3 +8,7 @@
 void IrCompare::renderX86(ostream &o) const {
     o << "    cmpl    $0, " << toCompareTo0 << endl;
 }
+
+void IrCompare::assignMemory() {
+    toCompareTo0->assignMemory(scope);
+}

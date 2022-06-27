@@ -5,10 +5,13 @@
 #include "UnaryOp.h"
 #include "../ir/UnaryOpIrInstruction.h"
 
-vector<IrInstruction *> *UnaryOp::linearize() {
-    auto *rInstr = rExpr->linearize();
-    var = new IrVariable(assignTo, owner->getOffset(assignTo));
-    return rInstr;
+void UnaryOp::linearize(IrFunction *fun) {
+    rExpr->linearize(fun);
+    if (assignTo != nullptr) {
+        var = new IrVariable(assignTo, owner->getType(assignTo));
+    } else {
+        var = new IrTempVariable(rExpr->var->type);
+    }
 }
 
 void UnaryOp::setOwner(Scope *owner) {
@@ -16,24 +19,21 @@ void UnaryOp::setOwner(Scope *owner) {
     rExpr->setOwner(owner);
 }
 
-vector<IrInstruction *> *MinusUnary::linearize() {
-    auto *rInstr = UnaryOp::linearize();
-    rInstr->push_back(new MinusUnaryIrInstruction(var, rExpr->var));
-    return rInstr;
+void MinusUnary::linearize(IrFunction *fun) {
+    UnaryOp::linearize(fun);
+    fun->append(new MinusUnaryIrInstruction(var, rExpr->var));
 }
 
-vector<IrInstruction *> *PlusUnary::linearize() {
-    return UnaryOp::linearize();
+void PlusUnary::linearize(IrFunction *fun) {
+    UnaryOp::linearize(fun);
 }
 
-vector<IrInstruction *> *NotUnary::linearize() {
-    auto *rInstr = UnaryOp::linearize();
-    rInstr->push_back(new NotUnaryIrInstruction(var, rExpr->var));
-    return rInstr;
+void NotUnary::linearize(IrFunction *fun) {
+    UnaryOp::linearize(fun);
+    fun->append(new NotUnaryIrInstruction(var, rExpr->var));
 }
 
-vector<IrInstruction *> *BitwiseNotUnary::linearize() {
-    auto *rInstr = UnaryOp::linearize();
-    rInstr->push_back(new BitwiseNotUnaryIrInstruction(var, rExpr->var));
-    return rInstr;
+void BitwiseNotUnary::linearize(IrFunction *fun) {
+    UnaryOp::linearize(fun);
+    fun->append(new BitwiseNotUnaryIrInstruction(var, rExpr->var));
 }

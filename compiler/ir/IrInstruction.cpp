@@ -3,6 +3,7 @@
 //
 
 #include "IrInstruction.h"
+#include "IrScope.h"
 #include <sstream>
 
 using namespace std;
@@ -24,12 +25,25 @@ ostream &operator<<(ostream &o, IrVariable *var) {
     return o;
 }
 
+void IrTempVariable::assignMemory(IrScope *scope) {
+    offset = scope->insertTempVariable();
+}
+
+void IrVariable::assignMemory(IrScope *scope) {
+    offset = scope->getOffset(name);
+}
+
 ostream &operator<<(ostream &o, IrRegister *var) {
     o << "%" << *(var->registerName);
     return o;
 }
 
+void IrRegister::assignMemory(IrScope *scope) {
+
+}
+
+/*
 ostream &operator<<(ostream &o, IrArgument *var) {
     o << var->offset << "(%rbp)";
     return o;
-}
+}*/

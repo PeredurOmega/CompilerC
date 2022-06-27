@@ -10,3 +10,7 @@ void IrEpilogue::renderX86(ostream &o) const {
       << "    popq    %rbp" << endl
       << "    ret" << endl;
 }
+
+void IrEpilogue::assignMemory() {
+
+}

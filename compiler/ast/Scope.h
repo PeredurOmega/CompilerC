@@ -21,18 +21,20 @@ public:
 
     void setOwner(Scope *owner) override;
 
-    PrimaryType* getType(string *varName);
+    PrimaryType *getType(string *varName);
 
-    PrimaryType* declareVariable(string *varName, PrimaryType* type);
+    PrimaryType *declareVariable(string *varName, PrimaryType *type);
 
     /**
      * If there is a need for conditional jump, jump label is returned, otherwise -1 is return.
      */
     virtual int conditionalJump() = 0;
 
+    virtual const IrType *getFunctionType(string functionName);
+
 protected:
     int *label;
-    unordered_map<string, PrimaryType*> varTable;
+    unordered_map<string, PrimaryType *> varTable;
 };
 
 class UndefinedVariable : exception {

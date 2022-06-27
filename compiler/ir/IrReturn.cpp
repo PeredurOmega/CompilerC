@@ -8,3 +8,7 @@
 void IrReturn::renderX86(ostream &o) const {
     o << "    movl    " << from << ", %eax" << from->comment("Return") << endl;
 }
+
+void IrReturn::assignMemory() {
+    from->assignMemory(scope);
+}

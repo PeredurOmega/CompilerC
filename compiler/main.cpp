@@ -39,9 +39,6 @@ int main(int argn, const char **argv) {
 
     CodeGenVisitor v;
     Prog *prog = any_cast<Prog *>(v.visit(tree));
-    auto *instr = prog->linearize();
-    for (auto *i: *instr) {
-        i->renderX86(cout);
-    }
+    prog->renderX86(cout);
     return 0;
 }

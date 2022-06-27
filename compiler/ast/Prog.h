@@ -17,13 +17,17 @@ class Prog : Scope {
 public:
     explicit Prog(string entry);
 
-    vector<IrInstruction *> *linearize() override;
+    void linearize(IrFunction* fun) override;
+
+    void renderX86(ostream &o);
 
     void addFunction(Function *function);
 
     void setOwner(Scope *owner) override;
 
     int conditionalJump() override;
+
+    const IrType* getFunctionType(string name) override;
 
 private:
     string entry;
@@ -32,5 +36,13 @@ private:
     int finalJump = 0;
 };
 
+class UndefinedFunction : exception {
+public:
+    explicit UndefinedFunction() = default;
+
+    [[nodiscard]] const char *what() const noexcept override {
+        return "Undefined function";
+    }
+};
 
 #endif //LIBANTLR4_PROG_H

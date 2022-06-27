@@ -12,6 +12,8 @@ class IrCopy : public IrInstruction {
 public:
     explicit IrCopy(IrVariable *from, IrVariable* to) : IrInstruction(), from(from), to(to) {};
 
+    void assignMemory() override;
+
     void renderX86(ostream &o) const override;
 
     IrVariable *from;

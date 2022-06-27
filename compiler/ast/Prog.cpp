@@ -22,17 +22,29 @@ int Prog::conditionalJump() {
     return -1;
 }
 
-vector<IrInstruction *> *Prog::linearize() {
-    auto *instr = new vector<IrInstruction *>();
-    instr->push_back(new IrGlobal(entry));
-    for (Function *function: functions) {
-        function->setOwner(this);
-        auto *l = function->linearize();
-        instr->insert(instr->end(), l->begin(), l->end());
-    }
-    return instr;
-}
-
 void Prog::setOwner(Scope *owner) {
     Scope::setOwner(owner);
+}
+
+const IrType *Prog::getFunctionType(string functionName) {
+    for (Function *function: functions) {
+        if (function->name == functionName) {
+            return function->returnType;
+        }
+    }
+    throw new UndefinedFunction();
+}
+
+void Prog::linearize(IrFunction *fun) {
+
+}
+
+void Prog::renderX86(ostream &o) {
+    (new IrGlobal(entry))->renderX86(o);
+    for (Function *function: functions) {
+        function->setOwner(this);
+        auto* fun = function->linearize();
+        fun->assignMemory();
+        fun->renderX86(o);
+    }
 }

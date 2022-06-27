@@ -10,13 +10,18 @@
 #include "../ir/IrLabel.h"
 #include "../ir/IrMovzbl.h"
 #include "../ir/IrCopy.h"
+#include <iostream>
 
-vector<IrInstruction *> *OpExpression::linearize() {
-    auto *lInstr = lExpr->linearize();
-    auto *rInstr = rExpr->linearize();
-    lInstr->insert(lInstr->end(), rInstr->begin(), rInstr->end());
-    var = new IrVariable(assignTo, owner->getOffset(assignTo));
-    return lInstr;
+using namespace std;
+
+void OpExpression::linearize(IrFunction *fun) {
+    lExpr->linearize(fun);
+    rExpr->linearize(fun);
+    if (assignTo != nullptr) {
+        var = new IrVariable(assignTo, owner->getType(assignTo));
+    } else {
+        var = new IrTempVariable(lExpr->var->type);
+    }
 }
 
 void OpExpression::setOwner(Scope *owner) {
@@ -25,138 +30,120 @@ void OpExpression::setOwner(Scope *owner) {
     rExpr->setOwner(owner);
 }
 
-vector<IrInstruction *> *AddOperation::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new AddIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void AddOperation::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new AddIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *SubOperation::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new SubIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void SubOperation::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new SubIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *TimesOperation::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new TimesIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void TimesOperation::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new TimesIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *DivOperation::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new DivIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void DivOperation::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new DivIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *ModuloOperation::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new ModuloIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void ModuloOperation::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new ModuloIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *ShiftRightOperation::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new ShiftRightIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void ShiftRightOperation::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new ShiftRightIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *ShiftLeftOperation::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new ShiftLeftIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void ShiftLeftOperation::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new ShiftLeftIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *LessCompare::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new LessCompareIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void LessCompare::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new LessCompareIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *LessEqualCompare::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new LessEqualCompareIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void LessEqualCompare::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new LessEqualCompareIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *GreatCompare::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new GreatCompareIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void GreatCompare::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new GreatCompareIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *GreatEqualCompare::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new GreatEqualCompareIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void GreatEqualCompare::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new GreatEqualCompareIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *EqualCompare::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new EqualCompareIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void EqualCompare::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new EqualCompareIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *NotEqualCompare::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new NotEqualCompareIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void NotEqualCompare::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new NotEqualCompareIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *BitwiseAnd::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new BitwiseAndIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void BitwiseAnd::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new BitwiseAndIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *BitwiseXor::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new BitwiseXorIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void BitwiseXor::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new BitwiseXorIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *BitwiseOr::linearize() {
-    auto *lInstr = OpExpression::linearize();
-    lInstr->push_back(new BitwiseOrIrInstruction(var, lExpr->var, rExpr->var));
-    return lInstr;
+void BitwiseOr::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
+    fun->append(new BitwiseOrIrInstruction(var, lExpr->var, rExpr->var));
 }
 
-vector<IrInstruction *> *LogicalAnd::linearize() {
-    auto *lInstr = OpExpression::linearize();
+void LogicalAnd::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
     firstLabel = owner->getNewLabel();
     secondLabel = owner->getNewLabel();
-    lInstr->push_back(new IrCompare(lExpr->var));
-    lInstr->push_back(new IrJumpIfEqual(firstLabel));
-    lInstr->push_back(new IrCompare(rExpr->var));
-    lInstr->push_back(new IrJumpIfEqual(firstLabel));
-    lInstr->push_back(new IrConstant(1, new IrRegister(nullptr, new string("eax"))));
-    lInstr->push_back(new IrJump(secondLabel));
-    lInstr->push_back(new IrLabel(".L" + to_string(firstLabel)));
-    lInstr->push_back(new IrConstant(0, new IrRegister(nullptr, new string("eax"))));
-    lInstr->push_back(new IrLabel(".L" + to_string(secondLabel)));
-    lInstr->push_back(new IrMobzbl(new IrRegister(nullptr, new string("al")),
-                                   new IrRegister(nullptr, new string("eax"))));
-    lInstr->push_back(new IrCopy(new IrRegister(nullptr, new string("eax")), var));
-    return lInstr;
+    fun->append(new IrCompare(lExpr->var));
+    fun->append(new IrJumpIfEqual(firstLabel));
+    fun->append(new IrCompare(rExpr->var));
+    fun->append(new IrJumpIfEqual(firstLabel));
+    fun->append(new IrConstant(1, new IrRegister(nullptr, new string("eax"), new IntType())));
+    fun->append(new IrJump(secondLabel));
+    fun->append(new IrLabel(".L" + to_string(firstLabel)));
+    fun->append(new IrConstant(0, new IrRegister(nullptr, new string("eax"), new IntType())));
+    fun->append(new IrLabel(".L" + to_string(secondLabel)));
+    fun->append(new IrMobzbl(new IrRegister(nullptr, new string("al"), new IntType()),
+                             new IrRegister(nullptr, new string("eax"), new IntType())));
+    fun->append(new IrCopy(new IrRegister(nullptr, new string("eax"), new IntType()), var));
 }
 
-vector<IrInstruction *> *LogicalOr::linearize() {
-    auto *lInstr = OpExpression::linearize();
+void LogicalOr::linearize(IrFunction *fun) {
+    OpExpression::linearize(fun);
     firstLabel = owner->getNewLabel();
     secondLabel = owner->getNewLabel();
     thirdLabel = owner->getNewLabel();
-    lInstr->push_back(new IrCompare(lExpr->var));
-    lInstr->push_back(new IrJumpIfNotEqual(firstLabel));
-    lInstr->push_back(new IrCompare(rExpr->var));
-    lInstr->push_back(new IrJumpIfEqual(secondLabel));
-    lInstr->push_back(new IrLabel(".L" + to_string(firstLabel)));
-    lInstr->push_back(new IrConstant(1, new IrRegister(nullptr, new string("eax"))));
-    lInstr->push_back(new IrJump(thirdLabel));
-    lInstr->push_back(new IrLabel(".L" + to_string(secondLabel)));
-    lInstr->push_back(new IrConstant(0, new IrRegister(nullptr, new string("eax"))));
-    lInstr->push_back(new IrLabel(".L" + to_string(thirdLabel)));
-    lInstr->push_back(new IrMobzbl(new IrRegister(nullptr, new string("al")),
-                                   new IrRegister(nullptr, new string("eax"))));
-    lInstr->push_back(new IrCopy(new IrRegister(nullptr, new string("eax")), var));
-    return lInstr;
+    fun->append(new IrCompare(lExpr->var));
+    fun->append(new IrJumpIfNotEqual(firstLabel));
+    fun->append(new IrCompare(rExpr->var));
+    fun->append(new IrJumpIfEqual(secondLabel));
+    fun->append(new IrLabel(".L" + to_string(firstLabel)));
+    fun->append(new IrConstant(1, new IrRegister(nullptr, new string("eax"), new IntType())));
+    fun->append(new IrJump(thirdLabel));
+    fun->append(new IrLabel(".L" + to_string(secondLabel)));
+    fun->append(new IrConstant(0, new IrRegister(nullptr, new string("eax"), new IntType())));
+    fun->append(new IrLabel(".L" + to_string(thirdLabel)));
+    fun->append(new IrMobzbl(new IrRegister(nullptr, new string("al"), new IntType()),
+                             new IrRegister(nullptr, new string("eax"), new IntType())));
+    fun->append(new IrCopy(new IrRegister(nullptr, new string("eax"), new IntType()), var));
 }

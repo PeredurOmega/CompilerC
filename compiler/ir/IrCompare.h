@@ -14,6 +14,8 @@ public:
     void renderX86(ostream &o) const override;
 
     IrVariable *toCompareTo0;
+
+    void assignMemory() override;
 };
 
 

@@ -15,11 +15,11 @@ class IrInstruction;
 
 class BasicBlock {
 public:
-    explicit BasicBlock(string *label, vector<IrInstruction *> *instructions)
-            : label(label), instructions(instructions) {};
+    explicit BasicBlock(string *label) : label(label) {};
 
     string *label;
-    vector<IrInstruction *> *instructions;
+    vector<IrInstruction *> *instr = new std::vector<IrInstruction *>();
+
     BasicBlock *nextTrue;
     BasicBlock *nextFalse;
 };
