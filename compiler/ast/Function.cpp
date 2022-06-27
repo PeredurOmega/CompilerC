@@ -15,6 +15,9 @@ IrFunction *Function::linearize() {
     endLabel = owner->getNewLabel();
 
     auto *fun = new IrFunction(parameters, name);
+    for (auto *param: parameters) {
+        declareVariable(&param->name, param->type);
+    }
     Block::linearize(fun);
 
     auto end = new BasicBlock(new string(".L" + to_string(endLabel)));
