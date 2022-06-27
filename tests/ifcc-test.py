@@ -176,7 +176,7 @@ directory_size = 0
 
 OK = '\033[92m'
 FAIL = '\033[91m'
-STOP = '\033[0m' #RESET COLOR
+STOP = '\033[0m'
 
 for jobname in jobs:
     os.chdir(orig_cwd)
