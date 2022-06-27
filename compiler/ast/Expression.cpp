@@ -44,7 +44,9 @@ void FunctionCall::linearize(IrFunction *fun) {
             fun->append(new IrCopy(new IrRegister(nullptr, new string("eax"), rType), var));
         }
     } else {
-        var = new IrTempVariable((PrimaryType *) returnType);
+        auto *rType = (PrimaryType *) returnType;
+        var = new IrTempVariable(rType);
+        fun->append(new IrCopy(new IrRegister(nullptr, new string("eax"), rType), var));
     }
 }
 
