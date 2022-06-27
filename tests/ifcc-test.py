@@ -174,6 +174,10 @@ currentDir = ""
 directory_cpt = 0
 directory_size = 0
 
+OK = '\033[92m'
+FAIL = '\033[91m'
+STOP = '\033[0m'
+
 for jobname in jobs:
     os.chdir(orig_cwd)
 
@@ -215,7 +219,7 @@ for jobname in jobs:
         xml_result += "/>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
-        print(tab + "TEST OK")
+        print(OK + tab + "TEST OK" + STOP)
         continue
     elif gccstatus != 0 and ifccstatus == 0:
         ## ifcc wrongly accepts invalid program -> error
@@ -224,7 +228,7 @@ for jobname in jobs:
         xml_result += tab + tab + "</testcase>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
-        print(tab + "TEST FAIL (your compiler accepts an invalid program)")
+        print(FAIL + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
         continue
     elif gccstatus == 0 and ifccstatus != 0:
         ## ifcc wrongly rejects valid program -> error
@@ -233,7 +237,7 @@ for jobname in jobs:
         xml_result += tab + tab + "</testcase>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
-        print(tab + "TEST FAIL (your compiler rejects a valid program)")
+        print(FAIL + tab + "TEST FAIL (your compiler rejects a valid program)" + STOP)
         if args.verbose:
             dumpfile("ifcc-compile.txt")
         continue
@@ -246,7 +250,7 @@ for jobname in jobs:
             xml_result += tab + tab + "</testcase>" + endl
             if directory_cpt == directory_size:
                 xml_result += tab + "</testsuite>" + endl
-            print(tab + "TEST FAIL (your compiler produces incorrect assembly)")
+            print(FAIL + tab + "TEST FAIL (your compiler produces incorrect assembly)" + STOP)
             if args.verbose:
                 dumpfile("ifcc-link.txt")
             continue
@@ -261,7 +265,7 @@ for jobname in jobs:
         xml_result += tab + tab + "</testcase>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
-        print(tab + "TEST FAIL (different results at execution)")
+        print(FAIL + tab + "TEST FAIL (different results at execution)" + STOP)
         if args.verbose:
             print("GCC:")
             dumpfile("gcc-execute.txt")
@@ -271,7 +275,7 @@ for jobname in jobs:
 
     ## last but not least
     xml_result += "/>" + endl
-    print(tab + "TEST OK")
+    print(OK + tab + "TEST OK" + STOP)
 
     if directory_cpt == directory_size:
         xml_result += tab + "</testsuite>" + endl

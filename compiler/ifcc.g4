@@ -2,8 +2,6 @@ grammar ifcc;
 
 axiom : prog EOF;
 
-//includeStdLib : INCLUDE '<'  '>' ;
-
 prog : ( function | functionDeclaration )*;
 function: (TYPE|'void') VAR '(' parameters? ')' block;
 functionDeclaration: (TYPE|'void') VAR '(' parameters? ')' SEMICOLON ;
@@ -19,15 +17,15 @@ statement : statementWithoutDeclaration
           | declaration;
 
 // Statement without declaration for inline statment (next to if, while...)
-statementWithoutDeclaration:   assignment
-                            | ret
-                            | ifBlock
-                            | whileBlock
-                            | procedureCall
-                            | block
-                            | empty;
+statementWithoutDeclaration:  empty
+                          | assignment
+                          | ret
+                          | ifBlock
+                          | whileBlock
+                          | procedureCall
+                          | block;
 
-procedureCall : VAR '(' arguments? ')' SEMICOLON ;
+procedureCall : VAR '(' arguments? ')' SEMICOLON;
 
 empty: expression? SEMICOLON;
 
@@ -61,8 +59,6 @@ expression : VAR #variable
 
 
 SEMICOLON : ';';
-
-INCLUDE : '#include';
 
 IF : 'if';
 ELSE: 'else';
