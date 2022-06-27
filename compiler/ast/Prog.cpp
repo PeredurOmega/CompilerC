@@ -8,6 +8,11 @@
 #include <utility>
 #include <sstream>
 
+static const unordered_map<string, Function*> stdFunctions =
+        {
+                {"putchar", new Function("putchar", (IrType*) new IntType(), vector<Parameter*>({new Parameter(new IntType(), "char")}))},
+        };
+
 Prog::Prog(string entry) {
     this->entry = std::move(entry);
     this->label = new int(0);
@@ -31,6 +36,9 @@ const IrType *Prog::getFunctionType(string functionName) {
         if (function->name == functionName) {
             return function->returnType;
         }
+    }
+    if(stdFunctions.find(functionName) != stdFunctions.end()) {
+        return stdFunctions.at(functionName)->returnType;
     }
     throw new UndefinedFunction();
 }

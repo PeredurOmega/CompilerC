@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 
 #include "ifccListener.h"
@@ -102,9 +102,9 @@ void ifccParserInitialize() {
   	92,15,1,0,0,0,93,97,5,5,0,0,94,96,3,18,9,0,95,94,1,0,0,0,96,99,1,0,0,
   	0,97,95,1,0,0,0,97,98,1,0,0,0,98,100,1,0,0,0,99,97,1,0,0,0,100,101,5,
   	6,0,0,101,17,1,0,0,0,102,105,3,20,10,0,103,105,3,34,17,0,104,102,1,0,
-  	0,0,104,103,1,0,0,0,105,19,1,0,0,0,106,114,3,24,12,0,107,114,3,40,20,
-  	0,108,114,3,32,16,0,109,114,3,26,13,0,110,114,3,30,15,0,111,114,3,22,
-  	11,0,112,114,3,16,8,0,113,106,1,0,0,0,113,107,1,0,0,0,113,108,1,0,0,0,
+  	0,0,104,103,1,0,0,0,105,19,1,0,0,0,106,114,3,40,20,0,107,114,3,32,16,
+  	0,108,114,3,26,13,0,109,114,3,30,15,0,110,114,3,22,11,0,111,114,3,16,
+  	8,0,112,114,3,24,12,0,113,106,1,0,0,0,113,107,1,0,0,0,113,108,1,0,0,0,
   	113,109,1,0,0,0,113,110,1,0,0,0,113,111,1,0,0,0,113,112,1,0,0,0,114,21,
   	1,0,0,0,115,116,5,36,0,0,116,118,5,2,0,0,117,119,3,12,6,0,118,117,1,0,
   	0,0,118,119,1,0,0,0,119,120,1,0,0,0,120,121,5,3,0,0,121,122,5,28,0,0,
@@ -1031,10 +1031,6 @@ ifccParser::StatementWithoutDeclarationContext::StatementWithoutDeclarationConte
   : ParserRuleContext(parent, invokingState) {
 }
 
-ifccParser::EmptyContext* ifccParser::StatementWithoutDeclarationContext::empty() {
-  return getRuleContext<ifccParser::EmptyContext>(0);
-}
-
 ifccParser::AssignmentContext* ifccParser::StatementWithoutDeclarationContext::assignment() {
   return getRuleContext<ifccParser::AssignmentContext>(0);
 }
@@ -1057,6 +1053,10 @@ ifccParser::ProcedureCallContext* ifccParser::StatementWithoutDeclarationContext
 
 ifccParser::BlockContext* ifccParser::StatementWithoutDeclarationContext::block() {
   return getRuleContext<ifccParser::BlockContext>(0);
+}
+
+ifccParser::EmptyContext* ifccParser::StatementWithoutDeclarationContext::empty() {
+  return getRuleContext<ifccParser::EmptyContext>(0);
 }
 
 
@@ -1102,49 +1102,49 @@ ifccParser::StatementWithoutDeclarationContext* ifccParser::statementWithoutDecl
     case 1: {
       enterOuterAlt(_localctx, 1);
       setState(106);
-      empty();
+      assignment();
       break;
     }
 
     case 2: {
       enterOuterAlt(_localctx, 2);
       setState(107);
-      assignment();
+      ret();
       break;
     }
 
     case 3: {
       enterOuterAlt(_localctx, 3);
       setState(108);
-      ret();
+      ifBlock();
       break;
     }
 
     case 4: {
       enterOuterAlt(_localctx, 4);
       setState(109);
-      ifBlock();
+      whileBlock();
       break;
     }
 
     case 5: {
       enterOuterAlt(_localctx, 5);
       setState(110);
-      whileBlock();
+      procedureCall();
       break;
     }
 
     case 6: {
       enterOuterAlt(_localctx, 6);
       setState(111);
-      procedureCall();
+      block();
       break;
     }
 
     case 7: {
       enterOuterAlt(_localctx, 7);
       setState(112);
-      block();
+      empty();
       break;
     }
 

@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -238,13 +238,13 @@ public:
   public:
     StatementWithoutDeclarationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    EmptyContext *empty();
     AssignmentContext *assignment();
     RetContext *ret();
     IfBlockContext *ifBlock();
     WhileBlockContext *whileBlock();
     ProcedureCallContext *procedureCall();
     BlockContext *block();
+    EmptyContext *empty();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
