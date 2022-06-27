@@ -35,6 +35,8 @@ public:
     void insertDeclaration(string &varName);
 
     int currentOffset = 0;
+
+    void syncOffset();
 };
 
 

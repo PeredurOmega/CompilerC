@@ -24,6 +24,7 @@ void IrFunction::assignMemory() {
 
     for (auto *block: *basicBlocks) {
         for (auto *instr: *block->instr) {
+            instr->scope->syncOffset();
             instr->assignMemory();
         }
     }
@@ -39,7 +40,6 @@ void IrFunction::renderX86(ostream &o) const {
         (new IrCopy(FunctionCall::getRegisterToUse(i, parameter->type), var))->renderX86(o);
     }
 
-    o << "test" <<endl;
     for (auto *block: *basicBlocks) {
         for (auto *instr: *block->instr) {
             instr->renderX86(o);
