@@ -9,14 +9,14 @@ int main(){
     while(i<nb){
         while(j<nb){
             while (k<nb){
-                k++;
+                k = k + 1;
                 if(a==k){
                     return 1;
                 }
             }
-            j++;
+            j = j + 1;
         }
-        i++;
+        i = i + 1;
     }
     return 0;
 }

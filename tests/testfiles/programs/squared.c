@@ -10,10 +10,10 @@ int main(){
     int i = 0, nb = 21;
 
     while(i<nb){
-        if(times2(squared(i))!=(i*i*2)){
+        if(times2(squared(i)) != (i*i*2)){
             return 0;
         }
-        i++;
+        i = i + 1;
     }
 
     return 1;
