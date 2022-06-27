@@ -6,7 +6,7 @@
 #include "generated/ifccParser.h"
 
 #include "CodeGenVisitor.h"
-#include "ir/Prog.h"
+#include "ast/Prog.h"
 
 using namespace antlr4;
 using namespace std;
@@ -40,6 +40,5 @@ int main(int argn, const char **argv) {
     CodeGenVisitor v;
     Prog *prog = any_cast<Prog *>(v.visit(tree));
     prog->renderX86(cout);
-
     return 0;
 }

@@ -1,5 +1,5 @@
 
-// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
+// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -24,9 +24,9 @@ public:
     RuleAxiom = 0, RuleProg = 1, RuleFunction = 2, RuleFunctionDeclaration = 3, 
     RuleParameters = 4, RuleParameter = 5, RuleArguments = 6, RuleArgument = 7, 
     RuleBlock = 8, RuleStatement = 9, RuleStatementWithoutDeclaration = 10, 
-    RuleEmpty = 11, RuleIfBlock = 12, RuleElseBlock = 13, RuleWhileBlock = 14, 
-    RuleRet = 15, RuleDeclaration = 16, RuleRawDeclaration = 17, RuleExpAssignment = 18, 
-    RuleAssignment = 19, RuleExpression = 20
+    RuleProcedureCall = 11, RuleEmpty = 12, RuleIfBlock = 13, RuleElseBlock = 14, 
+    RuleWhileBlock = 15, RuleRet = 16, RuleDeclaration = 17, RuleRawDeclaration = 18, 
+    RuleExpAssignment = 19, RuleAssignment = 20, RuleExpression = 21
   };
 
   explicit ifccParser(antlr4::TokenStream *input);
@@ -57,6 +57,7 @@ public:
   class BlockContext;
   class StatementContext;
   class StatementWithoutDeclarationContext;
+  class ProcedureCallContext;
   class EmptyContext;
   class IfBlockContext;
   class ElseBlockContext;
@@ -237,12 +238,13 @@ public:
   public:
     StatementWithoutDeclarationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    EmptyContext *empty();
     AssignmentContext *assignment();
     RetContext *ret();
     IfBlockContext *ifBlock();
     WhileBlockContext *whileBlock();
+    ProcedureCallContext *procedureCall();
     BlockContext *block();
+    EmptyContext *empty();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -252,6 +254,23 @@ public:
   };
 
   StatementWithoutDeclarationContext* statementWithoutDeclaration();
+
+  class  ProcedureCallContext : public antlr4::ParserRuleContext {
+  public:
+    ProcedureCallContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *VAR();
+    antlr4::tree::TerminalNode *SEMICOLON();
+    ArgumentsContext *arguments();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ProcedureCallContext* procedureCall();
 
   class  EmptyContext : public antlr4::ParserRuleContext {
   public:

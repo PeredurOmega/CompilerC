@@ -17,13 +17,13 @@ statement : statementWithoutDeclaration
           | declaration;
 
 // Statement without declaration for inline statment (next to if, while...)
-statementWithoutDeclaration:  empty
-                          | assignment
+statementWithoutDeclaration: assignment
                           | ret
                           | ifBlock
                           | whileBlock
                           | procedureCall
-                          | block;
+                          | block
+                          | empty;
 
 procedureCall : VAR '(' arguments? ')' SEMICOLON;
 

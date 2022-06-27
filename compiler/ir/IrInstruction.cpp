@@ -1,25 +1,49 @@
 //
-// Created by pauls on 16/06/2022.
+// Created by pauls on 24/06/2022.
 //
 
 #include "IrInstruction.h"
+#include "IrScope.h"
+#include <sstream>
 
-void IrInstruction::setOwner(IrScope *_owner) {
-    this->owner = _owner;
+using namespace std;
+
+string IrVariable::comment(const string &opType) const {
+    if (name == nullptr) {
+        return " # Temp " + opType;
+    } else {
+        return " # " + *name + " " + opType;
+    }
 }
 
-IrInstruction::IrInstruction() {
+ostream &operator<<(ostream &o, IrVariable *var) {
+    if (dynamic_cast<IrRegister *>(var) != nullptr) {
+        o << (IrRegister *) var;
+    } else {
+        o << var->offset << "(%rbp)";
+    }
+    return o;
+}
+
+void IrTempVariable::assignMemory(IrScope *scope) {
+    offset = scope->insertTempVariable();
+}
+
+void IrVariable::assignMemory(IrScope *scope) {
+    offset = scope->getOffset(name);
+}
+
+ostream &operator<<(ostream &o, IrRegister *var) {
+    o << "%" << *(var->registerName);
+    return o;
+}
+
+void IrRegister::assignMemory(IrScope *scope) {
 
 }
 
-Empty::Empty() {
-
-}
-
-void Empty::affect(IrScope *owner) {
-
-}
-
-void Empty::renderX86(ostream &o) const {
-
-}
+/*
+ostream &operator<<(ostream &o, IrArgument *var) {
+    o << var->offset << "(%rbp)";
+    return o;
+}*/

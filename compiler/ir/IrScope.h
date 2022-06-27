@@ -1,67 +1,43 @@
 //
-// Created by pauls on 15/06/2022.
+// Created by pauls on 27/06/2022.
 //
 
 #ifndef LIBANTLR4_IRSCOPE_H
 #define LIBANTLR4_IRSCOPE_H
 
+#include <string>
 #include <unordered_map>
-#include "IrElement.h"
-#include "IrInstruction.h"
 
 using namespace std;
 
-class IrScope : public IrInstruction {
-public:
-    explicit IrScope();
+class IrFunction;
 
-    int currentOffset = 0;
+class IrScope {
+public:
+    explicit IrScope(IrFunction *owner);
+
+    IrFunction *owner;
+
+    IrScope *parent;
+
+    unordered_map<string, int> symbolTable;
+
+    int getOffset(string *varName);
 
     int insertInitializedVariable(string &varName);
 
-    void insertDeclaration(string &varName);
+    void insertParameter(string &varName, int offset);
 
     int insertTempVariable();
 
-    int getOffset(string &varName);
+    int incrementOffset(int offset);
 
-    int getNewLabel();
+    void insertDeclaration(string &varName);
 
-    void setOwner(IrScope *owner) override;
+    int currentOffset = 0;
 
-    void affect(IrScope *owner) override = 0;
-
-    /**
-     * If there is a need for conditional jump, jump label is returned, otherwise -1 is return.
-     */
-    virtual int conditionalJump() = 0;
-
-    void insertParameter(string &varName, int offset);
-
-protected:
-    int *label;
-    unordered_map<string, int> symbolTable;
+    void syncOffset();
 };
 
-
-class UndefinedVariable : exception {
-public:
-    explicit UndefinedVariable() {
-    }
-
-    [[nodiscard]] const char *what() const noexcept override {
-        return "Undefined variable";
-    }
-};
-
-class BadOperation : exception {
-public:
-    explicit BadOperation() {
-    }
-
-    [[nodiscard]] const char *what() const noexcept override {
-        return "Bad operation";
-    }
-};
 
 #endif //LIBANTLR4_IRSCOPE_H

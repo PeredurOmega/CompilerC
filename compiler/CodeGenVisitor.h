@@ -18,6 +18,8 @@ public:
 
     antlrcpp::Any visitFunctionCall(ifccParser::FunctionCallContext *ctx) override;
 
+    antlrcpp::Any visitProcedureCall(ifccParser::ProcedureCallContext *ctx) override;
+
     antlrcpp::Any visitParameters(ifccParser::ParametersContext *ctx) override;
 
     antlrcpp::Any visitParameter(ifccParser::ParameterContext *ctx) override;
@@ -36,20 +38,15 @@ public:
 
     antlrcpp::Any visitStatement(ifccParser::StatementContext *ctx) override;
 
-    antlrcpp::Any visitStatementWithoutDeclaration(
-            ifccParser::StatementWithoutDeclarationContext *ctx) override;
+    antlrcpp::Any visitStatementWithoutDeclaration(ifccParser::StatementWithoutDeclarationContext *ctx) override;
 
-    antlrcpp::Any
-    visitDeclaration(ifccParser::DeclarationContext *ctx) override;
+    antlrcpp::Any visitDeclaration(ifccParser::DeclarationContext *ctx) override;
 
-    antlrcpp::Any
-    visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) override;
+    antlrcpp::Any visitRawDeclaration(ifccParser::RawDeclarationContext *ctx) override;
 
-    antlrcpp::Any
-    visitAssignment(ifccParser::AssignmentContext *ctx) override;
+    antlrcpp::Any visitAssignment(ifccParser::AssignmentContext *ctx) override;
 
-    antlrcpp::Any
-    visitExpAssignment(ifccParser::ExpAssignmentContext *ctx) override;
+    antlrcpp::Any visitExpAssignment(ifccParser::ExpAssignmentContext *ctx) override;
 
     antlrcpp::Any visitConstant(ifccParser::ConstantContext *ctx) override;
 
@@ -61,11 +58,9 @@ public:
 
     antlrcpp::Any visitAddSub(ifccParser::AddSubContext *ctx) override;
 
-    antlrcpp::Any
-    visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) override;
+    antlrcpp::Any visitTimesDivModulo(ifccParser::TimesDivModuloContext *ctx) override;
 
-    antlrcpp::Any
-    visitParenthesis(ifccParser::ParenthesisContext *ctx) override;
+    antlrcpp::Any visitParenthesis(ifccParser::ParenthesisContext *ctx) override;
 
     antlrcpp::Any visitUnary(ifccParser::UnaryContext *ctx) override;
 
