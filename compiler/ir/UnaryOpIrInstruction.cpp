@@ -5,8 +5,8 @@
 using namespace std;
 
 void MinusUnaryIrInstruction::renderX86(ostream &o) const {
-    o << "    negl    " << right << right->comment("MinusUnary") << endl;
     o << "    movl    " << right << ", %eax" << right->comment("MinusUnary") << endl;
+    o << "    negl    " << "%eax" << right->comment("MinusUnary") << endl;
     o << "    movl    %eax, " << to << to->comment("MinusUnary") << endl;
 }
 
