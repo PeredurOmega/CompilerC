@@ -22,7 +22,10 @@ statementWithoutDeclaration:  empty
                           | ret
                           | ifBlock
                           | whileBlock
+                          | procedureCall
                           | block;
+
+procedureCall : VAR '(' arguments? ')' SEMICOLON;
 
 empty: expression? SEMICOLON;
 
