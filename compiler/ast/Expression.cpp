@@ -23,15 +23,24 @@ const vector<string *> FunctionCall::registers = { // NOLINT(cert-err58-cpp)
 };
 
 void FunctionCall::linearize(IrFunction *fun) {
+    auto argsAsVar = vector<IrVariable*>();
+    argsAsVar.reserve(6);
     for (int i = (int) arguments->size() - 1; i >= 0; --i) {
         auto *expr = (*arguments)[i];
         expr->linearize(fun);
         if (i < 6) {
-            fun->append(new IrCopy(expr->var, getRegisterToUse(i, expr->var->type)));
+            auto* tempVar = new IrTempVariable(expr->var->type);
+            argsAsVar[i] = tempVar;
+            fun->append(new IrCopy(expr->var, tempVar));
         } else {
             fun->append(new IrPushq(expr->var));
         }
     }
+
+    for (int i = min((int) arguments->size() - 1, 5); i >= 0; --i) {
+        fun->append(new IrCopy(argsAsVar[i], getRegisterToUse(i, argsAsVar[i]->type)));
+    }
+
     fun->append(new IrCall(name));
     if ((int) arguments->size() - 6 > 0) fun->append(new IrAddQ(8 * ((int) arguments->size() - 6)));
     auto *returnType = owner->getFunctionType(name);

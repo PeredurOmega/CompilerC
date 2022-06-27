@@ -4,7 +4,7 @@ int c = 3;
 
 int main(){
     {
-        int a = 3
+        int a = 3;
         {
             int b = 4;
             {
