@@ -4,6 +4,7 @@
 
 #include "UnaryOp.h"
 #include "../ir/UnaryOpIrInstruction.h"
+#include "../ir/IrCopy.h"
 
 vector<IrInstruction *> *UnaryOp::linearize() {
     auto *rInstr = rExpr->linearize();
@@ -23,7 +24,9 @@ vector<IrInstruction *> *MinusUnary::linearize() {
 }
 
 vector<IrInstruction *> *PlusUnary::linearize() {
-    return UnaryOp::linearize();
+    auto *rInstr = UnaryOp::linearize();
+    rInstr->push_back(new IrCopy(rExpr->var, var));
+    return rInstr;
 }
 
 vector<IrInstruction *> *NotUnary::linearize() {
