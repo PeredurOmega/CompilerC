@@ -57,7 +57,7 @@ IrScope::IrScope(IrFunction *owner) : owner(owner), parent(owner->currentScope) 
 void IrScope::syncOffset() {
     if (parent != nullptr) {
         parent->syncOffset();
-        if (currentOffset < parent->currentOffset) {
+        if (currentOffset > parent->currentOffset) {
             currentOffset = parent->currentOffset;
         }
     }

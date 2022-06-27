@@ -28,6 +28,8 @@ void IrFunction::assignMemory() {
             instr->assignMemory();
         }
     }
+
+    stackSize = 256;
 }
 
 void IrFunction::renderX86(ostream &o) const {
