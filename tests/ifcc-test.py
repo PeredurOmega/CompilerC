@@ -177,13 +177,20 @@ directory_size = 0
 OK = '\033[92m'
 FAIL = '\033[91m'
 STOP = '\033[0m'
+WARNING = '\033[93m'
 
 for jobname in jobs:
     os.chdir(orig_cwd)
-
+    notimplemented = False
     file_path = jobname.split('/')[1]
     test_name = file_path.replace('tests-', '')
     file_name = test_name.split('-')[2]
+
+    file = open("testfiles/"+test_name.split('-')[1]+"/"+file_name+".c", "r")
+    firstline = file.read()
+    firstline = firstline.split("\n")[0]
+    if firstline == "// Not Implemented":
+        notimplemented = True
 
     if currentDir != test_name.split('-')[1]:
         currentDir = test_name.split('-')[1]
@@ -228,7 +235,10 @@ for jobname in jobs:
         xml_result += tab + tab + "</testcase>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
-        print(FAIL + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
+        if notimplemented:
+            print(WARNING + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
+        else:
+            print(FAIL + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
         continue
     elif gccstatus == 0 and ifccstatus != 0:
         ## ifcc wrongly rejects valid program -> error
@@ -237,7 +247,10 @@ for jobname in jobs:
         xml_result += tab + tab + "</testcase>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
-        print(FAIL + tab + "TEST FAIL (your compiler rejects a valid program)" + STOP)
+        if notimplemented:
+            print(WARNING + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
+        else:
+            print(FAIL + tab + "TEST FAIL (your compiler rejects a valid program)" + STOP)
         if args.verbose:
             dumpfile("ifcc-compile.txt")
         continue
@@ -250,7 +263,10 @@ for jobname in jobs:
             xml_result += tab + tab + "</testcase>" + endl
             if directory_cpt == directory_size:
                 xml_result += tab + "</testsuite>" + endl
-            print(FAIL + tab + "TEST FAIL (your compiler produces incorrect assembly)" + STOP)
+            if notimplemented:
+                print(WARNING + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
+            else:
+                print(FAIL + tab + "TEST FAIL (your compiler produces incorrect assembly)" + STOP)
             if args.verbose:
                 dumpfile("ifcc-link.txt")
             continue
@@ -265,7 +281,11 @@ for jobname in jobs:
         xml_result += tab + tab + "</testcase>" + endl
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
-        print(FAIL + tab + "TEST FAIL (different results at execution)" + STOP)
+        if notimplemented:
+            print(WARNING + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
+        else:
+            print(FAIL + tab + "TEST FAIL (different results at execution)" + STOP)
+
         if args.verbose:
             print("GCC:")
             dumpfile("gcc-execute.txt")
@@ -276,6 +296,7 @@ for jobname in jobs:
     ## last but not least
     xml_result += "/>" + endl
     print(OK + tab + "TEST OK" + STOP)
+    notimplemented = False
 
     if directory_cpt == directory_size:
         xml_result += tab + "</testsuite>" + endl

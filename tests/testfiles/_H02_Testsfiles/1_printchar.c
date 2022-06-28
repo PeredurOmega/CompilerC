@@ -1,4 +1,4 @@
-//$not_implemented
+// Not Implemented
 void main(){
     putchar('c');
     putchar('o');

@@ -1,4 +1,4 @@
-//$not_implemented
+// Not Implemented
 #include <stdio.h>
 
 int alphabet(int n)
