@@ -11,13 +11,13 @@
 
 class ElseStatement;
 
-class IfStatement : public Expression {
+class IfStatement : public Instruction {
 public:
 
     int finalLabel = 0;
 
     explicit IfStatement(Expression *compare, Instruction *content, ElseStatement *elseStatement)
-            : Expression(), compare(compare), content(content), elseStatement(elseStatement) {};
+            : Instruction(), compare(compare), content(content), elseStatement(elseStatement) {};
 
     void linearize(IrFunction *fun) override;
 
@@ -31,14 +31,14 @@ private:
 };
 
 
-class ElseStatement : public Expression {
+class ElseStatement : public Instruction {
 public:
 
     int label;
 
     int finalLabel;
 
-    explicit ElseStatement(Instruction *content) : Expression(), content(content) {};
+    explicit ElseStatement(Instruction *content) : Instruction(), content(content) {};
 
     void linearize(IrFunction* fun) override;
 

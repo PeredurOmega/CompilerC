@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -79,6 +79,9 @@ public:
 
   virtual void enterAssignment(ifccParser::AssignmentContext *ctx) = 0;
   virtual void exitAssignment(ifccParser::AssignmentContext *ctx) = 0;
+
+  virtual void enterExp(ifccParser::ExpContext *ctx) = 0;
+  virtual void exitExp(ifccParser::ExpContext *ctx) = 0;
 
   virtual void enterCompare(ifccParser::CompareContext *ctx) = 0;
   virtual void exitCompare(ifccParser::CompareContext *ctx) = 0;

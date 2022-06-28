@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -27,7 +27,7 @@ public:
     RuleArgument = 8, RuleBlock = 9, RuleStatement = 10, RuleStatementWithoutDeclaration = 11, 
     RuleProcedureCall = 12, RuleEmpty = 13, RuleIfBlock = 14, RuleElseBlock = 15, 
     RuleWhileBlock = 16, RuleRet = 17, RuleDeclaration = 18, RuleRawDeclaration = 19, 
-    RuleExpAssignment = 20, RuleAssignment = 21, RuleExpression = 22
+    RuleExpAssignment = 20, RuleAssignment = 21, RuleExp = 22, RuleExpression = 23
   };
 
   explicit ifccParser(antlr4::TokenStream *input);
@@ -69,6 +69,7 @@ public:
   class RawDeclarationContext;
   class ExpAssignmentContext;
   class AssignmentContext;
+  class ExpContext;
   class ExpressionContext; 
 
   class  AxiomContext : public antlr4::ParserRuleContext {
@@ -300,7 +301,7 @@ public:
     EmptyContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *SEMICOLON();
-    ExpressionContext *expression();
+    ExpContext *exp();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -317,7 +318,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *IF();
     StatementWithoutDeclarationContext *statementWithoutDeclaration();
-    ExpressionContext *expression();
+    ExpContext *exp();
     ExpAssignmentContext *expAssignment();
     ElseBlockContext *elseBlock();
 
@@ -351,7 +352,8 @@ public:
     WhileBlockContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *WHILE();
-    ExpressionContext *expression();
+    ExpContext *exp();
+    ExpAssignmentContext *expAssignment();
     StatementWithoutDeclarationContext *statementWithoutDeclaration();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -369,7 +371,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *RETURN();
     antlr4::tree::TerminalNode *SEMICOLON();
-    ExpressionContext *expression();
+    ExpContext *exp();
     ExpAssignmentContext *expAssignment();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -405,7 +407,7 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> VAR();
     antlr4::tree::TerminalNode* VAR(size_t i);
-    ExpressionContext *expression();
+    ExpContext *exp();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -420,7 +422,7 @@ public:
   public:
     ExpAssignmentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    ExpressionContext *expression();
+    ExpContext *exp();
     std::vector<antlr4::tree::TerminalNode *> VAR();
     antlr4::tree::TerminalNode* VAR(size_t i);
 
@@ -448,6 +450,21 @@ public:
   };
 
   AssignmentContext* assignment();
+
+  class  ExpContext : public antlr4::ParserRuleContext {
+  public:
+    ExpContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    ExpressionContext *expression();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ExpContext* exp();
 
   class  ExpressionContext : public antlr4::ParserRuleContext {
   public:

@@ -1,5 +1,5 @@
 
-// Generated from /home/mathis/IdeaProjects/CompilerC/compiler/ifcc.g4 by ANTLR 4.10.1
+// Generated from C:/Users/pauls/CLionProjects/CompilerC/compiler\ifcc.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -100,6 +100,10 @@ public:
   }
 
   virtual std::any visitAssignment(ifccParser::AssignmentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual std::any visitExp(ifccParser::ExpContext *ctx) override {
     return visitChildren(ctx);
   }
 

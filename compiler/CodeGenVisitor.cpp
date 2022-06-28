@@ -6,6 +6,7 @@
 #include "ast/IfElse.h"
 #include "ast/UnaryOp.h"
 #include "ast/While.h"
+#include "ast/Return.h"
 
 using namespace std;
 
@@ -120,7 +121,7 @@ antlrcpp::Any CodeGenVisitor::visitBlock(ifccParser::BlockContext *ctx) {
 antlrcpp::Any CodeGenVisitor::visitIfBlock(ifccParser::IfBlockContext *ctx) {
     Instruction *compare;
     if (ctx->statementWithoutDeclaration() != nullptr) {
-        compare = any_cast<Instruction *>(visit(ctx->expression()));
+        compare = any_cast<Instruction *>(visit(ctx->exp()));
     } else {
         compare = any_cast<Instruction *>(visit(ctx->expAssignment()));
     }
@@ -191,8 +192,8 @@ antlrcpp::Any CodeGenVisitor::visitRawDeclaration(ifccParser::RawDeclarationCont
         auto *name = new string(v->getText());
         varNames->push_back(name);
     }
-    if (ctx->expression() != nullptr) { // Init is optional
-        auto *expr = (Expression *) any_cast<Instruction *>(visit(ctx->expression()));
+    if (ctx->exp() != nullptr) { // Init is optional
+        auto *expr = (Expression *) any_cast<Instruction *>(visit(ctx->exp()));
         expr->assignTo = varNames->back();
         if (varNames->size() > 1) {
             auto *rawDec = new RawDeclaration(varNames->front(), new VarExpr(varNames, expr));
@@ -223,8 +224,8 @@ antlrcpp::Any CodeGenVisitor::visitVariable(ifccParser::VariableContext *ctx) {
 
 antlrcpp::Any CodeGenVisitor::visitRet(ifccParser::RetContext *ctx) {
     any result;
-    if (ctx->expression() != nullptr) {
-        result = visit(ctx->expression());
+    if (ctx->exp() != nullptr) {
+        result = visit(ctx->exp());
     } else {
         result = visit(ctx->expAssignment());
     }
@@ -414,7 +415,7 @@ antlrcpp::Any CodeGenVisitor::visitExpAssignment(ifccParser::ExpAssignmentContex
         auto *name = new string(v->getText());
         varNames->push_back(name);
     }
-    auto *expr = (Expression *) any_cast<Instruction *>(visit(ctx->expression()));
+    auto *expr = (Expression *) any_cast<Instruction *>(visit(ctx->exp()));
     expr->assignTo = varNames->back();
     if (varNames->size() > 1) {
         return (Instruction *) new VarExpr(varNames, expr);
@@ -428,7 +429,7 @@ antlrcpp::Any CodeGenVisitor::visitEmpty(ifccParser::EmptyContext *ctx) {
 }
 
 antlrcpp::Any CodeGenVisitor::visitWhileBlock(ifccParser::WhileBlockContext *ctx) {
-    auto *compare = (Expression *) any_cast<Instruction *>(visit(ctx->expression()));
+    auto *compare = (Expression *) any_cast<Instruction *>(visit(ctx->exp()));
     auto *content = any_cast<Instruction *>(visit(ctx->statementWithoutDeclaration()));
     auto *whileStatement = new WhileStatement(compare, content);
     if (content->alwaysReturn) whileStatement->conditionalReturn = true;
@@ -451,4 +452,9 @@ antlrcpp::Any CodeGenVisitor::visitStaticVariable(ifccParser::StaticVariableCont
         //TODO
         throw e;
     }
+}
+
+antlrcpp::Any CodeGenVisitor::visitExp(ifccParser::ExpContext *ctx) {
+    auto *expr = (Expression *) any_cast<Instruction *>(visit(ctx->expression()));
+    return (Instruction *) expr->propagateConstant();
 }

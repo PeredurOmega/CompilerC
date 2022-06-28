@@ -28,6 +28,8 @@ public:
      * When not nullptr, we should store the value of the expression in %eax.
      */
     string *assignTo = nullptr;
+
+    virtual Expression *propagateConstant() = 0;
 };
 
 class FunctionCall : public Expression {
@@ -43,23 +45,11 @@ public:
 
     static IrRegister *getRegisterToUse(int position, PrimaryType *type);
 
+    Expression *propagateConstant() override;
+
 private:
     string name;
     vector<Expression *> *arguments;
-};
-
-class Return : public Expression {
-public:
-    explicit Return(Expression *expression) : Expression(), expression(expression) {
-        alwaysReturn = true;
-    };
-
-    void linearize(IrFunction *fun) override;
-
-    void setOwner(Scope *owner) override;
-
-private:
-    Expression *expression;
 };
 
 class Constant : public Expression {
@@ -69,6 +59,8 @@ public:
     explicit Constant(int value) : Expression(), value(value) {}
 
     void linearize(IrFunction *fun) override;
+
+    Expression *propagateConstant() override;
 };
 
 class Variable : public Expression {
@@ -78,6 +70,8 @@ public:
     explicit Variable(string name) : Expression(), name(std::move(name)) {};
 
     void linearize(IrFunction *fun) override;
+
+    Expression *propagateConstant() override;
 };
 
 class VarExpr : public Expression {
@@ -88,6 +82,8 @@ public:
     void linearize(IrFunction *fun) override;
 
     void setOwner(Scope *owner) override;
+
+    Expression *propagateConstant() override;
 
 private:
     vector<string *> varNames;

@@ -29,19 +29,20 @@ statementWithoutDeclaration: assignment
 
 procedureCall : VAR '(' arguments? ')' SEMICOLON;
 
-empty: expression? SEMICOLON;
+empty: exp? SEMICOLON;
 
-ifBlock: IF '(' (expression | expAssignment) ')' statementWithoutDeclaration elseBlock?;
+ifBlock: IF '(' (exp | expAssignment) ')' statementWithoutDeclaration elseBlock?;
 elseBlock: ELSE statement;
 
-whileBlock: WHILE '(' expression ')' statementWithoutDeclaration;
+whileBlock: WHILE '(' exp | expAssignment ')' statementWithoutDeclaration;
 
-ret : RETURN (expression | expAssignment) SEMICOLON;
+ret : RETURN (exp | expAssignment) SEMICOLON;
 declaration : TYPE rawDeclaration (',' rawDeclaration)* SEMICOLON;
-rawDeclaration : VAR ('=' (VAR '=')* expression)?;
-expAssignment : (VAR '=')+ expression;
+rawDeclaration : VAR ('=' (VAR '=')* exp)?;
+expAssignment : (VAR '=')+ exp;
 assignment : expAssignment SEMICOLON;
 
+exp: expression;
 expression : VAR #variable
             |CONST #constant
             |'(' (expression | expAssignment)')' #parenthesis
@@ -58,7 +59,6 @@ expression : VAR #variable
             |expression op='&&' expression #logicalAnd
             |expression op='||' expression #logicalOr
             ;
-
 
 SEMICOLON : ';';
 

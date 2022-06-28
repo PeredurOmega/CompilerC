@@ -30,9 +30,22 @@ void OpExpression::setOwner(Scope *owner) {
     rExpr->setOwner(owner);
 }
 
+Expression *OpExpression::propagateConstant() {
+    lExpr = lExpr->propagateConstant();
+    rExpr = rExpr->propagateConstant();
+    if (dynamic_cast<Constant *>(lExpr) != nullptr && dynamic_cast<Constant *>(rExpr) != nullptr) {
+        return new Constant(evaluate((Constant *) lExpr, (Constant *) rExpr));
+    }
+    return this;
+}
+
 void AddOperation::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     fun->append(new AddIrInstruction(var, lExpr->var, rExpr->var));
+}
+
+int AddOperation::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value + rConst->value;
 }
 
 void SubOperation::linearize(IrFunction *fun) {
@@ -40,9 +53,17 @@ void SubOperation::linearize(IrFunction *fun) {
     fun->append(new SubIrInstruction(var, lExpr->var, rExpr->var));
 }
 
+int SubOperation::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value - rConst->value;
+}
+
 void TimesOperation::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     fun->append(new TimesIrInstruction(var, lExpr->var, rExpr->var));
+}
+
+int TimesOperation::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value * rConst->value;
 }
 
 void DivOperation::linearize(IrFunction *fun) {
@@ -50,9 +71,17 @@ void DivOperation::linearize(IrFunction *fun) {
     fun->append(new DivIrInstruction(var, lExpr->var, rExpr->var));
 }
 
+int DivOperation::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value / rConst->value;
+}
+
 void ModuloOperation::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     fun->append(new ModuloIrInstruction(var, lExpr->var, rExpr->var));
+}
+
+int ModuloOperation::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value % rConst->value;
 }
 
 void ShiftRightOperation::linearize(IrFunction *fun) {
@@ -60,9 +89,17 @@ void ShiftRightOperation::linearize(IrFunction *fun) {
     fun->append(new ShiftRightIrInstruction(var, lExpr->var, rExpr->var));
 }
 
+int ShiftRightOperation::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value >> rConst->value;
+}
+
 void ShiftLeftOperation::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     fun->append(new ShiftLeftIrInstruction(var, lExpr->var, rExpr->var));
+}
+
+int ShiftLeftOperation::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value << rConst->value;
 }
 
 void LessCompare::linearize(IrFunction *fun) {
@@ -70,9 +107,17 @@ void LessCompare::linearize(IrFunction *fun) {
     fun->append(new LessCompareIrInstruction(var, lExpr->var, rExpr->var));
 }
 
+int LessCompare::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value < rConst->value;
+}
+
 void LessEqualCompare::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     fun->append(new LessEqualCompareIrInstruction(var, lExpr->var, rExpr->var));
+}
+
+int LessEqualCompare::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value <= rConst->value;
 }
 
 void GreatCompare::linearize(IrFunction *fun) {
@@ -80,9 +125,17 @@ void GreatCompare::linearize(IrFunction *fun) {
     fun->append(new GreatCompareIrInstruction(var, lExpr->var, rExpr->var));
 }
 
+int GreatCompare::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value > rConst->value;
+}
+
 void GreatEqualCompare::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     fun->append(new GreatEqualCompareIrInstruction(var, lExpr->var, rExpr->var));
+}
+
+int GreatEqualCompare::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value >= rConst->value;
 }
 
 void EqualCompare::linearize(IrFunction *fun) {
@@ -90,9 +143,17 @@ void EqualCompare::linearize(IrFunction *fun) {
     fun->append(new EqualCompareIrInstruction(var, lExpr->var, rExpr->var));
 }
 
+int EqualCompare::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value == rConst->value;
+}
+
 void NotEqualCompare::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     fun->append(new NotEqualCompareIrInstruction(var, lExpr->var, rExpr->var));
+}
+
+int NotEqualCompare::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value != rConst->value;
 }
 
 void BitwiseAnd::linearize(IrFunction *fun) {
@@ -100,14 +161,26 @@ void BitwiseAnd::linearize(IrFunction *fun) {
     fun->append(new BitwiseAndIrInstruction(var, lExpr->var, rExpr->var));
 }
 
+int BitwiseAnd::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value & rConst->value;
+}
+
 void BitwiseXor::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     fun->append(new BitwiseXorIrInstruction(var, lExpr->var, rExpr->var));
 }
 
+int BitwiseXor::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value ^ rConst->value;
+}
+
 void BitwiseOr::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     fun->append(new BitwiseOrIrInstruction(var, lExpr->var, rExpr->var));
+}
+
+int BitwiseOr::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value | rConst->value;
 }
 
 void LogicalAnd::linearize(IrFunction *fun) {
@@ -128,6 +201,10 @@ void LogicalAnd::linearize(IrFunction *fun) {
     fun->append(new IrCopy(new IrRegister(nullptr, new string("eax"), new IntType()), var));
 }
 
+int LogicalAnd::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value && rConst->value;
+}
+
 void LogicalOr::linearize(IrFunction *fun) {
     OpExpression::linearize(fun);
     firstLabel = owner->getNewLabel();
@@ -146,4 +223,8 @@ void LogicalOr::linearize(IrFunction *fun) {
     fun->append(new IrMobzbl(new IrRegister(nullptr, new string("al"), new IntType()),
                              new IrRegister(nullptr, new string("eax"), new IntType())));
     fun->append(new IrCopy(new IrRegister(nullptr, new string("eax"), new IntType()), var));
+}
+
+int LogicalOr::evaluate(Constant *lConst, Constant *rConst) const {
+    return lConst->value || rConst->value;
 }

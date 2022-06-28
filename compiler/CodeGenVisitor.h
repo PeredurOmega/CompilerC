@@ -20,6 +20,8 @@ public:
 
     antlrcpp::Any visitFunctionCall(ifccParser::FunctionCallContext *ctx) override;
 
+    antlrcpp::Any visitExp(ifccParser::ExpContext *ctx) override;
+
     antlrcpp::Any visitProcedureCall(ifccParser::ProcedureCallContext *ctx) override;
 
     antlrcpp::Any visitParameters(ifccParser::ParametersContext *ctx) override;

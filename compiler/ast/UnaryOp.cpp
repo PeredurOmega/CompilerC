@@ -20,9 +20,21 @@ void UnaryOp::setOwner(Scope *owner) {
     rExpr->setOwner(owner);
 }
 
+Expression *UnaryOp::propagateConstant() {
+    rExpr = rExpr->propagateConstant();
+    if (dynamic_cast<Constant *>(rExpr) != nullptr) {
+        return new Constant(evaluate((Constant *) rExpr));
+    }
+    return this;
+}
+
 void MinusUnary::linearize(IrFunction *fun) {
     UnaryOp::linearize(fun);
     fun->append(new MinusUnaryIrInstruction(var, rExpr->var));
+}
+
+int MinusUnary::evaluate(Constant *rConst) const {
+    return -rConst->value;
 }
 
 void PlusUnary::linearize(IrFunction *fun) {
@@ -30,12 +42,24 @@ void PlusUnary::linearize(IrFunction *fun) {
     fun->append(new IrCopy(rExpr->var, var));
 }
 
+int PlusUnary::evaluate(Constant *rConst) const {
+    return rConst->value;
+}
+
 void NotUnary::linearize(IrFunction *fun) {
     UnaryOp::linearize(fun);
     fun->append(new NotUnaryIrInstruction(var, rExpr->var));
 }
 
+int NotUnary::evaluate(Constant *rConst) const {
+    return !rConst->value;
+}
+
 void BitwiseNotUnary::linearize(IrFunction *fun) {
     UnaryOp::linearize(fun);
     fun->append(new BitwiseNotUnaryIrInstruction(var, rExpr->var));
+}
+
+int BitwiseNotUnary::evaluate(Constant *rConst) const {
+    return ~rConst->value;
 }

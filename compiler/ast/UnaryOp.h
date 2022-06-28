@@ -16,6 +16,10 @@ public:
 
     void setOwner(Scope *owner) override;
 
+    Expression *propagateConstant() override;
+
+    virtual int evaluate(Constant *rConst) const = 0;
+
 protected:
     Expression *rExpr;
 };
@@ -25,6 +29,8 @@ public:
     using UnaryOp::UnaryOp;
 
     void linearize(IrFunction* fun) override;
+
+    int evaluate(Constant *rConst) const override;
 };
 
 class PlusUnary : public UnaryOp {
@@ -32,6 +38,8 @@ public:
     using UnaryOp::UnaryOp;
 
     void linearize(IrFunction* fun) override;
+
+    int evaluate(Constant *rConst) const override;
 };
 
 class NotUnary : public UnaryOp {
@@ -39,6 +47,8 @@ public:
     using UnaryOp::UnaryOp;
 
     void linearize(IrFunction* fun) override;
+
+    int evaluate(Constant *rConst) const override;
 };
 
 class BitwiseNotUnary : public UnaryOp {
@@ -46,6 +56,8 @@ public:
     using UnaryOp::UnaryOp;
 
     void linearize(IrFunction* fun) override;
+
+    int evaluate(Constant *rConst) const override;
 };
 
 

@@ -4,8 +4,6 @@
 
 #include "Expression.h"
 #include "../ir/IrConstant.h"
-#include "../ir/IrReturn.h"
-#include "../ir/IrJump.h"
 #include "../ir/IrCopy.h"
 #include "../ir/IrPushq.h"
 #include "../ir/IrCall.h"
@@ -70,11 +68,22 @@ IrRegister *FunctionCall::getRegisterToUse(int position, PrimaryType *type) {
     return new IrRegister(nullptr, registers[position], type);
 }
 
+Expression *FunctionCall::propagateConstant() {
+    for (auto &argument: *arguments) {
+        argument = argument->propagateConstant();
+    }
+    return this;
+}
+
 void Variable::linearize(IrFunction *fun) {
     var = owner->getIrVariable(&name);
     if (assignTo != nullptr) {
         fun->append(new IrCopy(var, owner->getIrVariable(assignTo)));
     }
+}
+
+Expression *Variable::propagateConstant() {
+    return this;
 }
 
 void Constant::linearize(IrFunction *fun) {
@@ -86,18 +95,8 @@ void Constant::linearize(IrFunction *fun) {
     fun->append(new IrConstant(value, var));
 }
 
-void Return::linearize(IrFunction *fun) {
-    expression->linearize(fun);
-    fun->append(new IrReturn(expression->var));
-    int conditionalJump = owner->conditionalJump();
-    if (conditionalJump != -1) {
-        fun->append(new IrJump(conditionalJump));
-    }
-}
-
-void Return::setOwner(Scope *owner) {
-    Instruction::setOwner(owner);
-    expression->setOwner(owner);
+Expression *Constant::propagateConstant() {
+    return this;
 }
 
 void VarExpr::linearize(IrFunction *fun) {
@@ -116,4 +115,8 @@ void VarExpr::linearize(IrFunction *fun) {
 void VarExpr::setOwner(Scope *owner) {
     Instruction::setOwner(owner);
     expression->setOwner(owner);
+}
+
+Expression *VarExpr::propagateConstant() {
+    return this;
 }
