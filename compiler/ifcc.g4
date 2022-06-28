@@ -5,8 +5,7 @@ axiom : prog EOF;
 prog : ( function | functionDeclaration | staticVariable )*;
 function: (TYPE|'void') VAR '(' parameters? ')' block;
 functionDeclaration: (TYPE|'void') VAR '(' parameters? ')' SEMICOLON ;
-// TODO ADD SUPPORT FOR PROPAGATED CONSTANT
-staticVariable: STATIC? TYPE VAR '=' CONST SEMICOLON;
+staticVariable: STATIC? TYPE VAR '=' (INT_CONST | CHAR_CONST) SEMICOLON;
 
 parameters : parameter (',' parameter)* ;
 parameter : TYPE VAR ;

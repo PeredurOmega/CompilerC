@@ -60,11 +60,11 @@ void ifccParserInitialize() {
       "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
       "", "", "", "", "", "", "", "", "", "", "", "SEMICOLON", "IF", "ELSE", 
       "WHILE", "RETURN", "TYPE", "STATIC", "COMMENT", "INT_CONST", "CHAR_CONST", 
-      "VAR", "DIRECTIVE", "WS", "CONST"
+      "VAR", "DIRECTIVE", "WS"
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,41,264,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	4,1,40,264,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
   	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
   	14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,
   	21,2,22,7,22,2,23,7,23,1,0,1,0,1,0,1,1,1,1,1,1,5,1,55,8,1,10,1,12,1,58,
@@ -99,7 +99,7 @@ void ifccParserInitialize() {
   	69,7,0,0,0,69,70,5,38,0,0,70,72,5,2,0,0,71,73,3,10,5,0,72,71,1,0,0,0,
   	72,73,1,0,0,0,73,74,1,0,0,0,74,75,5,3,0,0,75,76,5,28,0,0,76,7,1,0,0,0,
   	77,79,5,34,0,0,78,77,1,0,0,0,78,79,1,0,0,0,79,80,1,0,0,0,80,81,5,33,0,
-  	0,81,82,5,38,0,0,82,83,5,4,0,0,83,84,5,41,0,0,84,85,5,28,0,0,85,9,1,0,
+  	0,81,82,5,38,0,0,82,83,5,4,0,0,83,84,7,1,0,0,84,85,5,28,0,0,85,9,1,0,
   	0,0,86,91,3,12,6,0,87,88,5,5,0,0,88,90,3,12,6,0,89,87,1,0,0,0,90,93,1,
   	0,0,0,91,89,1,0,0,0,91,92,1,0,0,0,92,11,1,0,0,0,93,91,1,0,0,0,94,95,5,
   	33,0,0,95,96,5,38,0,0,96,13,1,0,0,0,97,102,3,16,8,0,98,99,5,5,0,0,99,
@@ -594,12 +594,16 @@ tree::TerminalNode* ifccParser::StaticVariableContext::VAR() {
   return getToken(ifccParser::VAR, 0);
 }
 
-tree::TerminalNode* ifccParser::StaticVariableContext::CONST() {
-  return getToken(ifccParser::CONST, 0);
-}
-
 tree::TerminalNode* ifccParser::StaticVariableContext::SEMICOLON() {
   return getToken(ifccParser::SEMICOLON, 0);
+}
+
+tree::TerminalNode* ifccParser::StaticVariableContext::INT_CONST() {
+  return getToken(ifccParser::INT_CONST, 0);
+}
+
+tree::TerminalNode* ifccParser::StaticVariableContext::CHAR_CONST() {
+  return getToken(ifccParser::CHAR_CONST, 0);
 }
 
 tree::TerminalNode* ifccParser::StaticVariableContext::STATIC() {
@@ -660,7 +664,16 @@ ifccParser::StaticVariableContext* ifccParser::staticVariable() {
     setState(82);
     match(ifccParser::T__3);
     setState(83);
-    match(ifccParser::CONST);
+    _la = _input->LA(1);
+    if (!(_la == ifccParser::INT_CONST
+
+    || _la == ifccParser::CHAR_CONST)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
     setState(84);
     match(ifccParser::SEMICOLON);
    

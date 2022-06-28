@@ -448,7 +448,14 @@ antlrcpp::Any CodeGenVisitor::visitStaticVariable(ifccParser::StaticVariableCont
         auto *var = new string(ctx->VAR()->getText());
         auto *t = PrimaryType::parse(type);
         try {
-            auto initValue = stoi(ctx->CONST()->getText());
+            int initValue;
+            if (ctx->CHAR_CONST() != nullptr) {
+                initValue = (int) (unsigned char) ((ctx->CHAR_CONST()->getText())[1]);
+            } else if (ctx->INT_CONST() != nullptr) {
+                initValue = stoi(ctx->INT_CONST()->getText());
+            } else {
+                throw InvalidType();
+            }
             auto *declaration = new StaticDeclaration(t, var, initValue);
             return (Instruction *) declaration;
         } catch (exception &e) {
