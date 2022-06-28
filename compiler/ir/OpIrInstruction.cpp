@@ -125,5 +125,15 @@ void BitwiseOrIrInstruction::renderX86(ostream &o) const {
 void OpIrInstruction::assignMemory() {
     left->assignMemory(scope);
     right->assignMemory(scope);
-    to->assignMemory(scope);
+    if (dynamic_cast<IrTempVariable *>(to) != nullptr) {
+        if (dynamic_cast<IrTempVariable *>(left) != nullptr) {
+            to = left;
+        } else if (dynamic_cast<IrTempVariable *>(right) != nullptr) {
+            to = right;
+        } else {
+            to->assignMemory(scope);
+        }
+    } else {
+        to->assignMemory(scope);
+    }
 }
