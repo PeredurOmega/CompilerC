@@ -34,7 +34,7 @@ empty: exp? SEMICOLON;
 ifBlock: IF '(' (exp | expAssignment) ')' statementWithoutDeclaration elseBlock?;
 elseBlock: ELSE statement;
 
-whileBlock: WHILE '(' exp | expAssignment ')' statementWithoutDeclaration;
+whileBlock: WHILE '(' (exp | expAssignment) ')' statementWithoutDeclaration;
 
 ret : RETURN (exp | expAssignment) SEMICOLON;
 declaration : TYPE rawDeclaration (',' rawDeclaration)* SEMICOLON;
@@ -67,10 +67,10 @@ ELSE: 'else';
 WHILE: 'while';
 
 RETURN : 'return' ;
-TYPE : 'int';
+TYPE : 'int' | 'char';
 STATIC : 'static';
 COMMENT : (('/*' .*? '*/') | ('//' .*? ('\n' | '\r\n'))) -> skip ;
-CONST : [0-9]+ ;
+CONST : [0-9]+ | '\''[\u0000-\u0255]'\'';
 VAR : [a-zA-Z_][a-zA-Z_$0-9]*;
 DIRECTIVE : '#' .*? '\n' -> skip ;
 WS    : [ \t\r\n] -> channel(HIDDEN);

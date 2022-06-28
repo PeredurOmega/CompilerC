@@ -69,5 +69,4 @@ WS=39
 'else'=30
 'while'=31
 'return'=32
-'int'=33
 'static'=34

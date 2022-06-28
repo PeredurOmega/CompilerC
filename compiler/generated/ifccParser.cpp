@@ -54,7 +54,7 @@ void ifccParserInitialize() {
       "", "'void'", "'('", "')'", "'='", "','", "'{'", "'}'", "'-'", "'!'", 
       "'+'", "'~'", "'*'", "'/'", "'%'", "'<<'", "'>>'", "'<'", "'<='", 
       "'>='", "'>'", "'=='", "'!='", "'&'", "'^'", "'|'", "'&&'", "'||'", 
-      "';'", "'if'", "'else'", "'while'", "'return'", "'int'", "'static'"
+      "';'", "'if'", "'else'", "'while'", "'return'", "", "'static'"
     },
     std::vector<std::string>{
       "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
@@ -75,7 +75,7 @@ void ifccParserInitialize() {
   	10,119,8,10,1,11,1,11,1,11,1,11,1,11,1,11,1,11,3,11,128,8,11,1,12,1,12,
   	1,12,3,12,133,8,12,1,12,1,12,1,12,1,13,3,13,139,8,13,1,13,1,13,1,14,1,
   	14,1,14,1,14,3,14,147,8,14,1,14,1,14,1,14,3,14,152,8,14,1,15,1,15,1,15,
-  	1,16,1,16,1,16,1,16,1,16,1,16,1,16,3,16,164,8,16,1,17,1,17,1,17,3,17,
+  	1,16,1,16,1,16,1,16,3,16,161,8,16,1,16,1,16,1,16,1,17,1,17,1,17,3,17,
   	169,8,17,1,17,1,17,1,18,1,18,1,18,1,18,5,18,177,8,18,10,18,12,18,180,
   	9,18,1,18,1,18,1,19,1,19,1,19,1,19,5,19,188,8,19,10,19,12,19,191,9,19,
   	1,19,3,19,194,8,19,1,20,1,20,4,20,198,8,20,11,20,12,20,199,1,20,1,20,
@@ -89,7 +89,7 @@ void ifccParserInitialize() {
   	0,48,1,0,0,0,2,56,1,0,0,0,4,59,1,0,0,0,6,68,1,0,0,0,8,78,1,0,0,0,10,86,
   	1,0,0,0,12,94,1,0,0,0,14,97,1,0,0,0,16,105,1,0,0,0,18,107,1,0,0,0,20,
   	118,1,0,0,0,22,127,1,0,0,0,24,129,1,0,0,0,26,138,1,0,0,0,28,142,1,0,0,
-  	0,30,153,1,0,0,0,32,163,1,0,0,0,34,165,1,0,0,0,36,172,1,0,0,0,38,183,
+  	0,30,153,1,0,0,0,32,156,1,0,0,0,34,165,1,0,0,0,36,172,1,0,0,0,38,183,
   	1,0,0,0,40,197,1,0,0,0,42,203,1,0,0,0,44,206,1,0,0,0,46,226,1,0,0,0,48,
   	49,3,2,1,0,49,50,5,0,0,1,50,1,1,0,0,0,51,55,3,4,2,0,52,55,3,6,3,0,53,
   	55,3,8,4,0,54,51,1,0,0,0,54,52,1,0,0,0,54,53,1,0,0,0,55,58,1,0,0,0,56,
@@ -119,9 +119,9 @@ void ifccParserInitialize() {
   	3,44,22,0,145,147,3,40,20,0,146,144,1,0,0,0,146,145,1,0,0,0,147,148,1,
   	0,0,0,148,149,5,3,0,0,149,151,3,22,11,0,150,152,3,30,15,0,151,150,1,0,
   	0,0,151,152,1,0,0,0,152,29,1,0,0,0,153,154,5,30,0,0,154,155,3,20,10,0,
-  	155,31,1,0,0,0,156,157,5,31,0,0,157,158,5,2,0,0,158,164,3,44,22,0,159,
-  	160,3,40,20,0,160,161,5,3,0,0,161,162,3,22,11,0,162,164,1,0,0,0,163,156,
-  	1,0,0,0,163,159,1,0,0,0,164,33,1,0,0,0,165,168,5,32,0,0,166,169,3,44,
+  	155,31,1,0,0,0,156,157,5,31,0,0,157,160,5,2,0,0,158,161,3,44,22,0,159,
+  	161,3,40,20,0,160,158,1,0,0,0,160,159,1,0,0,0,161,162,1,0,0,0,162,163,
+  	5,3,0,0,163,164,3,22,11,0,164,33,1,0,0,0,165,168,5,32,0,0,166,169,3,44,
   	22,0,167,169,3,40,20,0,168,166,1,0,0,0,168,167,1,0,0,0,169,170,1,0,0,
   	0,170,171,5,28,0,0,171,35,1,0,0,0,172,173,5,33,0,0,173,178,3,38,19,0,
   	174,175,5,5,0,0,175,177,3,38,19,0,176,174,1,0,0,0,177,180,1,0,0,0,178,
@@ -150,7 +150,7 @@ void ifccParserInitialize() {
   	258,237,1,0,0,0,258,240,1,0,0,0,258,243,1,0,0,0,258,246,1,0,0,0,258,249,
   	1,0,0,0,258,252,1,0,0,0,258,255,1,0,0,0,259,262,1,0,0,0,260,258,1,0,0,
   	0,260,261,1,0,0,0,261,47,1,0,0,0,262,260,1,0,0,0,25,54,56,63,72,78,91,
-  	102,111,118,127,132,138,146,151,163,168,178,189,193,199,214,221,226,258,
+  	102,111,118,127,132,138,146,151,160,168,178,189,193,199,214,221,226,258,
   	260
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
@@ -1642,16 +1642,16 @@ tree::TerminalNode* ifccParser::WhileBlockContext::WHILE() {
   return getToken(ifccParser::WHILE, 0);
 }
 
+ifccParser::StatementWithoutDeclarationContext* ifccParser::WhileBlockContext::statementWithoutDeclaration() {
+  return getRuleContext<ifccParser::StatementWithoutDeclarationContext>(0);
+}
+
 ifccParser::ExpContext* ifccParser::WhileBlockContext::exp() {
   return getRuleContext<ifccParser::ExpContext>(0);
 }
 
 ifccParser::ExpAssignmentContext* ifccParser::WhileBlockContext::expAssignment() {
   return getRuleContext<ifccParser::ExpAssignmentContext>(0);
-}
-
-ifccParser::StatementWithoutDeclarationContext* ifccParser::WhileBlockContext::statementWithoutDeclaration() {
-  return getRuleContext<ifccParser::StatementWithoutDeclarationContext>(0);
 }
 
 
@@ -1691,34 +1691,33 @@ ifccParser::WhileBlockContext* ifccParser::whileBlock() {
     exitRule();
   });
   try {
-    setState(163);
+    enterOuterAlt(_localctx, 1);
+    setState(156);
+    match(ifccParser::WHILE);
+    setState(157);
+    match(ifccParser::T__1);
+    setState(160);
     _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case ifccParser::WHILE: {
-        enterOuterAlt(_localctx, 1);
-        setState(156);
-        match(ifccParser::WHILE);
-        setState(157);
-        match(ifccParser::T__1);
-        setState(158);
-        exp();
-        break;
-      }
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 14, _ctx)) {
+    case 1: {
+      setState(158);
+      exp();
+      break;
+    }
 
-      case ifccParser::VAR: {
-        enterOuterAlt(_localctx, 2);
-        setState(159);
-        expAssignment();
-        setState(160);
-        match(ifccParser::T__2);
-        setState(161);
-        statementWithoutDeclaration();
-        break;
-      }
+    case 2: {
+      setState(159);
+      expAssignment();
+      break;
+    }
 
     default:
-      throw NoViableAltException(this);
+      break;
     }
+    setState(162);
+    match(ifccParser::T__2);
+    setState(163);
+    statementWithoutDeclaration();
    
   }
   catch (RecognitionException &e) {
