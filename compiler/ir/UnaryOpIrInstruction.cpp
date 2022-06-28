@@ -26,4 +26,9 @@ void BitwiseNotUnaryIrInstruction::renderX86(ostream &o) const {
 void UnaryOpIrInstruction::assignMemory() {
     right->assignMemory(scope);
     to->assignMemory(scope);
+    if (dynamic_cast<IrTempVariable *>(to) != nullptr && dynamic_cast<IrTempVariable *>(right) != nullptr) {
+        to->offset = right->offset;
+    } else {
+        to->assignMemory(scope);
+    }
 }

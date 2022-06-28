@@ -127,9 +127,9 @@ void OpIrInstruction::assignMemory() {
     right->assignMemory(scope);
     if (dynamic_cast<IrTempVariable *>(to) != nullptr) {
         if (dynamic_cast<IrTempVariable *>(left) != nullptr) {
-            to = left;
+            to->offset = left->offset;
         } else if (dynamic_cast<IrTempVariable *>(right) != nullptr) {
-            to = right;
+            to->offset = right->offset;
         } else {
             to->assignMemory(scope);
         }
