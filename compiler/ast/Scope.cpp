@@ -6,11 +6,12 @@
 #include <utility>
 #include "Scope.h"
 #include "Declaration.h"
+#include "Prog.h"
 
 void Scope::setOwner(Scope *_owner) {
     owner = _owner;
     label = owner->label;
-    staticVarTable = owner->staticVarTable;
+    globalScope = owner->globalScope;
 }
 
 int Scope::getNewLabel() {
@@ -21,14 +22,16 @@ int Scope::getNewLabel() {
 IrVariable *Scope::getIrVariable(string *varName) {
     if (varTable.find(*varName) == varTable.end()) {
         if (owner != nullptr) return owner->getIrVariable(varName);
-        else if (staticVarTable->find(*varName) != staticVarTable->end()) {
-            return new IrStaticVariable(varName, staticVarTable->at(*varName)->type);
+        auto staticVar = globalScope->getStaticIrVariable(varName);
+        if (staticVar != nullptr) {
+            return staticVar;
         } else {
             UndefinedVariable e = UndefinedVariable();
             cerr << e.what() << " '" << *varName << "'"; //TODO
             throw e;
         }
     } else {
+        usedVar.insert(pair(*varName, true));
         return new IrVariable(varName, varTable.at(*varName));
     }
 }
@@ -52,12 +55,13 @@ const IrType *Scope::getFunctionType(string functionName) {
 }
 
 PrimaryType *Scope::declareStaticVariable(StaticDeclaration *sDeclaration) {
-    if (staticVarTable->find(*sDeclaration->name) != staticVarTable->end()) {
-        AlreadyDeclaredVariable e = AlreadyDeclaredVariable();
-        cerr << e.what() << " '" << *sDeclaration->name << "'";//TODO
-        throw e;
-    } else {
-        staticVarTable->insert(pair(*(sDeclaration->name), sDeclaration));
-        return sDeclaration->type;
+    globalScope->declareStaticVariable(sDeclaration);
+}
+
+void Scope::warnAboutUnusedVariables() {
+    for (auto &it: varTable) {
+        if (usedVar.find(it.first) == usedVar.end()) {
+            cerr << "Warning: unused variable '" << it.first << "'." << endl;
+        }
     }
 }

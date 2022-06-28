@@ -33,6 +33,7 @@ const IrType *Prog::getFunctionType(string functionName) {
         }
     }
     if (stdFunctions.find(functionName) != stdFunctions.end()) {
+        usedFunction->insert(pair(functionName, true));
         return stdFunctions.at(functionName)->returnType;
     }
     throw new UndefinedFunction();
@@ -43,18 +44,63 @@ void Prog::linearize(IrFunction *fun) {
 }
 
 void Prog::renderX86(ostream &o) {
-    (new IrGlobal(entry))->renderX86(o);
-    for (const auto &sDeclaration: *staticVarTable) {
+    usedFunction->insert(pair(entry, true));
+    for (const auto &sDeclaration: staticVarTable) {
         sDeclaration.second->setOwner(this);
         sDeclaration.second->linearize(nullptr);
     }
+    vector<IrFunction *> irFunctions;
     for (auto *function: functions) {
         function->setOwner(this);
         auto *fun = function->linearize();
         fun->assignMemory();
+        irFunctions.push_back(fun);
+    }
+    warnAboutUnusedFunctions();
+    warnAboutUnusedVariables();
+
+    (new IrGlobal(entry))->renderX86(o);
+    for (auto *fun: irFunctions) {
         fun->renderX86(o);
     }
-    for (const auto &sDeclaration: *staticVarTable) {
+    for (const auto &sDeclaration: staticVarTable) {
         sDeclaration.second->renderX86(o);
+    }
+}
+
+void Prog::warnAboutUnusedFunctions() {
+    for (auto *function: functions) {
+        if (usedFunction->find(function->name) == usedFunction->end()) {
+            cerr << "Warning: function " << function->name << " is not used." << endl;
+        }
+    }
+}
+
+IrVariable *Prog::getStaticIrVariable(string *varName) {
+    usedVar.insert(pair(*varName, true));
+    if (staticVarTable.find(*varName) != staticVarTable.end()) {
+        return new IrStaticVariable(varName, staticVarTable.at(*varName)->type);
+    } else {
+        return nullptr;
+    }
+}
+
+PrimaryType *Prog::declareStaticVariable(StaticDeclaration *sDeclaration) {
+    if (staticVarTable.find(*sDeclaration->name) != staticVarTable.end()) {
+        AlreadyDeclaredVariable e = AlreadyDeclaredVariable();
+        cerr << e.what() << " '" << *sDeclaration->name << "'";//TODO
+        throw e;
+    } else {
+        staticVarTable.insert(pair(*(sDeclaration->name), sDeclaration));
+        return sDeclaration->type;
+    }
+}
+
+void Prog::warnAboutUnusedVariables() {
+    Scope::warnAboutUnusedVariables();
+    for (auto &it: staticVarTable) {
+        if (usedVar.find(it.first) == usedVar.end()) {
+            cerr << "Warning: unused static/global variable '" << it.first << "'." << endl;
+        }
     }
 }

@@ -41,6 +41,7 @@ void Block::linearize(IrFunction *fun) {
     if (fun->currentScope->parent != nullptr) {
         fun->currentScope = fun->currentScope->parent;
     }
+    warnAboutUnusedVariables();
 }
 
 void Block::setOwner(Scope *owner) {

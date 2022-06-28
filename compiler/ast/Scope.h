@@ -12,6 +12,8 @@
 
 using namespace std;
 
+class Prog;
+
 class StaticDeclaration;
 
 class Scope : public Instruction {
@@ -27,7 +29,7 @@ public:
 
     PrimaryType *declareVariable(string *varName, PrimaryType *type);
 
-    PrimaryType *declareStaticVariable(StaticDeclaration* sDeclaration);
+    virtual PrimaryType *declareStaticVariable(StaticDeclaration *sDeclaration);
 
     /**
      * If there is a need for conditional jump, jump label is returned, otherwise -1 is return.
@@ -39,7 +41,10 @@ public:
 protected:
     int *label;
     unordered_map<string, PrimaryType *> varTable;
-    unordered_map<string, StaticDeclaration *> *staticVarTable;
+    Prog *globalScope;
+    unordered_map<string, bool> usedVar;
+
+    virtual void warnAboutUnusedVariables();
 };
 
 class UndefinedVariable : exception {

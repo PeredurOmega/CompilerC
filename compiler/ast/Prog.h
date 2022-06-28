@@ -19,7 +19,8 @@ public:
     explicit Prog(string entry)
             : Scope(), entry(std::move(entry)) {
         label = new int(0);
-        staticVarTable = new unordered_map<string, StaticDeclaration *>();
+        globalScope = this;
+        usedFunction = new unordered_map<string, bool>();
     };
 
     void linearize(IrFunction *fun) override;
@@ -30,15 +31,24 @@ public:
 
     void setOwner(Scope *owner) override;
 
+    IrVariable *getStaticIrVariable(string *varName);
+
+    PrimaryType *declareStaticVariable(StaticDeclaration *sDeclaration) override;
+
     int conditionalJump() override;
 
     const IrType *getFunctionType(string name) override;
 
+protected:
+    void warnAboutUnusedVariables() override;
+
 private:
     string entry;
     vector<Function *> functions;
-    int jumpOffset = 0;
-    int finalJump = 0;
+    unordered_map<string, bool> *usedFunction;
+    unordered_map<string, StaticDeclaration *> staticVarTable;
+
+    void warnAboutUnusedFunctions();
 };
 
 class UndefinedFunction : exception {
