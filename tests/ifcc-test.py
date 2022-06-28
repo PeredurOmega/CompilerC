@@ -186,7 +186,10 @@ for jobname in jobs:
     test_name = file_path.replace('tests-', '')
     file_name = test_name.split('-')[2]
 
-    file = open("tests/testfiles/"+test_name.split('-')[1]+"/"+file_name+".c", "r")
+    if "tests" in file_path:
+        file = open("tests/testfiles/"+test_name.split('-')[1]+"/"+file_name+".c", "r")
+    else:
+        file = open("testfiles/"+test_name.split('-')[1]+"/"+file_name+".c", "r")
     firstline = file.read()
     firstline = firstline.split("\n")[0]
     if firstline == "// Not Implemented":
