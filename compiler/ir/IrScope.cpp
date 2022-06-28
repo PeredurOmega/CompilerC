@@ -6,11 +6,11 @@
 #include "IrScope.h"
 #include "../ast/Scope.h"
 
-int IrScope::getOffset(string *varName) {
+int IrScope::getOffset(string *varName, PrimaryType *type) {
     if (varName == nullptr) {
-        return insertTempVariable();
+        return insertTempVariable(type);
     } else if (symbolTable.find(*varName) == symbolTable.end()) {
-        if (parent != nullptr) return parent->getOffset(varName);
+        if (parent != nullptr) return parent->getOffset(varName, type);
         else {
             UndefinedVariable e = UndefinedVariable();
             cerr << e.what() << " '" << *varName << "'";//TODO
@@ -18,13 +18,13 @@ int IrScope::getOffset(string *varName) {
         }
     } else {
         int offset = symbolTable.at(*varName);
-        if (offset == 0) insertInitializedVariable(*varName);
+        if (offset == 0) insertInitializedVariable(*varName, type);
         return symbolTable.at(*varName);
     }
 }
 
-int IrScope::insertInitializedVariable(string &varName) {
-    symbolTable[varName] = incrementOffset(4);
+int IrScope::insertInitializedVariable(string &varName, PrimaryType *type) {
+    symbolTable[varName] = incrementOffset(type->offset);
     return currentOffset;
 }
 
@@ -38,8 +38,8 @@ void IrScope::insertDeclaration(string &varName) {
     symbolTable[varName] = 0;
 }
 
-int IrScope::insertTempVariable() {
-    return incrementOffset(4);
+int IrScope::insertTempVariable(PrimaryType *type) {
+    return incrementOffset(type->offset);
 }
 
 int IrScope::incrementOffset(int offset) {

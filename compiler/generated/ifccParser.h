@@ -17,8 +17,8 @@ public:
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
     T__26 = 27, SEMICOLON = 28, IF = 29, ELSE = 30, WHILE = 31, RETURN = 32, 
-    TYPE = 33, STATIC = 34, COMMENT = 35, CONST = 36, VAR = 37, DIRECTIVE = 38, 
-    WS = 39
+    TYPE = 33, STATIC = 34, COMMENT = 35, INT_CONST = 36, CHAR_CONST = 37, 
+    VAR = 38, DIRECTIVE = 39, WS = 40, CONST = 41
   };
 
   enum {
@@ -496,7 +496,8 @@ public:
   public:
     ConstantContext(ExpressionContext *ctx);
 
-    antlr4::tree::TerminalNode *CONST();
+    antlr4::tree::TerminalNode *INT_CONST();
+    antlr4::tree::TerminalNode *CHAR_CONST();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
 

@@ -15,7 +15,7 @@ void IrFunction::assignMemory() {
     for (int i = 0; i < (int) parameters.size(); ++i) {
         auto *parameter = parameters[i];
         if (i < 6) {
-            mainScope->insertInitializedVariable(parameter->name);
+            mainScope->insertInitializedVariable(parameter->name, parameter->type);
         } else {
             mainScope->insertParameter(parameter->name, offset);
             offset += 8;

@@ -18,17 +18,17 @@ bool IrType::operator==(int typeId) const {
 }
 
 PrimaryType *PrimaryType::parse(const string &type) {
-    if (type == "int") return new PrimaryType(INT);
-    else if (type == "char") return new PrimaryType(CHAR);
+    if (type == "int") return new IntType();
+    else if (type == "char") return new CharType();
     else throw InvalidType();
 }
 
-string PrimaryType::text(PrimaryType* type) {
-    if(*type == PrimaryType::INT) {
+string PrimaryType::text(PrimaryType *type) {
+    if (*type == PrimaryType::INT) {
         return "int";
-    }else if(*type == PrimaryType::CHAR) {
+    } else if (*type == PrimaryType::CHAR) {
         return "char";
-    }else{
+    } else {
         throw exception();
     }
 }

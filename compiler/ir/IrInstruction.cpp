@@ -28,11 +28,11 @@ ostream &operator<<(ostream &o, IrVariable *var) {
 }
 
 void IrTempVariable::assignMemory(IrScope *scope) {
-    offset = scope->insertTempVariable();
+    offset = scope->insertTempVariable(type);
 }
 
 void IrVariable::assignMemory(IrScope *scope) {
-    offset = scope->getOffset(name);
+    offset = scope->getOffset(name, type);
 }
 
 ostream &operator<<(ostream &o, IrRegister *var) {

@@ -7,6 +7,7 @@
 
 #include <string>
 #include <unordered_map>
+#include "../ast/TypeSymbol.h"
 
 using namespace std;
 
@@ -22,21 +23,22 @@ public:
 
     unordered_map<string, int> symbolTable;
 
-    int getOffset(string *varName);
+    int getOffset(string *varName, PrimaryType *type);
 
-    int insertInitializedVariable(string &varName);
+    int insertInitializedVariable(string &varName, PrimaryType *type);
 
     void insertParameter(string &varName, int offset);
 
-    int insertTempVariable();
-
-    int incrementOffset(int offset);
+    int insertTempVariable(PrimaryType *type);
 
     void insertDeclaration(string &varName);
 
     int currentOffset = 0;
 
     void syncOffset();
+
+private:
+    int incrementOffset(int offset);
 };
 
 

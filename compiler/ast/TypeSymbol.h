@@ -34,20 +34,29 @@ public:
     }
 };
 
-class PrimaryType : IrType {
+class PrimaryType : public IrType {
 public:
     static const int INT = 1;
     static const int CHAR = 2;
 
-    explicit PrimaryType(int k) : IrType(k) {}
+    explicit PrimaryType(int k, int offset) : IrType(k), offset(offset) {}
 
     static PrimaryType *parse(const string &type);
-    static string text(PrimaryType* type);
+
+    static string text(PrimaryType *type);
+
+    int offset;
 };
 
-class IntType: public PrimaryType {
+class IntType : public PrimaryType {
 public:
-    explicit IntType(): PrimaryType(PrimaryType::INT) {};
+    explicit IntType() : PrimaryType(PrimaryType::INT, 4) {};
+};
+
+class CharType : public PrimaryType {
+public:
+    //TODO OFFSET SHOULD BE 4 IN THE FUTURE
+    explicit CharType() : PrimaryType(PrimaryType::CHAR, 4) {};
 };
 
 class InvalidType : exception {

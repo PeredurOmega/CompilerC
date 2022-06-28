@@ -89,6 +89,13 @@ Expression *Variable::propagateConstant() {
 void Constant::linearize(IrFunction *fun) {
     if (assignTo != nullptr) {
         var = owner->getIrVariable(assignTo);
+        if (*(var->type) == PrimaryType::CHAR) {
+            if (value > 255) {
+                cerr << "Warning: Constant value " << value << " is too large for char. Auto converted to "
+                     << value % 256 << "." << endl;
+                value = value % 256;
+            }
+        }
     } else {
         var = new IrTempVariable(new IntType());
     }

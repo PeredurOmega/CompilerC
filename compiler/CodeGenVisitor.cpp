@@ -74,8 +74,7 @@ antlrcpp::Any CodeGenVisitor::visitFunctionCall(ifccParser::FunctionCallContext 
     return (Instruction *) new FunctionCall(ctx->VAR()->getText(), arguments);
 }
 
-antlrcpp::Any
-CodeGenVisitor::visitParameters(ifccParser::ParametersContext *ctx) {
+antlrcpp::Any CodeGenVisitor::visitParameters(ifccParser::ParametersContext *ctx) {
     auto *parameters = new vector<Parameter *>();
     for (auto parameter: ctx->parameter()) {
         parameters->push_back(any_cast<Parameter *>(visitParameter(parameter)));
@@ -211,8 +210,15 @@ antlrcpp::Any CodeGenVisitor::visitAssignment(ifccParser::AssignmentContext *ctx
 
 antlrcpp::Any CodeGenVisitor::visitConstant(ifccParser::ConstantContext *ctx) {
     try {
-        auto constant = new Constant(stoi(ctx->CONST()->getText()));
-        return (Instruction *) constant;
+        if (ctx->CHAR_CONST() != nullptr) {
+            auto constant = new Constant((int) ctx->CHAR_CONST()->getText()[1]);
+            return (Instruction *) constant;
+        } else if (ctx->INT_CONST() != nullptr) {
+            auto constant = new Constant(stoi(ctx->INT_CONST()->getText()));
+            return (Instruction *) constant;
+        } else {
+            throw InvalidType();
+        }
     } catch (exception &e) {
         throw e;//TODO
     }

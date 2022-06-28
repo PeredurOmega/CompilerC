@@ -44,7 +44,7 @@ assignment : expAssignment SEMICOLON;
 
 exp: expression;
 expression : VAR #variable
-            |CONST #constant
+            |(INT_CONST | CHAR_CONST) #constant
             |'(' (expression | expAssignment)')' #parenthesis
             |VAR '(' arguments? ')' #functionCall
             |op=('-'|'!'|'+'|'~') expression #unary
@@ -70,7 +70,8 @@ RETURN : 'return' ;
 TYPE : 'int' | 'char';
 STATIC : 'static';
 COMMENT : (('/*' .*? '*/') | ('//' .*? ('\n' | '\r\n'))) -> skip ;
-CONST : [0-9]+ | '\''[\u0000-\u0255]'\'';
+INT_CONST : [0-9]+;
+CHAR_CONST : '\''[\u0000-\u0255]'\'';
 VAR : [a-zA-Z_][a-zA-Z_$0-9]*;
 DIRECTIVE : '#' .*? '\n' -> skip ;
 WS    : [ \t\r\n] -> channel(HIDDEN);
