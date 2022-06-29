@@ -11,7 +11,7 @@ int main(){
                 int i = 0;
                 while(i<5){
                     a = a + 1;
-                    ++i;
+                    i = i + 1;
                 }
             }
         }
