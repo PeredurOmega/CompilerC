@@ -239,7 +239,7 @@ for jobname in jobs:
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
         if notimplemented:
-            print(WARNING + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
+            print(WARNING + tab + "TEST NOT IMPLEMENTED (your compiler accepts an invalid program)" + STOP)
         else:
             print(FAIL + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
         continue
@@ -251,7 +251,7 @@ for jobname in jobs:
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
         if notimplemented:
-            print(WARNING + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
+            print(WARNING + tab + "TEST NOT IMPLEMENTED (your compiler accepts an invalid program)" + STOP)
         else:
             print(FAIL + tab + "TEST FAIL (your compiler rejects a valid program)" + STOP)
         if args.verbose:
@@ -267,7 +267,7 @@ for jobname in jobs:
             if directory_cpt == directory_size:
                 xml_result += tab + "</testsuite>" + endl
             if notimplemented:
-                print(WARNING + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
+                print(WARNING + tab + "TEST NOT IMPLEMENTED (your compiler accepts an invalid program)" + STOP)
             else:
                 print(FAIL + tab + "TEST FAIL (your compiler produces incorrect assembly)" + STOP)
             if args.verbose:
@@ -285,7 +285,7 @@ for jobname in jobs:
         if directory_cpt == directory_size:
             xml_result += tab + "</testsuite>" + endl
         if notimplemented:
-            print(WARNING + tab + "TEST FAIL (your compiler accepts an invalid program)" + STOP)
+            print(WARNING + tab + "TEST NOT IMPLEMENTED (your compiler accepts an invalid program)" + STOP)
         else:
             print(FAIL + tab + "TEST FAIL (different results at execution)" + STOP)
 
