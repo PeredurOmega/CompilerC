@@ -59,12 +59,29 @@ void Prog::renderX86(ostream &o) {
     warnAboutUnusedFunctions();
     warnAboutUnusedVariables();
 
-    (new IrGlobal(entry))->renderX86(o);
+    vector<StaticDeclaration *> staticDeclarations;
+    for (const auto &sDeclaration: staticVarTable) {
+        staticDeclarations.push_back(sDeclaration.second);
+    }
+    if (!staticVarTable.empty()) {
+        (new IrGlobal(*staticDeclarations[0]->name))->renderX86(o);
+        o << "    .data" << endl;
+        o << "    .align 4" << endl;
+    } else {
+        (new IrGlobal(entry))->renderX86(o);
+    }
+    for (int i = 0; i < (int) staticDeclarations.size(); i++) {
+        staticDeclarations[i]->renderX86(o);
+        if (i == (int) staticDeclarations.size() - 1) {
+            o << "    .text" << endl;
+            o << "    .globl   " << entry << endl;
+        } else {
+            o << "    .globl   " << *staticDeclarations[i + 1]->name << endl;
+            o << "    .align 4" << endl;
+        }
+    }
     for (auto *fun: irFunctions) {
         fun->renderX86(o);
-    }
-    for (const auto &sDeclaration: staticVarTable) {
-        sDeclaration.second->renderX86(o);
     }
 }
 
